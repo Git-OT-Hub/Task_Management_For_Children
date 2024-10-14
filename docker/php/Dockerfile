@@ -1,5 +1,6 @@
 # 使用イメージの指定
 FROM php:8.3-fpm
+EXPOSE 5173
 
 # composer イメージ内から特定のファイルをコピー
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

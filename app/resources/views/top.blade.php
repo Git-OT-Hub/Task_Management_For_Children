@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.layout')
 
 @section('content')
 <div class="container">
@@ -8,7 +8,7 @@
                 <div class="card-header">トップページ</div>
 
                 <div class="card-body">
-                    機能の説明
+                    <p class="test">機能の説明</p>
                 </div>
             </div>
         </div>
