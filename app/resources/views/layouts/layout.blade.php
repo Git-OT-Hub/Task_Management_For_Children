@@ -20,31 +20,29 @@
     <div id="app">
         <header class="custom-main-color">
             <nav class="navbar navbar-expand-md shadow">
-                <div class="container">
+                <div class="container-fluid">
                     <img src="{{ asset('images/test_header_icon.png') }}" alt="" width="80" height="60">
                     <a class="navbar-brand px-3" href="{{ url('/') }}">
                         {{ config('layout.name', 'My_Laravel_Project') }}
                     </a>
-                    
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <!-- Left Side Of Navbar -->
-                        <ul class="navbar-nav me-auto">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                        </ul>
-
+                    <div class="collapse navbar-collapse mt-3 mt-md-0" id="navbarSupportedContent">
                         <!-- Right Side Of Navbar -->
-                        <ul class="navbar-nav ms-auto">
+                        <ul class="navbar-nav ms-3 ms-md-auto">
                             <!-- Authentication Links -->
                             @guest
                                 @if (Route::has('login'))
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                        <a class="nav-link" href="{{ route('login') }}"><i class="fa-solid fa-right-to-bracket fa-2x"></i></a>
                                     </li>
                                 @endif
 
                                 @if (Route::has('register'))
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <li class="nav-item ms-0 ms-md-3">
+                                        <a class="nav-link" href="{{ route('register') }}"><i class="fa-solid fa-user-plus fa-2x"></i></a>
                                     </li>
                                 @endif
                             @else
@@ -55,7 +53,7 @@
 
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="{{ route('logout') }}"
-                                          onclick="event.preventDefault();
+                                        onclick="event.preventDefault();
                                                         document.getElementById('logout-form').submit();">
                                             {{ __('Logout') }}
                                         </a>
@@ -74,7 +72,10 @@
         <main class="py-4">
             @yield('content')
         </main>
-        <footer>
+        <footer class="custom-footer-color p-3">
+            <div><a href="{{ url('/') }}">My_Laravel_Project について</a></div>
+            <div class="mt-2"><a href="#">お問い合わせ</a></div>
+            <div class="mt-2"><small>c 2024 My_Laravel_Project All Rights Reserved</small></div>
         </footer>
     </div>
 </body>
