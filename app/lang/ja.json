@@ -1,3 +1,10 @@
 {
-    "Register": "ユーザー登録"
+    "About": "について",
+    "Contact": "お問い合わせ",
+    "Copyrigth": "c 2024 My_App_Name All Rights Reserved",
+    "Register": "ユーザー登録",
+    "Name": "ニックネーム",
+    "Email Address": "メールアドレス",
+    "Password": "パスワード",
+    "Confirm Password": "パスワード確認"
 }

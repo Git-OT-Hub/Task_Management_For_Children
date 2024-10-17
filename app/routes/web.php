@@ -21,6 +21,6 @@ Route::get('/', function () {
     return view('top');
 });
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::resource("rooms", RoomController::class);
+Route::group(['middleware' => 'auth'], function() {
+    Route::resource("rooms", RoomController::class);
+});

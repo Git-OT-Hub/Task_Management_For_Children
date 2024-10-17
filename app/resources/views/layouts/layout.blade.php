@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('layout.name', 'My_Laravel_Project') }}</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -23,7 +23,7 @@
                 <div class="container-fluid">
                     <img src="{{ asset('images/test_header_icon.png') }}" alt="" width="80" height="60">
                     <a class="navbar-brand px-3" href="{{ url('/') }}">
-                        {{ config('layout.name', 'My_Laravel_Project') }}
+                        {{ config('app.name', 'Laravel') }}
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -72,10 +72,16 @@
         <main class="py-4">
             @yield('content')
         </main>
-        <footer class="custom-footer-color p-3">
-            <div><a href="{{ url('/') }}">My_Laravel_Project について</a></div>
-            <div class="mt-2"><a href="#">お問い合わせ</a></div>
-            <div class="mt-2"><small>c 2024 My_Laravel_Project All Rights Reserved</small></div>
+        <footer class="custom-main-color p-3">
+            <div>
+                <a href="{{ url('/') }}">{{ config('app.name', 'Laravel') }} {{ __('About') }}</a>
+            </div>
+            <div class="mt-2">
+                <a href="#">{{ __('Contact') }}</a>
+            </div>
+            <div class="mt-2">
+                <small>{{ __('Copyrigth') }}</small>
+            </div>
         </footer>
     </div>
 </body>

@@ -1,9 +1,6 @@
+// メインカラー
 .custom-main-color {
-    background: #f7b951;
-}
-
-.custom-footer-color {
-    background: #d2cfc9;
+    background: #8795a1;
 }
 
 // footer下の余白削除
@@ -23,4 +20,11 @@ body {
 
 main {
     flex: 1;
+}
+
+// btn-primary カスタム
+.btn-primary {
+    --bs-btn-bg: #3a7de2;
+    --bs-btn-hover-bg: #1f64cb;
+    --bs-btn-active-bg: #1953aa;
 }
