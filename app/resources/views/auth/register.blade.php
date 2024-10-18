@@ -63,9 +63,20 @@
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
-                                </button>
+                                <div>
+                                    <button type="submit" class="btn btn-primary">
+                                        {{ __('Register') }}
+                                    </button>
+                                </div>
+
+                                @if (Route::has('login'))
+                                    <div class="mt-3">
+                                        <a class="btn btn-link" href="{{ route('login') }}">
+                                            <i class="fa-solid fa-right-to-bracket"></i>
+                                            {{ __('User login here!') }}
+                                        </a>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </form>

@@ -24,7 +24,13 @@ main {
 
 // btn-primary カスタム
 .btn-primary {
-    --bs-btn-bg: #3a7de2;
+    --bs-btn-bg: #4885e1;
     --bs-btn-hover-bg: #1f64cb;
     --bs-btn-active-bg: #1953aa;
+}
+
+// header Userアイコン
+.custom-user-icon {
+    display: inline-block;
+    vertical-align: middle;
 }
