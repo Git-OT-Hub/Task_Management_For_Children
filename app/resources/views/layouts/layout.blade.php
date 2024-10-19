@@ -18,8 +18,8 @@
 </head>
 <body>
     <div id="app">
-        <header class="custom-main-color">
-            <nav class="navbar navbar-expand-md shadow">
+        <header class="custom-main-color shadow">
+            <nav class="navbar navbar-expand-md">
                 <div class="container-fluid">
                     <img src="{{ asset('images/test_header_icon.png') }}" alt="" width="80" height="60">
                     <a class="navbar-brand px-3" href="{{ url('/') }}">

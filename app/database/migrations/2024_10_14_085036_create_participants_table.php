@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('room_id')->constrained('rooms')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->boolean('join_flg')->default(false);
+            $table->boolean('master_flg')->default(false);
             $table->timestamps();
         });
     }
