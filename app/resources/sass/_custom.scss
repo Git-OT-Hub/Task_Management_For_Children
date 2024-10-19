@@ -29,8 +29,18 @@ main {
     --bs-btn-active-bg: #1953aa;
 }
 
+// dropdown-menu カスタム
+.dropdown-menu {
+    --bs-dropdown-link-active-bg: #69707c;
+}
+
 // header Userアイコン
 .custom-user-icon {
     display: inline-block;
     vertical-align: middle;
+}
+
+// お知らせアイコン
+.custom-notification-icon {
+    cursor: pointer;
 }

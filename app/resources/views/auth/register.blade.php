@@ -71,7 +71,7 @@
 
                                 @if (Route::has('login'))
                                     <div class="mt-3">
-                                        <a class="btn btn-link" href="{{ route('login') }}">
+                                        <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ route('login') }}">
                                             <i class="fa-solid fa-right-to-bracket"></i>
                                             {{ __('User login here!') }}
                                         </a>

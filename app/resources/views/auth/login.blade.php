@@ -61,15 +61,15 @@
 
                                 @if (Route::has('register'))
                                     <div class="mt-3">
-                                        <a class="btn btn-link" href="{{ route('register') }}">
+                                        <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ route('register') }}">
                                             <i class="fa-solid fa-user-plus"></i>
                                             {{ __('User registration here!') }}
                                         </a>
                                     </div>    
                                 @endif
                                 @if (Route::has('password.request'))
-                                    <div>
-                                        <a class="btn btn-link" href="{{ route('password.request') }}">
+                                    <div class="mt-2">
+                                        <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ route('password.request') }}">
                                             <i class="fa-solid fa-key"></i>
                                             {{ __('Forgot Your Password?') }}
                                         </a>
