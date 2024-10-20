@@ -18,7 +18,7 @@
 </head>
 <body>
     <div id="app">
-        <header class="custom-main-color shadow">
+        <header class="custom-main-color shadow sticky-top">
             <nav class="navbar navbar-expand-md">
                 <div class="container-fluid">
                     <img src="{{ asset('images/test_header_icon.png') }}" alt="" width="80" height="60">
