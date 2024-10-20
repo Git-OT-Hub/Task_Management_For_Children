@@ -22,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'icon',
+        'goal',
     ];
 
     /**
@@ -44,8 +46,20 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function rooms()
+    public function participatedRooms()
     {
-        return $this->belongsToMany(Room::class, 'participants', 'user_id', 'room_id')->withPivot('join_flg', 'master_flg');
+        return $this->belongsToMany(Room::class, 'participants', 'user_id', 'room_id')
+        ->withPivot('join_flg', 'master_flg')
+        ->withTimestamps();
+    }
+
+    public function taskSenderTasks()
+    {
+        return $this->hasMany(Task::class, 'task_sender');
+    }
+
+    public function taskRecipientTasks()
+    {
+        return $this->hasMany(Task::class, 'task_recipient');
     }
 }

@@ -10,8 +10,19 @@ class Room extends Model
 {
     use HasFactory;
 
-    public function users()
+    protected $fillable = [
+        "name",
+    ];
+
+    public function participants()
     {
-        return $this->belongsToMany(User::class, 'participants', 'room_id', 'user_id');
+        return $this->belongsToMany(User::class, 'participants', 'room_id', 'user_id')
+        ->withPivot('join_flg', 'master_flg')
+        ->withTimestamps();
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'room_id');
     }
 }

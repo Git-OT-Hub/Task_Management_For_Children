@@ -51,7 +51,7 @@ return [
     'email' => ':attribute 欄はメールアドレスを入力してください。',
     'ends_with' => 'The :attribute field must end with one of the following: :values.',
     'enum' => 'The selected :attribute is invalid.',
-    'exists' => 'The selected :attribute is invalid.',
+    'exists' => '入力された :attribute は存在しません。',
     'extensions' => 'The :attribute field must have one of the following extensions: :values.',
     'file' => 'The :attribute field must be a file.',
     'filled' => 'The :attribute field must have a value.',
@@ -191,6 +191,8 @@ return [
         'email' => 'メールアドレス',
         'password' => 'パスワード',
         'token' => 'トークン',
+        'room_name' => 'ルーム名',
+        'user_name' => 'ユーザー名'
     ],
 
 ];
