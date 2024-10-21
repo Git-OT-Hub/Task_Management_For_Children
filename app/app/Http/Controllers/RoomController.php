@@ -13,7 +13,7 @@ class RoomController extends Controller
     public function index()
     {
         $rooms = Auth::user()->participatedRooms()->latest()->get();
-        $room_status = [];
+        $room_informations = [];
         foreach ($rooms as $room) {
             $array = [];
             $array["room_id"] = $room->id;
@@ -43,10 +43,10 @@ class RoomController extends Controller
                 $array["join_status"] = 1;
             }
             $array["created_at"] = $room->created_at;
-            $room_status[] = $array;
+            $room_informations[] = $array;
         }
 
-        return view("rooms.index")->with(["results" => $room_status]);
+        return view("rooms.index")->with(["results" => $room_informations]);
     }
 
     public function create()
@@ -70,6 +70,25 @@ class RoomController extends Controller
 
     public function show(Room $room)
     {
-        return view("rooms.show")->with(["room" => $room]);
+        $task_informations = [];
+        $tasks = $room->tasks;
+        foreach ($tasks as $task) {
+            $array = [];
+            $sender = User::find($task->task_sender);
+            $array["sender_icon"] = $sender->icon;
+            $array["sender_name"] = $sender->name;
+            $array["task_title"] = $task->title;
+            $array["task_point"] = $task->point;
+            $array["task_deadline"] = $task->deadline;
+            $array["task_image"] = $task->image;
+            $array["task_complete_flg"] = $task->complete_flg;
+            $array["task_approval_flg"] = $task->approval_flg;
+            $array["task_created_at"] = $task->created_at;
+            $task_informations[] = $array;
+        }
+
+        $room->participants;
+
+        return view("rooms.show")->with(["room" => $room, "results" => $task_informations]);
     }
 }
