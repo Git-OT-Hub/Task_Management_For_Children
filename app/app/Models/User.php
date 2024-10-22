@@ -49,7 +49,7 @@ class User extends Authenticatable
     public function participatedRooms()
     {
         return $this->belongsToMany(Room::class, 'participants', 'user_id', 'room_id')
-        ->withPivot('join_flg', 'master_flg')
+        ->withPivot('room_id', 'user_id', 'join_flg', 'master_flg')
         ->withTimestamps();
     }
 

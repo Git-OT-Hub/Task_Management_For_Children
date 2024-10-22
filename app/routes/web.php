@@ -23,4 +23,5 @@ Route::get('/', function () {
 
 Route::group(['middleware' => 'auth'], function() {
     Route::resource("rooms", RoomController::class);
+    Route::post("/rooms/{room}/join", [RoomController::class, "join"])->name("rooms.join");
 });

@@ -50,9 +50,12 @@
                                     </p>
                                 </div>
                                 <div class="mt-3 text-center">
-                                    <a class="btn btn-primary shadow" href="#">
-                                        {{ __('rooms.join') }}
-                                    </a>
+                                    <form method="post" action="{{ route('rooms.join', ['room' => $result['room_id']]) }}" id="room-join-form">
+                                        @csrf
+                                        <button type="submit" class="btn btn-primary shadow">
+                                            {{ __('rooms.join') }}
+                                        </button>
+                                    </form>
                                 </div>
                                 <p class="mb-0 mt-3">
                                     {{ __('rooms.date') }}：

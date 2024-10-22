@@ -70,8 +70,10 @@ class RoomController extends Controller
 
     public function show(Room $room)
     {
+        $this->authorize('view', $room);
+
         $task_informations = [];
-        $tasks = $room->tasks;
+        $tasks = $room->tasks()->latest()->get();
         foreach ($tasks as $task) {
             $array = [];
             $sender = User::find($task->task_sender);
@@ -87,8 +89,18 @@ class RoomController extends Controller
             $task_informations[] = $array;
         }
 
-        $room->participants;
-
         return view("rooms.show")->with(["room" => $room, "results" => $task_informations]);
+    }
+
+    public function join(Room $room)
+    {
+        $this->authorize('join', $room);
+
+        foreach ($room->participants as $participant) {
+            if (Auth::user()->id === $participant->id && $participant->pivot->join_flg == 0) {
+                $room->participants()->updateExistingPivot($participant->id, ["join_flg" => 1]);
+                return redirect()->route("rooms.show", $room);
+            }
+        }
     }
 }
