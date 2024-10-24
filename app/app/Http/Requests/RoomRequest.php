@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class RoomRequest extends FormRequest
 {
@@ -25,5 +27,14 @@ class RoomRequest extends FormRequest
             "room_name" => "required|max:50",
             "user_name" => "required|exists:users,name",
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $response['status']  = 400;
+        $response['errors']  = $validator->errors()->toArray();
+        throw new HttpResponseException(
+            response()->json( $response, 200 )
+        );
     }
 }

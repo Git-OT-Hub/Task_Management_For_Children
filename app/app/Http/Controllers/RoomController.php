@@ -88,8 +88,13 @@ class RoomController extends Controller
             $array["task_created_at"] = $task->created_at;
             $task_informations[] = $array;
         }
+        foreach ($room->participants as $user) {
+            if ($user->id !== $room->user_id) {
+                $recipient = $user->name;
+            }
+        }
 
-        return view("rooms.show")->with(["room" => $room, "results" => $task_informations]);
+        return view("rooms.show")->with(["room" => $room, "results" => $task_informations, "recipient" => $recipient]);
     }
 
     public function join(Room $room)
@@ -102,5 +107,13 @@ class RoomController extends Controller
                 return redirect()->route("rooms.show", $room);
             }
         }
+    }
+
+    public function update(RoomRequest $request, Room $room)
+    {
+        $room->name = $request->room_name;
+        $room->save();
+
+        return response()->json($room);
     }
 }

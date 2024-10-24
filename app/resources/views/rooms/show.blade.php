@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col">
                     <div class="card shadow">
-                        <div class="card-header text-center custom-main-color">{{ $room->name }}</div>
+                        <div class="card-header text-center custom-main-color" id="room-name">{{ $room->name }}</div>
 
                         <div class="card-body">
                             <div class="row">
@@ -18,9 +18,55 @@
                                     </a>
                                 </div>
                                 <div class="col-4 ms-auto text-center">
-                                    <a class="btn btn-secondary shadow" href="#">
-                                        {{ __('rooms.edit') }}
-                                    </a>
+                                    <div class="dropdown custom-room-edit">
+                                        <button type="button" class="btn btn-secondary shadow dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                            {{ __('rooms.edit') }}
+                                        </button>
+                                        <form class="dropdown-menu p-4 dropdown-menu-end shadow">
+                                            @csrf
+                                            <div class="mb-3">
+                                                <label for="room_name" class="form-label">{{ __('rooms.name') }}</label>
+                                                <input type="text" class="form-control @error('room_name') is-invalid @enderror" id="room_name" name="room_name" value="{{ old('room-name', $room->name) }}" required autocomplete="room_name" autofocus>
+
+                                                @error('room_name')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                            <input type="hidden" id="room-edit-id" value="{{ $room->id }}">
+                                            <input type="hidden" id="room-edit-recipient" name="user_name" value="{{ $recipient }}">
+                                            <button type="button" class="btn btn-primary" id="room-edit">{{ __('rooms.update') }}</button>
+                                        </form>
+                                        <script type="module">
+                                            $(document).ready(function() {
+                                                let roomEditId = $("#room-edit-id").val();
+                                                if (roomEditId) {
+                                                    $("#room-edit").click(function() {
+                                                        $.ajax({
+                                                            type: "POST",
+                                                            url: `/rooms/${roomEditId}`,
+                                                            dataType: "json",
+                                                            data: {
+                                                                "_token": "{{ csrf_token() }}",
+                                                                "_method": "PATCH",
+                                                                room_name: $("input[name='room_name']").val(),
+                                                                user_name: $("input[name='user_name']").val(),
+                                                            },
+                                                        })
+                                                        .done(function(res) {
+                                                            console.log(res);
+                                                            $("#room-name").text(res.name);
+                                                        })
+                                                        .fail(function(jqXHR, textStatus, errorThrown) {
+                                                            console.error("Ajax request failed:", textStatus, errorThrown);
+                                                            alert("ルーム名の変更に失敗しました。");
+                                                        });
+                                                    });
+                                                }
+                                            });
+                                        </script>
+                                    </div>
                                     <a class="btn btn-danger shadow ms-3" href="#">
                                         {{ __('rooms.delete') }}
                                     </a>

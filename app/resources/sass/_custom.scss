@@ -49,3 +49,12 @@ main {
 .custom-user-border {
     border-bottom: 1px solid black;
 }
+
+// ルーム編集ボタン
+.custom-room-edit {
+    display: inline-block;
+}
+
+.dropdown-menu {
+    --bs-dropdown-min-width: 20rem;
+}

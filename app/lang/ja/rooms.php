@@ -15,5 +15,5 @@ return [
     "user_explanation" => "※招待したいユーザー名を正確に入力してください。",
     "edit" => "編集",
     "delete" => "削除",
-    "rewards" => "報酬一覧"
+    "update" => "更新"
 ];
