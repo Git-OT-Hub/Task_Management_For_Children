@@ -18,7 +18,7 @@
                                     </a>
                                 </div>
                                 <div class="col-4 ms-auto text-center">
-                                    <div class="dropdown custom-room-edit">
+                                    <div class="dropdown custom-room-button">
                                         <button type="button" class="btn btn-secondary shadow dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                                             {{ __('rooms.edit') }}
                                         </button>
@@ -28,11 +28,9 @@
                                                 <label for="room_name" class="form-label">{{ __('rooms.name') }}</label>
                                                 <input type="text" class="form-control @error('room_name') is-invalid @enderror" id="room_name" name="room_name" value="{{ old('room-name', $room->name) }}" required autocomplete="room_name" autofocus>
 
-                                                @error('room_name')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
+                                                <ul id="room-error-message" class="fw-bold text-danger">
+                                                </ul>
+
                                             </div>
                                             <input type="hidden" id="room-edit-id" value="{{ $room->id }}">
                                             <input type="hidden" id="room-edit-recipient" name="user_name" value="{{ $recipient }}">
@@ -43,12 +41,15 @@
                                                 let roomEditId = $("#room-edit-id").val();
                                                 if (roomEditId) {
                                                     $("#room-edit").click(function() {
+                                                        $.ajaxSetup({
+                                                            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
+                                                        });
+
                                                         $.ajax({
                                                             type: "POST",
                                                             url: `/rooms/${roomEditId}`,
                                                             dataType: "json",
                                                             data: {
-                                                                "_token": "{{ csrf_token() }}",
                                                                 "_method": "PATCH",
                                                                 room_name: $("input[name='room_name']").val(),
                                                                 user_name: $("input[name='user_name']").val(),
@@ -57,19 +58,34 @@
                                                         .done(function(res) {
                                                             console.log(res);
                                                             $("#room-name").text(res.name);
+                                                            $('#room-error-message').empty();
                                                         })
                                                         .fail(function(jqXHR, textStatus, errorThrown) {
-                                                            console.error("Ajax request failed:", textStatus, errorThrown);
+                                                            console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
                                                             alert("ルーム名の変更に失敗しました。");
+
+                                                            $('#room-error-message').empty();
+                                                            var text = $.parseJSON(jqXHR.responseText);
+                                                            var errors = text.errors;
+                                                            for (var key in errors) {
+                                                                var errorMessage = errors[key][0];
+                                                                $('#room-error-message').append(`<li>${errorMessage}</li>`);
+                                                            }
                                                         });
                                                     });
                                                 }
                                             });
                                         </script>
                                     </div>
-                                    <a class="btn btn-danger shadow ms-3" href="#">
-                                        {{ __('rooms.delete') }}
-                                    </a>
+                                    <div class="custom-room-button ms-3">
+                                        <form method="POST" action="{{ route('rooms.destroy', $room) }}" id="room-delete-form">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button class="btn btn-danger shadow">
+                                                {{ __('rooms.delete') }}
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                             検索機能

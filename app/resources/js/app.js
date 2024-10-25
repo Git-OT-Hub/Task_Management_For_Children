@@ -3,4 +3,4 @@ window.$ = jQuery;
 
 import './bootstrap';
 
-import './main';
+import './room';

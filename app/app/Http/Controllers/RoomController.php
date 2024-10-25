@@ -111,9 +111,20 @@ class RoomController extends Controller
 
     public function update(RoomRequest $request, Room $room)
     {
+        $this->authorize('update', $room);
+
         $room->name = $request->room_name;
         $room->save();
 
         return response()->json($room);
+    }
+
+    public function destroy(Room $room)
+    {
+        $this->authorize('delete', $room);
+
+        $room->delete();
+        
+        return redirect()->route("rooms.index");
     }
 }

@@ -31,10 +31,17 @@ class RoomRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        $response['status']  = 400;
-        $response['errors']  = $validator->errors()->toArray();
-        throw new HttpResponseException(
-            response()->json( $response, 200 )
-        );
+        if ($this->ajax()) {
+            $response = [
+                'status' => 400,
+                'errors' => $validator->errors()->toArray(),
+            ];
+            
+            throw new HttpResponseException(
+                response()->json($response, 422)
+            );
+        }
+    
+        parent::failedValidation($validator);
     }
 }
