@@ -25,7 +25,7 @@ class TaskRequest extends FormRequest
             "title" => "required|string|max:50",
             "deadline" => "required|date",
             "point" => "required|integer|min:0",
-            "body" => "string|max:1000",
+            "body" => "max:1000",
         ];
     }
 
