@@ -88,13 +88,21 @@ class RoomController extends Controller
             $array["task_created_at"] = $task->created_at;
             $task_informations[] = $array;
         }
+
+        $recipient = "";
+        $room_member = [];
         foreach ($room->participants as $user) {
             if ($user->id !== $room->user_id) {
                 $recipient = $user->name;
+                $room_member["participant_icon"] = $user->icon;
+                $room_member["participant_name"] = $user->name;
+            } elseif ($user->id == $room->user_id) {
+                $room_member["room_master_icon"] = $user->icon;
+                $room_member["room_master_name"] = $user->name;
             }
         }
 
-        return view("rooms.show")->with(["room" => $room, "results" => $task_informations, "recipient" => $recipient]);
+        return view("rooms.show")->with(["room" => $room, "results" => $task_informations, "recipient" => $recipient, "room_member" => $room_member]);
     }
 
     public function join(Room $room)
