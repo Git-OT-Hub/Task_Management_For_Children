@@ -79,6 +79,7 @@ class RoomController extends Controller
             $sender = User::find($task->task_sender);
             $array["sender_icon"] = $sender->icon;
             $array["sender_name"] = $sender->name;
+            $array["task_id"] = $task->id;
             $array["task_title"] = $task->title;
             $array["task_point"] = $task->point;
             $array["task_deadline"] = $task->deadline;

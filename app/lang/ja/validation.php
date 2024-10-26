@@ -187,12 +187,9 @@ return [
     */
 
     'attributes' => [
-        'name' => 'ニックネーム',
         'email' => 'メールアドレス',
         'password' => 'パスワード',
         'token' => 'トークン',
-        'room_name' => 'ルーム名',
-        'user_name' => 'ユーザー名'
     ],
 
 ];

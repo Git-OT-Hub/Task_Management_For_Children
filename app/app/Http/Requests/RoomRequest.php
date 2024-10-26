@@ -29,6 +29,14 @@ class RoomRequest extends FormRequest
         ];
     }
 
+    public function attributes()
+    {
+        return [
+            'room_name' => 'ルーム名',
+            'user_name' => 'ユーザー名'
+        ];
+    }
+
     protected function failedValidation(Validator $validator)
     {
         if ($this->ajax()) {

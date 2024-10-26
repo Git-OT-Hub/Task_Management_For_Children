@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\TaskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +25,5 @@ Route::get('/', function () {
 Route::group(['middleware' => 'auth'], function() {
     Route::resource("rooms", RoomController::class);
     Route::post("/rooms/{room}/join", [RoomController::class, "join"])->name("rooms.join");
+    Route::resource("rooms.tasks", TaskController::class)->only("create", "store", "show", "edit", "update", "destroy");
 });

@@ -133,7 +133,7 @@
             <div class="row mt-3">
                 <div class="col-4 text-center">
                     @if(Auth::user()->id === $room->user_id)
-                        <a class="btn btn-primary shadow" href="#">
+                        <a class="btn btn-primary shadow" href="{{ route('rooms.tasks.create', $room) }}">
                             {{ __('tasks.create') }}
                         </a>
                     @endif
@@ -183,7 +183,7 @@
                                         </div>
 
                                         <h4 class="card-title my-3">
-                                            <a href="#" class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ $result["task_title"] }}</a>
+                                            <a href="{{ route('rooms.tasks.show', ['room' => $room, 'task' => $result['task_id']]) }}" class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ $result["task_title"] }}</a>
                                         </h4>
                                         <p class="card-text">
                                             {{ __('tasks.point') }}：{{ $result["task_point"] }}
@@ -193,7 +193,7 @@
                                         </p>
                                         <p class="card-text">
                                             <small class="text-body-secondary">
-                                                {{ __('tasks.created_at') }}：{{ $result["task_created_at"] }}
+                                                {{ __('tasks.created_at') }}：{{ $result["task_created_at"]->format('Y/m/d') }}
                                             </small>
                                         </p>
                                     </div>

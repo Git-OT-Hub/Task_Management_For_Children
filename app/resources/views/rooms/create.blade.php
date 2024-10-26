@@ -49,7 +49,7 @@
                         <div class="row mb-0">
                             <div class="col-12">
                                 <div class="text-end">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-primary shadow">
                                         {{ __('rooms.create') }}
                                     </button>
                                 </div>
