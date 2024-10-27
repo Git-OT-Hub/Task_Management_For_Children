@@ -153,7 +153,7 @@
                                     @if($result["task_image"])
                                         <img src="{{ Storage::url($result['task_image']) }}" class="img-fluid rounded" alt="">
                                     @else
-                                        <img src="{{ asset('images/test_task_image.png') }}" class="img-fluid rounded" alt="">
+                                        <img src="{{ asset('images/no_image.png') }}" class="img-fluid rounded" alt="">
                                     @endif
                                 </div>
                                 <div class="col-8">

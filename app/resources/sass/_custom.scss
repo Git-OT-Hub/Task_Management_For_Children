@@ -58,3 +58,25 @@ main {
 .dropdown-menu {
     --bs-dropdown-min-width: 20rem;
 }
+
+// 画像生成時の処理中画面
+#loading-overlay-task.custom-hidden {
+    display: none;
+}
+
+#loading-overlay-task {
+    background: rgba(255, 255, 255, 0.8);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 2000;
+}
+
+.custom-loading-spinner {
+    position: absolute;
+    top: 30%;
+    left: 5%;
+    right: 5%;
+}

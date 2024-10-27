@@ -16,11 +16,15 @@ class TaskController extends Controller
 {
     public function create(Room $room)
     {
+        $this->authorize('create', [Task::class, $room]);
+
         return view("rooms.tasks.create")->with(["room" => $room]);
     }
 
     public function store(Room $room, TaskRequest $request)
     {
+        $this->authorize('create', [Task::class, $room]);
+
         $task = new Task();
         $task->room_id = $room->id;
         foreach ($room->participants as $user) {
@@ -43,6 +47,8 @@ class TaskController extends Controller
 
     public function generateImage(Room $room, Task $task, TaskImageRequest $request)
     {
+        $this->authorize('create', [Task::class, $room]);
+
         try {
             // 日本語を英語に翻訳
             $sentence = $request->image_description;
@@ -88,8 +94,21 @@ class TaskController extends Controller
 
     public function show(Room $room, Task $task)
     {
-
+        $this->authorize('view', [Task::class, $room]);
 
         return view("rooms.tasks.show")->with(["room" => $room, "task" => $task]);
+    }
+
+    public function deleteImage(Room $room, Task $task)
+    {
+        $this->authorize('delete', [Task::class, $room]);
+
+        if ($currentImage = $task->image) {
+            Storage::delete($currentImage);
+        }
+        $task->image = null;
+        $task->save();
+
+        return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
     }
 }

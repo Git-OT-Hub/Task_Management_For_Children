@@ -27,4 +27,5 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post("/rooms/{room}/join", [RoomController::class, "join"])->name("rooms.join");
     Route::resource("rooms.tasks", TaskController::class)->only("create", "store", "show", "edit", "update", "destroy");
     Route::post("/rooms/{room}/tasks/{task}/image/ai", [TaskController::class, "generateImage"])->name("rooms.tasks.image.ai");
+    Route::delete("/rooms/{room}/tasks/{task}/image", [TaskController::class, "deleteImage"])->name("rooms.tasks.image.destroy");
 });

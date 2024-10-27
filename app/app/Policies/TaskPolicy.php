@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Room;
 use Illuminate\Auth\Access\Response;
 
 class TaskPolicy
@@ -19,17 +20,22 @@ class TaskPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Task $task): bool
+    public function view(User $user, Room $room): bool
     {
-        //
+        foreach ($room->participants as $participant) {
+            if ($user->id === $participant->id && $participant->pivot->join_flg == 1) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Room $room): bool
     {
-        //
+        return $user->id === $room->user_id;
     }
 
     /**
@@ -43,9 +49,9 @@ class TaskPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Task $task): bool
+    public function delete(User $user, Room $room): bool
     {
-        //
+        return $user->id === $room->user_id;
     }
 
     /**
