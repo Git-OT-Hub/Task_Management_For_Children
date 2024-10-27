@@ -149,8 +149,12 @@
                     <div class="col-12 col-lg-6 mt-3">
                         <div class="card h-100 shadow">
                             <div class="row g-0">
-                                <div class="col-4 align-self-center">
-                                    <img src="{{ asset('images/test_task_image.png') }}" class="img-fluid rounded-start" alt="">
+                                <div class="col-4 align-self-center p-3">
+                                    @if($result["task_image"])
+                                        <img src="{{ Storage::url($result['task_image']) }}" class="img-fluid rounded" alt="">
+                                    @else
+                                        <img src="{{ asset('images/test_task_image.png') }}" class="img-fluid rounded" alt="">
+                                    @endif
                                 </div>
                                 <div class="col-8">
                                     <div class="card-body">

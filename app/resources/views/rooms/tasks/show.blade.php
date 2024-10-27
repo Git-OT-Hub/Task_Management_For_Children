@@ -31,7 +31,58 @@
 
                 <div class="card-body">
                     <div class="text-center">
-                        <img src="{{ asset('images/test_task_image.png') }}" class="img-fluid rounded" alt="">
+                        @if($task->image)
+                            <img src="{{ Storage::url($task->image) }}" class="img-fluid rounded" alt="">
+                        @else
+                            <img src="{{ asset('images/test_task_image.png') }}" class="img-fluid rounded" alt="">
+                        @endif
+                    </div>
+
+                    @if(isset($imageGenerationFailure))
+                        <div class="alert alert-danger mt-4" role="alert">
+                            {{ $imageGenerationFailure }}
+                        </div>
+                    @endif
+                    
+                    <div class="accordion mt-4" id="accordionGenerateImage">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    {{ __('tasks.image_generation') }}
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionGenerateImage">
+                                <div class="accordion-body">
+                                    <form method="POST" action="{{ route('rooms.tasks.image.ai', ['room' => $room, 'task' => $task]) }}">
+                                        @csrf
+
+                                        <div class="row mb-2">
+                                            <small class="col">{{ __('tasks.image_generation_explanation') }}</small>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-12">
+                                                <input type="text" class="form-control @error('image_description') is-invalid @enderror" name="image_description" value="{{ old('image_description') }}" required>
+
+                                                @error('image_description')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="row mb-0">
+                                            <div class="col-12">
+                                                <div class="text-end">
+                                                    <button type="submit" class="btn btn-primary shadow">
+                                                        {{ __('tasks.image_generation') }}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Room;
 use App\Models\Task;
 use App\Http\Requests\TaskRequest;
+use App\Http\Requests\TaskImageRequest;
+use Illuminate\Support\Str;
+use OpenAI\Laravel\Facades\OpenAI;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 
 class TaskController extends Controller
 {
@@ -34,6 +39,51 @@ class TaskController extends Controller
         $task->save();
 
         return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+    }
+
+    public function generateImage(Room $room, Task $task, TaskImageRequest $request)
+    {
+        try {
+            // 日本語を英語に翻訳
+            $sentence = $request->image_description;
+            $response = Http::get(
+                'https://api-free.deepl.com/v2/translate',
+                [
+                    'auth_key' => env('DEEPL_KEY'),
+                    'target_lang' => 'EN-US',
+                    'text' => $sentence,
+                ]
+            );
+            $translated_text = $response->json('translations')[0]['text'];
+
+            // OpenAI で画像生成
+            $Image = OpenAI::images()->create([
+                "prompt" => $translated_text,
+                "n" => 1,
+                "size" => "1024x1024",
+            ]);
+
+            $url = $Image->data[0]->url;
+            $filename = Str::random(10) . ".jpg";
+            $path = "public/uploads/{$filename}";
+
+            if ($currentImage = $task->image) {
+                Storage::delete($currentImage);
+            }
+
+            $imageContents = file_get_contents($url);
+            Storage::put($path, $imageContents);
+
+            $task->image = $path;
+            $task->save();
+
+            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+
+        } catch (\Exception $e) {
+            $imageGenerationFailure = "画像生成に失敗しました。時間を置いてから試してください。";
+
+            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task])->with(["imageGenerationFailure" => $imageGenerationFailure]);
+        }
     }
 
     public function show(Room $room, Task $task)
