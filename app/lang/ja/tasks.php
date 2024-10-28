@@ -18,4 +18,11 @@ return [
     "image_generation_explanation" => "※生成したい画像の説明文を入力してください（例：「夏休みの宿題をする子ども」、「母親と一緒に洗濯を干す子どもの絵」）。",
     "image_generation_progress" => "画像生成中です。しばらくお待ちください...",
     "image_delete" => "画像削除",
+    "edit" => "課題編集",
+    "delete" => "課題削除",
+    "show" => "課題詳細",
+    "approval" => "承認",
+    "cancel_approval" => "承認取消",
+    "completion_report" => "完了報告",
+    "cancel_completion_report" => "完了報告取消",
 ];

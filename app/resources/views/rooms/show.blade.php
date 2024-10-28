@@ -166,11 +166,11 @@
                                             </div>
                                             <div class="col-8 text-end">
                                                 @if($result["task_complete_flg"] == 1 && $result["task_approval_flg"] == 0)
-                                                    <span class="btn btn-warning">
+                                                    <span class="btn btn-warning rounded-pill">
                                                         {{ __('tasks.completion_reported') }}
                                                     </span>
                                                 @elseif($result["task_complete_flg"] == 1 && $result["task_approval_flg"] == 1)
-                                                    <span class="btn btn-danger">
+                                                    <span class="btn btn-danger rounded-pill">
                                                         {{ __('tasks.completed') }}
                                                     </span>
                                                 @endif

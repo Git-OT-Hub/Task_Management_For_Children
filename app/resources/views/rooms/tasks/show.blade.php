@@ -17,11 +17,11 @@
                         </div>
                         <div class="col-4 ms-auto text-center">
                             @if($task->complete_flg == 1 && $task->approval_flg == 0)
-                                <span class="btn btn-warning">
+                                <span class="btn btn-warning rounded-pill">
                                     {{ __('tasks.completion_reported') }}
                                 </span>
                             @elseif($task->complete_flg == 1 && $task->approval_flg == 1)
-                                <span class="btn btn-danger">
+                                <span class="btn btn-danger rounded-pill">
                                     {{ __('tasks.completed') }}
                                 </span>
                             @endif
@@ -117,8 +117,10 @@
                     <p class="card-text">
                         {{ __('tasks.deadline') }}：{{ $task->deadline }}
                     </p>
-                    <p class="card-text">
-                        {{ __('tasks.body') }}：<br>
+                    <p class="card-text mb-1">
+                        {{ __('tasks.body') }}：
+                    </p>
+                    <p class="card-text border border-2 p-2">
                         {!! nl2br(e($task->body)) !!}
                     </p>
                     <p class="card-text">
@@ -126,6 +128,68 @@
                             {{ __('tasks.created_at') }}：{{ $task->created_at->format('Y/m/d') }}
                         </small>
                     </p>
+                </div>
+
+                <div class="card-body">
+                    <div class="row align-items-center justify-content-end">
+                        <div class="col-3 text-end">
+                            <a class="btn btn-secondary" href="{{ route('rooms.tasks.edit', ['room' => $room, 'task' => $task]) }}">
+                                {{ __('tasks.edit') }}
+                            </a>
+                        </div>
+                        <div class="col-3 text-end">
+                            <form method="POST" action="{{ route('rooms.tasks.destroy', ['room' => $room, 'task' => $task]) }}" id="delete-task">
+                                @method("DELETE")
+                                @csrf
+
+                                <button type="submit" class="btn btn-danger shadow">
+                                    {{ __('tasks.delete') }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row align-items-center justify-content-center mt-3">
+                        <div class="col-3 text-center">
+                            <form method="POST" action="" id="">
+                                @csrf
+
+                                @if($task->approval_flg == 0 && $task->complete_flg == 1)
+                                    <button type="submit" class="btn btn-success shadow">
+                                        {{ __('tasks.approval') }}
+                                    </button>
+                                @elseif($task->approval_flg == 0 && $task->complete_flg == 0)
+                                    <button type="submit" class="btn btn-success shadow" disabled>
+                                        {{ __('tasks.approval') }}
+                                    </button>
+                                @elseif($task->approval_flg == 1 && $task->complete_flg == 1)
+                                    <button type="submit" class="btn btn-warning shadow">
+                                        {{ __('tasks.cancel_approval') }}
+                                    </button>
+                                @endif
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row align-items-center justify-content-center mt-3">
+                        <div class="col-3 text-center">
+                            <form method="POST" action="" id="">
+                                @csrf
+
+                                @if($task->complete_flg == 0 && $task->approval_flg == 0)
+                                    <button type="submit" class="btn btn-success shadow">
+                                        {{ __('tasks.completion_report') }}
+                                    </button>
+                                @elseif($task->complete_flg == 1 && $task->approval_flg == 0)
+                                    <button type="submit" class="btn btn-warning shadow">
+                                        {{ __('tasks.cancel_completion_report') }}
+                                    </button>
+                                @elseif($task->complete_flg == 1 && $task->approval_flg == 1)
+                                    <button type="submit" class="btn btn-warning shadow" disabled>
+                                        {{ __('tasks.cancel_completion_report') }}
+                                    </button>
+                                @endif
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

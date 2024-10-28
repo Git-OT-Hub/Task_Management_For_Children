@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow">
-                <div class="card-header text-center custom-main-color">{{ __('tasks.create') }}</div>
+                <div class="card-header text-center fs-5 custom-main-color">{{ __('tasks.create') }}</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('rooms.tasks.store', $room) }}">
@@ -60,9 +60,7 @@
                             <label for="body" class="col-12 col-form-label">{{ __('tasks.body') }}</label>
 
                             <div class="col-12">
-                                <textarea id="body" name="body" rows="4" class="form-control @error('body') is-invalid @enderror">
-                                    {{ old('body') }}
-                                </textarea>
+                                <textarea id="body" name="body" rows="4" class="form-control @error('body') is-invalid @enderror">{{ old('body') }}</textarea>
 
                                 @error('body')
                                     <span class="invalid-feedback" role="alert">

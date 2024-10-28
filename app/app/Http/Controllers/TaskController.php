@@ -111,4 +111,33 @@ class TaskController extends Controller
 
         return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
     }
+
+    public function edit(Room $room, Task $task)
+    {
+        $this->authorize('update', [Task::class, $room]);
+        
+        return view("rooms.tasks.edit")->with(["room" => $room, "task" => $task]);
+    }
+
+    public function update(Room $room, Task $task, TaskRequest $request)
+    {
+        $this->authorize('update', [Task::class, $room]);
+        
+        $columns = ["title", "deadline", "point", "body"];
+        foreach ($columns as $column) {
+            $task->$column = $request->$column;
+        }
+        $task->save();
+
+        return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+    }
+
+    public function destroy(Room $room, Task $task)
+    {
+        $this->authorize('delete', [Task::class, $room]);
+
+        $task->delete();
+
+        return redirect()->route("rooms.show", $room);
+    }
 }
