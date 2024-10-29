@@ -140,4 +140,16 @@ class TaskController extends Controller
 
         return redirect()->route("rooms.show", $room);
     }
+
+    public function completion(Room $room, Task $task)
+    {
+        $this->authorize('completion', $task);
+
+        if ($task->complete_flg == 0 && $task->approval_flg == 0) {
+            $task->complete_flg = true;
+            $task->save();
+        }
+
+        return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+    }
 }

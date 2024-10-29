@@ -22,7 +22,10 @@ return [
     "delete" => "課題削除",
     "show" => "課題詳細",
     "approval" => "承認",
-    "cancel_approval" => "承認取消",
+    "redo" => "やり直し",
+    "approved" => "承認しました!",
     "completion_report" => "完了報告",
-    "cancel_completion_report" => "完了報告取消",
+    "is_approved" => "承認されました!",
+    "completion_report_in_progress" => "完了報告中です!",
+    "there_was_completion_report" => "完了報告がありました!",
 ];

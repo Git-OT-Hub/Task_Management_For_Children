@@ -69,4 +69,11 @@ class TaskPolicy
     {
         //
     }
+
+    public function completion(User $user, Task $task): bool
+    {
+        $recipient = User::find($task->task_recipient);
+
+        return $user->id === $recipient->id;
+    }
 }

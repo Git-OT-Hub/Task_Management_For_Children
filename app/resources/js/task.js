@@ -40,4 +40,46 @@
             });
         }
     });
+
+    // 課題完了報告の確認画面
+    document.addEventListener("DOMContentLoaded", () => {
+        const completion = document.querySelector("#completion-report");
+        if (completion) {
+            completion.addEventListener("submit", (e) => {
+                e.preventDefault();
+                if (!confirm("この課題の完了報告をしますか?")) {
+                    return;
+                }
+                completion.submit();
+            });
+        }
+    });
+
+    // 課題やり直し報告の確認画面
+    document.addEventListener("DOMContentLoaded", () => {
+        const redo = document.querySelector("#redo");
+        if (redo) {
+            redo.addEventListener("submit", (e) => {
+                e.preventDefault();
+                if (!confirm("この課題のやり直しを依頼しますか?")) {
+                    return;
+                }
+                redo.submit();
+            });
+        }
+    });
+
+    // 課題承認の確認画面
+    document.addEventListener("DOMContentLoaded", () => {
+        const approval = document.querySelector("#approval");
+        if (approval) {
+            approval.addEventListener("submit", (e) => {
+                e.preventDefault();
+                if (!confirm("この課題の完了報告を承認しますか?\n承認すると取消できません。\n承認後は課題実施ユーザーへポイントが付与されます。")) {
+                    return;
+                }
+                approval.submit();
+            });
+        }
+    });
 }
