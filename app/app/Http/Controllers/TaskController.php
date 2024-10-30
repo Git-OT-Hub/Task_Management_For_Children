@@ -81,14 +81,18 @@ class TaskController extends Controller
             Storage::put($path, $imageContents);
 
             $task->image = $path;
-            $task->save();
+            $result = $task->save();
+
+            if ($result) {
+                session()->flash("successMessage", "画像を生成しました");
+            }
 
             return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
 
         } catch (\Exception $e) {
-            $imageGenerationFailure = "画像生成に失敗しました。時間を置いてから試してください。";
+            session()->flash("imageGenerationFailure", "画像生成に失敗しました。時間を置いてから試してください。");
 
-            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task])->with(["imageGenerationFailure" => $imageGenerationFailure]);
+            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
         }
     }
 
@@ -147,7 +151,49 @@ class TaskController extends Controller
 
         if ($task->complete_flg == 0 && $task->approval_flg == 0) {
             $task->complete_flg = true;
-            $task->save();
+            $result = $task->save();
+        }
+
+        if ($result) {
+            session()->flash("successMessage", "完了報告しました");
+        } else {
+            session()->flash("failureMessage", "完了報告に失敗しました");
+        }
+
+        return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+    }
+
+    public function redo(Room $room, Task $task)
+    {
+        $this->authorize('redo', [Task::class, $room]);
+
+        if ($task->approval_flg == 0 && $task->complete_flg == 1) {
+            $task->complete_flg = false;
+            $result = $task->save();
+        }
+
+        if ($result) {
+            session()->flash("successMessage", "やり直しを依頼しました");
+        } else {
+            session()->flash("failureMessage", "やり直しの依頼に失敗しました");
+        }
+
+        return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+    }
+
+    public function approval(Room $room, Task $task)
+    {
+        $this->authorize('approval', [Task::class, $room]);
+
+        if ($task->approval_flg == 0 && $task->complete_flg == 1) {
+            $task->approval_flg = true;
+            $result = $task->save();
+        }
+
+        if ($result) {
+            session()->flash("successMessage", "承認しました");
+        } else {
+            session()->flash("failureMessage", "承認に失敗しました");
         }
 
         return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);

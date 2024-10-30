@@ -76,4 +76,14 @@ class TaskPolicy
 
         return $user->id === $recipient->id;
     }
+
+    public function redo(User $user, Room $room): bool
+    {
+        return $user->id === $room->user_id;
+    }
+
+    public function approval(User $user, Room $room): bool
+    {
+        return $user->id === $room->user_id;
+    }
 }
