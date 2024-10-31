@@ -80,3 +80,11 @@ main {
     left: 5%;
     right: 5%;
 }
+
+// フラッシュメッセージ
+.alert-info {
+    --bs-alert-color: rgb(64 83 86);
+    --bs-alert-bg: rgb(206 220 223);
+    --bs-alert-border-color: rgb(97 124 129);
+    --bs-alert-link-color: rgb(63 91 97);
+}

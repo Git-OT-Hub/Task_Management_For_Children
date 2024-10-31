@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Room;
 use App\Http\Requests\RoomRequest;
+use Illuminate\Support\Facades\DB;
 
 class RoomController extends Controller
 {
@@ -56,16 +57,23 @@ class RoomController extends Controller
 
     public function store(RoomRequest $request)
     {
-        $room = new Room();
-        $room->user_id = Auth::user()->id;
-        $room->name = $request->room_name;
-        $room->save();
+        try {
+            DB::transaction(function () use($request) {
+                $room = new Room();
+                $room->user_id = Auth::user()->id;
+                $room->name = $request->room_name;
+                $room->save();
 
-        $participant = User::where("name", "=", $request->user_name)->first();
-        $room->participants()->attach(Auth::user()->id, ["join_flg" => 1, "master_flg" => 1]);
-        $room->participants()->attach($participant->id, ["join_flg" => 0, "master_flg" => 0]);
+                $participant = User::where("name", "=", $request->user_name)->first();
+                $room->participants()->attach(Auth::user()->id, ["join_flg" => 1, "master_flg" => 1]);
+                $room->participants()->attach($participant->id, ["join_flg" => 0, "master_flg" => 0]);
+            });
+            session()->flash("successMessage", "ルームを作成しました。");
 
-        return redirect()->route("rooms.index");
+            return redirect()->route("rooms.index");
+        } catch (\Throwable $e) {
+
+        }
     }
 
     public function show(Room $room)
@@ -113,6 +121,8 @@ class RoomController extends Controller
         foreach ($room->participants as $participant) {
             if (Auth::user()->id === $participant->id && $participant->pivot->join_flg == 0) {
                 $room->participants()->updateExistingPivot($participant->id, ["join_flg" => 1]);
+                session()->flash("successMessage", "ルームに参加しました。");
+
                 return redirect()->route("rooms.show", $room);
             }
         }
@@ -133,6 +143,7 @@ class RoomController extends Controller
         $this->authorize('delete', $room);
 
         $room->delete();
+        session()->flash("successMessage", "ルームを削除しました。");
         
         return redirect()->route("rooms.index");
     }

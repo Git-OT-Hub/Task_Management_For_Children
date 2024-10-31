@@ -95,6 +95,8 @@
                                                                 console.log(res);
                                                                 $("#room-name").text(res.name);
                                                                 $('#room-error-message').empty();
+                                                                var dom = '<div class="p-3"><div class="alert alert-info mb-0" role="alert">ルームを編集しました。</div></div>'
+                                                                $('#ajax-flash-message').append(dom);
                                                             })
                                                             .fail(function(jqXHR, textStatus, errorThrown) {
                                                                 console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);

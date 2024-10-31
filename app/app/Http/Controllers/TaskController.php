@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use OpenAI\Laravel\Facades\OpenAI;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
@@ -41,6 +42,7 @@ class TaskController extends Controller
         $task->complete_flg = false;
         $task->approval_flg = false;
         $task->save();
+        session()->flash("successMessage", "課題を作成しました。");
 
         return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
     }
@@ -73,23 +75,23 @@ class TaskController extends Controller
             $filename = Str::random(10) . ".jpg";
             $path = "public/uploads/{$filename}";
 
-            if ($currentImage = $task->image) {
-                Storage::delete($currentImage);
-            }
+            DB::transaction(function () use($task, $url, $path) {
+                if ($currentImage = $task->image) {
+                    Storage::delete($currentImage);
+                }
 
-            $imageContents = file_get_contents($url);
-            Storage::put($path, $imageContents);
+                $imageContents = file_get_contents($url);
+                Storage::put($path, $imageContents);
 
-            $task->image = $path;
-            $result = $task->save();
+                $task->image = $path;
+                $task->save();
+            });
 
-            if ($result) {
-                session()->flash("successMessage", "画像を生成しました");
-            }
+            session()->flash("successMessage", "画像を生成しました。");
 
             return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             session()->flash("imageGenerationFailure", "画像生成に失敗しました。時間を置いてから試してください。");
 
             return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
@@ -107,11 +109,14 @@ class TaskController extends Controller
     {
         $this->authorize('delete', [Task::class, $room]);
 
-        if ($currentImage = $task->image) {
-            Storage::delete($currentImage);
-        }
-        $task->image = null;
-        $task->save();
+        DB::transaction(function () use($task) {
+            if ($currentImage = $task->image) {
+                Storage::delete($currentImage);
+            }
+            $task->image = null;
+            $task->save();
+        });
+        session()->flash("successMessage", "画像を削除しました。");
 
         return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
     }
@@ -132,6 +137,7 @@ class TaskController extends Controller
             $task->$column = $request->$column;
         }
         $task->save();
+        session()->flash("successMessage", "課題を編集しました。");
 
         return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
     }
@@ -141,6 +147,7 @@ class TaskController extends Controller
         $this->authorize('delete', [Task::class, $room]);
 
         $task->delete();
+        session()->flash("successMessage", "課題を削除しました。");
 
         return redirect()->route("rooms.show", $room);
     }
@@ -153,12 +160,7 @@ class TaskController extends Controller
             $task->complete_flg = true;
             $result = $task->save();
         }
-
-        if ($result) {
-            session()->flash("successMessage", "完了報告しました");
-        } else {
-            session()->flash("failureMessage", "完了報告に失敗しました");
-        }
+        session()->flash("successMessage", "完了報告しました。");
 
         return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
     }
@@ -171,12 +173,7 @@ class TaskController extends Controller
             $task->complete_flg = false;
             $result = $task->save();
         }
-
-        if ($result) {
-            session()->flash("successMessage", "やり直しを依頼しました");
-        } else {
-            session()->flash("failureMessage", "やり直しの依頼に失敗しました");
-        }
+        session()->flash("successMessage", "やり直しを依頼しました。");
 
         return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
     }
@@ -189,12 +186,7 @@ class TaskController extends Controller
             $task->approval_flg = true;
             $result = $task->save();
         }
-
-        if ($result) {
-            session()->flash("successMessage", "承認しました");
-        } else {
-            session()->flash("failureMessage", "承認に失敗しました");
-        }
+        session()->flash("successMessage", "承認しました。");
 
         return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
     }

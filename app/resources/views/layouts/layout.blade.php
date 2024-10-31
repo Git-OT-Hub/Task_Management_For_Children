@@ -121,6 +121,8 @@
                     </div>
                 </div>
             @endif
+            <div id="ajax-flash-message">
+            </div>
         </header>
         <main class="py-4">
             @yield('content')
