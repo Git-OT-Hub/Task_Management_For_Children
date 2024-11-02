@@ -21,7 +21,7 @@ class TasksTableSeeder extends Seeder
                 "task_recipient" => 2,
                 "title" => "user-2への課題1",
                 "deadline" => Carbon::create(2024, 11, 20, 17, 0, 0),
-                "point" => 100,
+                "point" => 1500,
                 "body" => "Hello!",
                 "complete_flg" => true,
                 "approval_flg" => true,
