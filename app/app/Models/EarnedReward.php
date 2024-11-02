@@ -5,30 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Reward extends Model
+class EarnedReward extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        "room_id",
+        "reward_id",
         "user_id",
-        "point",
-        "reward",
-        "acquired_flg",
     ];
 
-    public function room()
+    public function reward()
     {
-        return $this->belongsTo(Room::class, 'room_id');
+        return $this->belongsTo(Reward::class, 'reward_id');
     }
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function earnedReward()
-    {
-        return $this->hasOne(EarnedReward::class, 'reward_id');
     }
 }

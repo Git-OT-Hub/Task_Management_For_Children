@@ -26,4 +26,14 @@ class Room extends Model
     {
         return $this->hasMany(Task::class, 'room_id');
     }
+
+    public function earnedPoint()
+    {
+        return $this->hasOne(EarnedPoint::class, 'room_id');
+    }
+
+    public function rewards()
+    {
+        return $this->hasMany(Reward::class, 'room_id');
+    }
 }

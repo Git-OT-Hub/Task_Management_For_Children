@@ -62,4 +62,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class, 'task_recipient');
     }
+
+    public function earnedPoints()
+    {
+        return $this->hasMany(EarnedPoint::class, 'user_id');
+    }
+
+    public function rewards()
+    {
+        return $this->hasMany(Reward::class, 'user_id');
+    }
+
+    public function earnedRewards()
+    {
+        return $this->hasMany(EarnedReward::class, 'user_id');
+    }
 }
