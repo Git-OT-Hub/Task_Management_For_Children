@@ -158,7 +158,7 @@ class TaskController extends Controller
 
         if ($task->complete_flg == 0 && $task->approval_flg == 0) {
             $task->complete_flg = true;
-            $result = $task->save();
+            $task->save();
         }
         session()->flash("successMessage", "完了報告しました。");
 
@@ -171,7 +171,7 @@ class TaskController extends Controller
 
         if ($task->approval_flg == 0 && $task->complete_flg == 1) {
             $task->complete_flg = false;
-            $result = $task->save();
+            $task->save();
         }
         session()->flash("successMessage", "やり直しを依頼しました。");
 
@@ -183,8 +183,14 @@ class TaskController extends Controller
         $this->authorize('approval', [Task::class, $room]);
 
         if ($task->approval_flg == 0 && $task->complete_flg == 1) {
-            $task->approval_flg = true;
-            $result = $task->save();
+            DB::transaction(function () use($task, $room) {
+                $task->approval_flg = true;
+                $task->save();
+
+                $earnedPoint = $room->earnedPoint;
+                $earnedPoint->point = $earnedPoint->point + $task->point;
+                $earnedPoint->save();
+            });
         }
         session()->flash("successMessage", "承認しました。");
 

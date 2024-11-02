@@ -70,7 +70,7 @@
                                                 </div>
                                                 <input type="hidden" id="room-edit-id" value="{{ $room->id }}">
                                                 <input type="hidden" id="room-edit-recipient" name="user_name" value="{{ $recipient }}">
-                                                <button type="button" class="btn btn-primary" id="room-edit">{{ __('rooms.update') }}</button>
+                                                <button type="button" class="btn btn-primary shadow" id="room-edit">{{ __('rooms.update') }}</button>
                                             </form>
                                             <script type="module">
                                                 $(document).ready(function() {
@@ -141,7 +141,7 @@
                     @endif
                 </div>
                 <div class="col-4 offset-4 text-center">
-                    <a class="btn btn-success shadow" href="#">
+                    <a class="btn btn-success shadow" href="{{ route('rooms.rewards.index', $room) }}">
                         {{ __('rewards.list') }}
                     </a>
                 </div>

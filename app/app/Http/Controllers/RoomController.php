@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Room;
+use App\Models\EarnedPoint;
 use App\Http\Requests\RoomRequest;
 use Illuminate\Support\Facades\DB;
 
@@ -67,6 +68,11 @@ class RoomController extends Controller
                 $participant = User::where("name", "=", $request->user_name)->first();
                 $room->participants()->attach(Auth::user()->id, ["join_flg" => 1, "master_flg" => 1]);
                 $room->participants()->attach($participant->id, ["join_flg" => 0, "master_flg" => 0]);
+
+                $earnedPoint = new EarnedPoint();
+                $earnedPoint->room_id = $room->id;
+                $earnedPoint->user_id = $participant->id;
+                $earnedPoint->save();
             });
             session()->flash("successMessage", "ルームを作成しました。");
 
