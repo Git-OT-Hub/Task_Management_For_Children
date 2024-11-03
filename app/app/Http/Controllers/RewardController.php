@@ -42,4 +42,36 @@ class RewardController extends Controller
 
         return response()->json($rewards);
     }
+
+    public function update(RewardRequest $request, Room $room, Reward $reward)
+    {
+        $this->authorize('update', [Reward::class, $room]);
+
+        if ($reward->acquired_flg == 1) {
+            $message = ["message" => "この報酬は他のユーザーによって獲得されたため、更新できませんでした。"];
+
+            return response()->json($message, 400);
+        }
+        $columns = ["point", "reward"];
+        foreach ($columns as $column) {
+            $reward->$column = $request->$column;
+        }
+        $reward->save();
+
+        return response()->json($reward);
+    }
+
+    public function destroy(Room $room, Reward $reward)
+    {
+        $this->authorize('delete', [Reward::class, $room]);
+
+        if ($reward->acquired_flg == 1) {
+            $message = ["message" => "この報酬は他のユーザーによって獲得されたため、削除できませんでした。"];
+
+            return response()->json($message, 400);
+        }
+        $reward->delete();
+
+        return response()->json($reward);
+    }
 }

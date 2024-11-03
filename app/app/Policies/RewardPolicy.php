@@ -41,17 +41,17 @@ class RewardPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Reward $reward): bool
+    public function update(User $user, Room $room): bool
     {
-        //
+        return $user->id === $room->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Reward $reward): bool
+    public function delete(User $user, Room $room): bool
     {
-        //
+        return $user->id === $room->user_id;
     }
 
     /**

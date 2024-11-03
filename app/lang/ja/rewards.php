@@ -10,4 +10,8 @@ return [
     "consumption_points" => "消費ポイント",
     "no_earned" => "獲得済の報酬はありません。",
     "create" => "報酬作成",
+    "edit" => "編集",
+    "update" => "更新",
+    "delete" => "削除",
+    "earn" => "獲得",
 ];
