@@ -36,4 +36,5 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post("/rooms/{room}/tasks/{task}/approval", [TaskController::class, "approval"])->name("rooms.tasks.approval");
     // reward
     Route::resource("rooms.rewards", RewardController::class)->only("index", "store", "update", "destroy");
+    Route::post("/rooms/{room}/rewards/{reward}/earn", [RewardController::class, "earn"])->name("rooms.rewards.earn");
 });

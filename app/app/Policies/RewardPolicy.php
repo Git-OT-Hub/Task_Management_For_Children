@@ -69,4 +69,10 @@ class RewardPolicy
     {
         //
     }
+
+    public function earn(User $user, Room $room, Reward $reward): bool
+    {
+        $earnedPoint = $room->earnedPoint;
+        return $user->id === $earnedPoint->user_id && $earnedPoint->room_id === $reward->room_id;
+    }
 }

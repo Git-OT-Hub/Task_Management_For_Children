@@ -61,12 +61,14 @@
         if (deleteBtns) {
             deleteBtns.each(function() {
                 $(this).click(function() {
-                    if (!confirm("この報酬を削除しますか?")) {
-                        return;
-                    }
-
                     let rewardId = $(this).val();
                     let roomId = $(`#reward-delete-${rewardId} input[name='room-id']`).val();
+                    let point = $(`#reward-${rewardId} td.point`).text();
+                    let reward = $(`#reward-${rewardId} td.reward`).text();
+
+                    if (!confirm(`報酬「 ${point} / ${reward} 」を削除しますか?`)) {
+                        return;
+                    }
 
                     $.ajaxSetup({
                         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
@@ -99,6 +101,63 @@
                         
                         console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
                         alert("報酬の削除に失敗しました。");
+                    });
+                });
+            });
+        }
+    });
+    // 報酬獲得
+    $(document).ready(function() {
+        let earnBtns = $("form.earn-reward button.earn-reward");
+        if (earnBtns) {
+            earnBtns.each(function() {
+                $(this).click(function() {
+                    let rewardId = $(this).val();
+                    let roomId = $(`#earn-reward-${rewardId} input[name='room-id']`).val();
+                    let point = $(`#earn-reward-${rewardId} input[name='point']`).val();
+                    let reward = $(`#earn-reward-${rewardId} input[name='reward']`).val();
+
+                    if (!confirm(`「${point} P」を消費して、報酬「 ${reward} 」を獲得しますか?`)) {
+                        return;
+                    }
+
+                    $.ajaxSetup({
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
+                    });
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: `/rooms/${roomId}/rewards/${rewardId}/earn`,
+                        dataType: "json",
+                        data: {
+                            "_method": "POST",
+                            point: point,
+                            reward: reward,
+                        },
+                    })
+                    .done(function(res) {
+                        $('#ajax-flash-message').empty();
+
+                        $(`#reward-${res.reward.id}`).remove();
+                        var earnedReward = `<tr><td>${res.reward.point} P</td><td>${res.reward.reward}</td></tr>`;
+                        $('#earned-rewards').prepend(earnedReward);
+                        $('#current-points-held').text(res.earnedPoint.point);
+                        
+                        var dom = '<div class="p-3"><div class="alert alert-info mb-0" role="alert">報酬を獲得しました。</div></div>'
+                        $('#ajax-flash-message').append(dom);
+                        
+                        setTimeout(function() {
+                            $('#ajax-flash-message').empty();
+                        }, 3000);
+                    })
+                    .fail(function(jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.responseJSON["message"]) {
+                            alert(jqXHR.responseJSON["message"]);
+                            exit;
+                        }
+                        
+                        console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
+                        alert("報酬の獲得に失敗しました。");
                     });
                 });
             });

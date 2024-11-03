@@ -119,7 +119,13 @@
                                         </form>
                                     </td>
                                     <td class="text-end">
-                                        獲得
+                                        <form class="earn-reward" id="earn-reward-{{ $reward->id }}">
+                                            @csrf
+                                            <input type="hidden" name="room-id" value="{{ $room->id }}">
+                                            <input type="hidden" name="point" value="{{ $reward->point }}">
+                                            <input type="hidden" name="reward" value="{{ $reward->reward }}">
+                                            <button type="button" class="btn btn-success shadow earn-reward" value="{{ $reward->id }}">{{ __('rewards.earn') }}</button> 
+                                        </form>
                                     </td>
                                 </tr>
                             @empty
@@ -145,7 +151,8 @@
                         </div>
                         <div class="col-12 border-top border-3 mt-2">
                             <p class="mb-0 fs-5 py-2">
-                                {{ __('rewards.points_held') }}：{{ $receiveRewardsUser["earned_point"] }} P
+                                {{ __('rewards.points_held') }}：
+                                <span id="current-points-held">{{ $receiveRewardsUser["earned_point"] }}</span> P
                             </p>
                         </div>
                     </div>
@@ -157,7 +164,7 @@
                                 <th scope="col">{{ __('rewards.earned') }}</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="earned-rewards">
                             @forelse ($earnedRewards as $earnedReward)
                                 <tr>
                                     <td>{{ $earnedReward->point }} P</td>

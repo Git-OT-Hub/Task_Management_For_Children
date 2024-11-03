@@ -26,7 +26,7 @@ class ParticipantsTableSeeder extends Seeder
             [
                 "room_id" => 1,
                 "user_id" => 2,
-                "join_flg" => false,
+                "join_flg" => true,
                 "master_flg" => false,
                 "created_at" => Carbon::now(),
                 "updated_at" => Carbon::now(),

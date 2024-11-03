@@ -18,7 +18,7 @@ class EarnedPointsTableSeeder extends Seeder
             [
                 "room_id" => 1,
                 "user_id" => 2,
-                "point" => 900,
+                "point" => 5400,
                 "created_at" => Carbon::now(),
                 "updated_at" => Carbon::now(),
             ],
