@@ -20,7 +20,7 @@ class RewardController extends Controller
         $earnedRewards = $room->rewards()->where("acquired_flg", "=", 1)->orderBy("point", "asc")->get();
         $earnedPoint = $room->earnedPoint;
         $user = User::find($earnedPoint->user_id);
-        $receiveRewardsUser = ["user_icon" => $user->icon, "user_name" => $user->name, "earned_point" => $earnedPoint->point];
+        $receiveRewardsUser = ["user_id" => $user->id, "user_icon" => $user->icon, "user_name" => $user->name, "earned_point" => $earnedPoint->point];
         
         return view("rooms.rewards.index")->with(["room" => $room, "rewards" => $rewards, "receiveRewardsUser" => $receiveRewardsUser, "earnedRewards" => $earnedRewards]);
     }
@@ -38,11 +38,8 @@ class RewardController extends Controller
             $reward->$column = $request->$column;
         }
         $reward->save();
-        session()->flash("successMessage", "報酬を作成しました。");
 
-        $rewards = $room->rewards()->where("acquired_flg", "=", 0)->orderBy("point", "asc")->get();
-
-        return response()->json($rewards);
+        return response()->json(["reward" => $reward, "room" => $room]);
     }
 
     public function update(RewardRequest $request, Room $room, Reward $reward)

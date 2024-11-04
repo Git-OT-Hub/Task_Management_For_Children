@@ -16,58 +16,46 @@
                             </a>
                         </div>
                     </div>
-
-                    <div class="accordion mt-4" id="accordionRewardCreation">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    {{ __('rewards.create') }}
-                                </button>
-                            </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionRewardCreation">
-                                <div class="accordion-body">
-                                    <form>
-                                        @csrf
-
-                                        <div class="row mb-3">
-                                            <div class="col-3">
-                                                <label for="point" class="form-label">{{ __('rewards.point') }}</label>
-                                                <input id="point" type="number" class="form-control @error('point') is-invalid @enderror" name="point" value="{{ old('point') }}" required>
-
-                                                @error('point')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-
-                                            <div class="col-9">
-                                                <label for="reward" class="form-label">{{ __('rewards.reward') }}</label>
-                                                <input id="reward" type="text" class="form-control @error('reward') is-invalid @enderror" name="reward" value="{{ old('reward') }}" required>
-
-                                                @error('reward')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-0">
-                                            <div class="col-12">
-                                                <div class="text-end">
-                                                    <button type="submit" class="btn btn-primary shadow" id="reward-create">
-                                                        {{ __('rewards.create') }}
-                                                    </button>
+                    @if(Auth::user()->id === $room->user_id)
+                        <div class="accordion mt-4" id="accordionRewardCreation">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        {{ __('rewards.create') }}
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionRewardCreation">
+                                    <div class="accordion-body">
+                                        <form id="reward-create-form">
+                                            @csrf
+                                            <div class="row mb-3">
+                                                <div class="col-3">
+                                                    <label for="point" class="form-label">{{ __('rewards.point') }}</label>
+                                                    <input id="point" type="number" class="form-control @error('point') is-invalid @enderror" name="point" value="{{ old('point') }}" required>
+                                                </div>
+                                                <div class="col-9">
+                                                    <label for="reward" class="form-label">{{ __('rewards.reward') }}</label>
+                                                    <input id="reward" type="text" class="form-control @error('reward') is-invalid @enderror" name="reward" value="{{ old('reward') }}" required>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </form>
+                                            <ul class="fw-bold text-danger reward-create-error-message">
+                                            </ul>
+                                            <input type="hidden" name="room-id" value="{{ $room->id }}">
+                                            <div class="row mb-0">
+                                                <div class="col-12">
+                                                    <div class="text-end">
+                                                        <button type="button" class="btn btn-primary shadow" id="reward-create-btn">
+                                                            {{ __('rewards.create') }}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
+                    @endif
                     <table class="table table-striped border-top border-3 mt-4">
                         <thead>
                             <tr>
@@ -78,58 +66,64 @@
                                 <th scope="col"></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="creation-rewards-list">
                             @forelse ($rewards as $reward)
                                 <tr id="reward-{{ $reward->id }}">
-                                    <td class="point">{{ $reward->point }} P</td>
-                                    <td class="reward">{{ $reward->reward }}</td>
+                                    <td class="point align-middle">{{ $reward->point }} P</td>
+                                    <td class="reward align-middle">{{ $reward->reward }}</td>
                                     <td class="text-end">
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-secondary shadow dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                                                {{ __('rewards.edit') }}
-                                            </button>
-                                            <form class="dropdown-menu p-3 dropdown-menu-end shadow reward-update" id="reward-update-{{ $reward->id }}">
+                                        @if(Auth::user()->id === $room->user_id)
+                                            <div class="dropdown">
+                                                <button type="button" class="btn btn-secondary shadow dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                                    {{ __('rewards.edit') }}
+                                                </button>
+                                                <form class="dropdown-menu p-3 dropdown-menu-end shadow reward-update" id="reward-update-{{ $reward->id }}">
+                                                    @csrf
+                                                    <div class="row mb-3">
+                                                        <div class="col-12">
+                                                            <label for="point" class="form-label mb-0">{{ __('rewards.point') }}</label>
+                                                            <input id="point" type="number" class="form-control @error('point') is-invalid @enderror" name="point" value="{{ old('point', $reward->point) }}" required>
+                                                        </div>
+                                                        <div class="col-12 mt-2">
+                                                            <label for="reward" class="form-label mb-0">{{ __('rewards.reward') }}</label>
+                                                            <input id="reward" type="text" class="form-control @error('reward') is-invalid @enderror" name="reward" value="{{ old('reward', $reward->reward) }}" required>
+                                                        </div>
+                                                    </div>
+                                                    <ul class="fw-bold text-danger reward-update-error-message">
+                                                    </ul>
+                                                    <input type="hidden" name="room-id" value="{{ $room->id }}">
+                                                    <div class="row mb-0">
+                                                        <div class="col-12 text-end">
+                                                            <button type="button" class="btn btn-primary shadow reward-update" value="{{ $reward->id }}">{{ __('rewards.update') }}</button> 
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td class="text-end">
+                                        @if(Auth::user()->id === $room->user_id)
+                                            <form class="reward-delete" id="reward-delete-{{ $reward->id }}">
                                                 @csrf
-                                                <div class="row mb-3">
-                                                    <div class="col-12">
-                                                        <label for="point" class="form-label mb-0">{{ __('rewards.point') }}</label>
-                                                        <input id="point" type="number" class="form-control @error('point') is-invalid @enderror" name="point" value="{{ old('point', $reward->point) }}" required>
-                                                    </div>
-                                                    <div class="col-12 mt-2">
-                                                        <label for="reward" class="form-label mb-0">{{ __('rewards.reward') }}</label>
-                                                        <input id="reward" type="text" class="form-control @error('reward') is-invalid @enderror" name="reward" value="{{ old('reward', $reward->reward) }}" required>
-                                                    </div>
-                                                </div>
-                                                <ul class="fw-bold text-danger reward-update-error-message">
-                                                </ul>
                                                 <input type="hidden" name="room-id" value="{{ $room->id }}">
-                                                <div class="row mb-0">
-                                                    <div class="col-12 text-end">
-                                                        <button type="button" class="btn btn-primary shadow reward-update" value="{{ $reward->id }}">{{ __('rewards.update') }}</button> 
-                                                    </div>
-                                                </div>
+                                                <button type="button" class="btn btn-danger shadow reward-delete" value="{{ $reward->id }}">{{ __('rewards.delete') }}</button> 
                                             </form>
-                                        </div>
+                                        @endif
                                     </td>
                                     <td class="text-end">
-                                        <form class="reward-delete" id="reward-delete-{{ $reward->id }}">
-                                            @csrf
-                                            <input type="hidden" name="room-id" value="{{ $room->id }}">
-                                            <button type="button" class="btn btn-danger shadow reward-delete" value="{{ $reward->id }}">{{ __('rewards.delete') }}</button> 
-                                        </form>
-                                    </td>
-                                    <td class="text-end">
-                                        <form class="earn-reward" id="earn-reward-{{ $reward->id }}">
-                                            @csrf
-                                            <input type="hidden" name="room-id" value="{{ $room->id }}">
-                                            <input type="hidden" name="point" value="{{ $reward->point }}">
-                                            <input type="hidden" name="reward" value="{{ $reward->reward }}">
-                                            <button type="button" class="btn btn-success shadow earn-reward" value="{{ $reward->id }}">{{ __('rewards.earn') }}</button> 
-                                        </form>
+                                        @if(Auth::user()->id === $receiveRewardsUser["user_id"])
+                                            <form class="earn-reward" id="earn-reward-{{ $reward->id }}">
+                                                @csrf
+                                                <input type="hidden" name="room-id" value="{{ $room->id }}">
+                                                <input type="hidden" name="point" value="{{ $reward->point }}">
+                                                <input type="hidden" name="reward" value="{{ $reward->reward }}">
+                                                <button type="button" class="btn btn-success shadow earn-reward" value="{{ $reward->id }}">{{ __('rewards.earn') }}</button> 
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
-                                <tr><td colspan="5">{{ __('rewards.no_rewards') }}</td></tr>
+                                <tr class="no_rewards"><td colspan="5">{{ __('rewards.no_rewards') }}</td></tr>
                             @endforelse
                         </table>
                     </table>
@@ -152,7 +146,7 @@
                         <div class="col-12 border-top border-3 mt-2">
                             <p class="mb-0 fs-5 py-2">
                                 {{ __('rewards.points_held') }}：
-                                <span id="current-points-held">{{ $receiveRewardsUser["earned_point"] }}</span> P
+                                <span id="current-points-held" class="badge text-bg-warning fs-4">{{ $receiveRewardsUser["earned_point"] }}</span> P
                             </p>
                         </div>
                     </div>
@@ -171,7 +165,7 @@
                                     <td>{{ $earnedReward->reward }}</td>
                                 </tr>
                             @empty
-                                <tr><td colspan="2">{{ __('rewards.no_earned') }}</td></tr>
+                                <tr class="no_earned"><td colspan="2">{{ __('rewards.no_earned') }}</td></tr>
                             @endforelse
                         </table>
                     </table>
