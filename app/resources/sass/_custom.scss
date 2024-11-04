@@ -88,3 +88,15 @@ main {
     --bs-alert-border-color: rgb(97 124 129);
     --bs-alert-link-color: rgb(63 91 97);
 }
+
+.custom-flash-area-parent {
+    position: relative;
+}
+
+.custom-flash-area-child {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}

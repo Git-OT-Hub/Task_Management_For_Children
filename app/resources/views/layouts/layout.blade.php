@@ -18,112 +18,119 @@
 </head>
 <body>
     <div id="app">
-        <header class="custom-main-color shadow sticky-top">
-            <nav class="navbar navbar-expand-md">
-                <div class="container-fluid">
-                    <img src="{{ asset('images/test_header_icon.png') }}" alt="" width="80" height="60">
-                    <a class="navbar-brand px-3" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                    </button>
+        <div class="sticky-top">
+            <header class="custom-main-color shadow">
+                <nav class="navbar navbar-expand-md">
+                    <div class="container-fluid">
+                        <img src="{{ asset('images/test_header_icon.png') }}" alt="" width="80" height="60">
+                        <a class="navbar-brand px-3" href="{{ url('/') }}">
+                            {{ config('app.name', 'Laravel') }}
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                        </button>
 
-                    <div class="collapse navbar-collapse mt-3 mt-md-0" id="navbarSupportedContent">
-                        <!-- Right Side Of Navbar -->
-                        <ul class="navbar-nav ms-3 ms-md-auto">
-                            <!-- Authentication Links -->
-                            @guest
-                                @if (Route::has('login'))
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('login') }}"><i class="fa-solid fa-right-to-bracket fa-2x"></i></a>
+                        <div class="collapse navbar-collapse mt-3 mt-md-0" id="navbarSupportedContent">
+                            <!-- Right Side Of Navbar -->
+                            <ul class="navbar-nav ms-3 ms-md-auto">
+                                <!-- Authentication Links -->
+                                @guest
+                                    @if (Route::has('login'))
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ route('login') }}"><i class="fa-solid fa-right-to-bracket fa-2x"></i></a>
+                                        </li>
+                                    @endif
+
+                                    @if (Route::has('register'))
+                                        <li class="nav-item ms-0 ms-md-3">
+                                            <a class="nav-link" href="{{ route('register') }}"><i class="fa-solid fa-user-plus fa-2x"></i></a>
+                                        </li>
+                                    @endif
+                                @else
+                                    <li class="nav-item d-flex align-items-center">     
+                                        <a class="nav-link" href="{{ route('rooms.index') }}"><i class="fa-solid fa-house fa-2x"></i></a>
                                     </li>
-                                @endif
+                                    <li class="nav-item dropdown ms-0 ms-md-3">
+                                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                            <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
+                                                <img src="{{ asset('images/test_header_icon.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                            </div>
+                                        </a>
 
-                                @if (Route::has('register'))
-                                    <li class="nav-item ms-0 ms-md-3">
-                                        <a class="nav-link" href="{{ route('register') }}"><i class="fa-solid fa-user-plus fa-2x"></i></a>
+                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                            <li>
+                                                <span class="dropdown-item">{{ Auth::user()->name }}</span>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <a class="dropdown-item" href="#">
+                                                    {{ __('Go To My Page') }}
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                                onclick="event.preventDefault();
+                                                                document.getElementById('logout-form').submit();">
+                                                    <i class="fa-solid fa-right-from-bracket fa-2x"></i>
+                                                </a>
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                    @csrf
+                                                </form>
+                                            </li>
+                                        </ul>
                                     </li>
-                                @endif
-                            @else
-                                <li class="nav-item d-flex align-items-center">     
-                                    <a class="nav-link" href="{{ route('rooms.index') }}"><i class="fa-solid fa-house fa-2x"></i></a>
-                                </li>
-                                <li class="nav-item dropdown ms-0 ms-md-3">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
-                                            <img src="{{ asset('images/test_header_icon.png') }}" alt="" class="img-thumbnail rounded-circle">
-                                        </div>
-                                    </a>
+                                    <li class="nav-item d-flex align-items-center ms-0 ms-md-1">
+                                        <a class="nav-link custom-notification-icon" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                            <i class="fa-solid fa-bell fa-2x"></i>
+                                        </a>
 
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <li>
-                                            <span class="dropdown-item">{{ Auth::user()->name }}</span>
-                                        </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <a class="dropdown-item" href="#">
-                                                {{ __('Go To My Page') }}
-                                            </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                            document.getElementById('logout-form').submit();">
-                                                <i class="fa-solid fa-right-from-bracket fa-2x"></i>
-                                            </a>
-                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                                @csrf
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item d-flex align-items-center ms-0 ms-md-1">
-                                    <a class="nav-link custom-notification-icon" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                        <i class="fa-solid fa-bell fa-2x"></i>
-                                    </a>
-
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    ...
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        ...
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                            @endguest
-                        </ul>
+                                    </li>
+                                @endguest
+                            </ul>
+                        </div>
                     </div>
+                </nav>
+            </header>
+
+            <div class="custom-flash-area-parent">
+                <div class="custom-flash-area-child" id="ajax-flash-message">
+                    @if(session("successMessage"))
+                        <div class="p-1">
+                            <div class="alert alert-info mb-0 alert-dismissible fade show" role="alert">
+                                {{ session("successMessage") }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    @elseif(session("failureMessage"))
+                        <div class="p-1">
+                            <div class="alert alert-danger mb-0 alert-dismissible fade show" role="alert">
+                                {{ session("failureMessage") }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    @endif
                 </div>
-            </nav>
-            @if(session("successMessage"))
-                <div class="p-3">
-                    <div class="alert alert-info mb-0" role="alert">
-                        {{ session("successMessage") }}
-                    </div>
-                </div>
-            @elseif(session("failureMessage"))
-                <div class="p-3">
-                    <div class="alert alert-danger mb-0" role="alert">
-                        {{ session("failureMessage") }}
-                    </div>
-                </div>
-            @endif
-            <div id="ajax-flash-message">
             </div>
-        </header>
+        </div>
         <main class="py-4">
             @yield('content')
         </main>

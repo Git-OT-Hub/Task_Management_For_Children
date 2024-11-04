@@ -92,7 +92,7 @@
                     `;
                     $('#creation-rewards-list').prepend(newReward);
 
-                    var dom = '<div class="p-3"><div class="alert alert-info mb-0" role="alert">報酬を作成しました。</div></div>'
+                    var dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">報酬を作成しました。</div></div>'
                     $('#ajax-flash-message').append(dom);
                     
                     setTimeout(function() {
@@ -144,7 +144,7 @@
                 $('#ajax-flash-message').empty();
                 $(`#reward-${rewardId} td.point`).text(`${res.point} P`);
                 $(`#reward-${rewardId} td.reward`).text(res.reward);
-                var dom = '<div class="p-3"><div class="alert alert-info mb-0" role="alert">報酬を更新しました。</div></div>'
+                var dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">報酬を更新しました。</div></div>'
                 $('#ajax-flash-message').append(dom);
                 
                 setTimeout(function() {
@@ -198,7 +198,7 @@
                 $('#ajax-flash-message').empty();
                 $(`#reward-${res.id}`).remove();
                 
-                var dom = '<div class="p-3"><div class="alert alert-info mb-0" role="alert">報酬を削除しました。</div></div>'
+                var dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">報酬を削除しました。</div></div>'
                 $('#ajax-flash-message').append(dom);
                 
                 setTimeout(function() {
@@ -254,7 +254,7 @@
                 $('#earned-rewards').prepend(earnedReward);
                 $('#current-points-held').text(res.earnedPoint.point);
                 
-                var dom = '<div class="p-3"><div class="alert alert-info mb-0" role="alert">報酬を獲得しました。</div></div>'
+                var dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">報酬を獲得しました。</div></div>'
                 $('#ajax-flash-message').append(dom);
                 
                 setTimeout(function() {
