@@ -63,8 +63,8 @@
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <a class="dropdown-item" href="#">
-                                                    {{ __('Go To My Page') }}
+                                                <a class="dropdown-item" href="{{ route('profiles.index') }}">
+                                                    {{ __('profiles.profile') }}
                                                 </a>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>

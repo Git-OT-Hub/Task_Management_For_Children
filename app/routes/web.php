@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\RewardController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,4 +38,8 @@ Route::group(['middleware' => 'auth'], function() {
     // reward
     Route::resource("rooms.rewards", RewardController::class)->only("index", "store", "update", "destroy");
     Route::post("/rooms/{room}/rewards/{reward}/earn", [RewardController::class, "earn"])->name("rooms.rewards.earn");
+    // profile
+    Route::get("/profiles", [ProfileController::class, "index"])->name("profiles.index");
+    Route::get("/profiles/edit", [ProfileController::class, "edit"])->name("profiles.edit");
+    Route::patch("/profiles/update", [ProfileController::class, "update"])->name("profiles.update");
 });
