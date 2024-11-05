@@ -25,7 +25,7 @@
                         <div class="col-12 text-center">
                             <div class="ratio ratio-1x1 w-25 custom-user-icon">
                                 @if(Auth::user()->icon)
-                                    <img src="" alt="" class="img-thumbnail rounded-circle">
+                                    <img src="{{ Storage::url(Auth::user()->icon) }}" alt="" class="img-thumbnail rounded-circle">
                                 @else
                                     <img src="{{ asset('images/no_image.png') }}" alt="" class="img-thumbnail rounded-circle">
                                 @endif

@@ -18,7 +18,7 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-12">
-                            <form method="POST" action="{{ route('profiles.update') }}">
+                            <form method="POST" action="{{ route('profiles.update') }}" enctype="multipart/form-data">
                                 @method("PATCH")
                                 @csrf
 
@@ -57,6 +57,20 @@
                                         <textarea id="goal" name="goal" rows="4" class="form-control @error('goal') is-invalid @enderror">{{ old('goal', Auth::user()->goal) }}</textarea>
 
                                         @error('goal')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="icon" class="col-12 col-form-label">{{ __('profiles.icon') }}</label>
+
+                                    <div class="col-12">
+                                        <input id="icon" type="file" class="form-control @error('icon') is-invalid @enderror" name="icon" value="{{ old('icon', Auth::user()->icon) }}">
+
+                                        @error('icon')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
