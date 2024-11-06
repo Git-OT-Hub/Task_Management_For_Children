@@ -64,7 +64,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row mb-3">
+                                <div class="row mb-3 profile-icon-input">
                                     <label for="icon" class="col-12 col-form-label">{{ __('profiles.icon') }}</label>
 
                                     <div class="col-12">
@@ -75,6 +75,14 @@
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3 profile-icon-preview">
+                                    <div class="col-12 text-center">
+                                        <div class="ratio ratio-1x1 w-25 custom-user-icon"> 
+                                            <img src="#" alt="" class="img-thumbnail rounded-circle shadow" style="display: none;" id="iconPreview">
+                                        </div>
                                     </div>
                                 </div>
 

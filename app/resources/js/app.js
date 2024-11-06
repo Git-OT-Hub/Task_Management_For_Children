@@ -5,3 +5,4 @@ import './bootstrap';
 
 import './room';
 import './task';
+import './profile';
