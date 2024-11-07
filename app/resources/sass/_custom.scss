@@ -41,8 +41,11 @@ main {
 }
 
 // お知らせアイコン
-.custom-notification-icon {
-    cursor: pointer;
+#navbarDropdownNotice {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 // 課題一覧　user情報
