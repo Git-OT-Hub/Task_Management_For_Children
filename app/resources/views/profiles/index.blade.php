@@ -30,6 +30,13 @@
                                     <img src="{{ asset('images/no_image.png') }}" alt="" class="img-thumbnail rounded-circle shadow">
                                 @endif
                             </div>
+                            @if(Auth::user()->icon)
+                                <form method="POST" action="{{ route('profiles.icon.destroy') }}" id="icon-delete" class="custom-icon-button align-bottom ms-2">
+                                    @method("DELETE")
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger shadow">{{ __('profiles.delete') }}</button>
+                                </form>
+                            @endif
                         </div>
                     </div>
                     <div class="row mt-4 fs-5">

@@ -17,8 +17,12 @@
                                             {{ __('rooms.master') }}
                                         </div>
                                         <div class="col-3">
-                                            <div class="ratio ratio-1x1 custom-user-icon" style="width: 40px; height: 40px;">
-                                                <img src="{{ asset('images/test_header_icon.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                            <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
+                                                @if($room_member["room_master_icon"])
+                                                    <img src="{{ Storage::url($room_member['room_master_icon']) }}" alt="" class="img-thumbnail rounded-circle">
+                                                @else
+                                                    <img src="{{ asset('images/no_image.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="col-9 align-self-center">
@@ -32,8 +36,12 @@
                                             {{ __('rooms.executor') }}
                                         </div>
                                         <div class="col-3">
-                                            <div class="ratio ratio-1x1 custom-user-icon" style="width: 40px; height: 40px;">
-                                                <img src="{{ asset('images/test_header_icon.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                            <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
+                                                @if($room_member["participant_icon"])
+                                                    <img src="{{ Storage::url($room_member['participant_icon']) }}" alt="" class="img-thumbnail rounded-circle">
+                                                @else
+                                                    <img src="{{ asset('images/no_image.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="col-9 align-self-center">
@@ -182,7 +190,11 @@
                                         
                                         <div class="border-bottom border-5 py-3">
                                             <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
-                                                <img src="{{ asset('images/test_header_icon.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                                @if($result["sender_icon"])
+                                                    <img src="{{ Storage::url($result['sender_icon']) }}" alt="" class="img-thumbnail rounded-circle">
+                                                @else
+                                                    <img src="{{ asset('images/no_image.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                                @endif
                                             </div>
                                             <span class="mb-0 fs-4 ms-3">
                                                 {{ $result["sender_name"] }}

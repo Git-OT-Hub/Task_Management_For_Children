@@ -68,7 +68,7 @@ return [
         'string' => 'The :attribute field must be greater than or equal to :value characters.',
     ],
     'hex_color' => 'The :attribute field must be a valid hexadecimal color.',
-    'image' => 'The :attribute field must be an image.',
+    'image' => ':attribute 欄は画像を添付してください。',
     'in' => 'The selected :attribute is invalid.',
     'in_array' => 'The :attribute field must exist in :other.',
     'integer' => ':attribute 欄は整数を入力してください。',
@@ -97,7 +97,7 @@ return [
         'string' => ':attribute は :max 文字以内で入力してください。',
     ],
     'max_digits' => 'The :attribute field must not have more than :max digits.',
-    'mimes' => 'The :attribute field must be a file of type: :values.',
+    'mimes' => ':attribute 欄に添付できる画像形式は「 :values 」になります。',
     'mimetypes' => 'The :attribute field must be a file of type: :values.',
     'min' => [
         'array' => 'The :attribute field must have at least :min items.',

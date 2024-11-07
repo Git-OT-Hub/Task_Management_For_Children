@@ -34,7 +34,11 @@
                                         <div class="row">
                                             <div class="col-3">
                                                 <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
-                                                    <img src="{{ asset('images/test_header_icon.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                                    @if($result["room_master_icon"])
+                                                        <img src="{{ Storage::url($result['room_master_icon']) }}" alt="" class="img-thumbnail rounded-circle">
+                                                    @else
+                                                        <img src="{{ asset('images/no_image.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class="col-9 align-self-center">
@@ -78,7 +82,11 @@
                                         <div class="row">
                                             <div class="col-3">
                                                 <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
-                                                    <img src="{{ asset('images/test_header_icon.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                                    @if($result["room_master_icon"])
+                                                        <img src="{{ Storage::url($result['room_master_icon']) }}" alt="" class="img-thumbnail rounded-circle">
+                                                    @else
+                                                        <img src="{{ asset('images/no_image.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class="col-9 align-self-center">
@@ -94,7 +102,11 @@
                                         <div class="row">
                                             <div class="col-3">
                                                 <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
-                                                    <img src="{{ asset('images/test_header_icon.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                                    @if($result["participant_icon"])
+                                                        <img src="{{ Storage::url($result['participant_icon']) }}" alt="" class="img-thumbnail rounded-circle">
+                                                    @else
+                                                        <img src="{{ asset('images/no_image.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class="col-9 align-self-center">

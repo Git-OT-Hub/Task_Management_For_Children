@@ -1,6 +1,7 @@
 "use strict";
 
 {
+    // アイコン添付時の画像プレビュー
     document.addEventListener("DOMContentLoaded", () => {
         const iconInput = document.querySelector("div.profile-icon-input #icon");
         const iconPreview = document.querySelector("div.profile-icon-preview #iconPreview");
@@ -19,6 +20,20 @@
                     iconPreview.src = "";
                     iconPreview.style.display = "none";
                 }
+            });
+        }
+    });
+
+    // アイコン削除時の確認画面
+    document.addEventListener("DOMContentLoaded", () => {
+        const iconDelete = document.querySelector("#icon-delete");
+        if (iconDelete) {
+            iconDelete.addEventListener("submit", (e) => {
+                e.preventDefault();
+                if (!confirm("このアイコンを削除しますか?")) {
+                    return;
+                }
+                iconDelete.submit();
             });
         }
     });

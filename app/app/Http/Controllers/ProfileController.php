@@ -52,4 +52,21 @@ class ProfileController extends Controller
 
         return redirect()->route("profiles.index");
     }
+
+    public function deleteIcon()
+    {
+        $user = User::find(Auth::user()->id);
+
+        DB::transaction(function () use($user) {
+            if ($currentIcon = $user->icon) {
+                Storage::disk("public")->delete($currentIcon);
+            }
+            $user->icon = null;
+            $user->save();
+        });
+
+        session()->flash("successMessage", "アイコンを削除しました。");
+
+        return redirect()->route("profiles.index");
+    }
 }

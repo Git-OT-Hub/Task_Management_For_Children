@@ -68,7 +68,7 @@
                                     <label for="icon" class="col-12 col-form-label">{{ __('profiles.icon') }}</label>
 
                                     <div class="col-12">
-                                        <input id="icon" type="file" class="form-control @error('icon') is-invalid @enderror" name="icon" value="{{ old('icon', Auth::user()->icon) }}">
+                                        <input id="icon" type="file" class="form-control @error('icon') is-invalid @enderror" name="icon" accept="image/jpeg, image/png, image/jpg, image/gif">
 
                                         @error('icon')
                                             <span class="invalid-feedback" role="alert">

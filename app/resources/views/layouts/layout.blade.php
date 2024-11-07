@@ -53,7 +53,11 @@
                                     <li class="nav-item dropdown ms-0 ms-md-3">
                                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                             <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
-                                                <img src="{{ asset('images/test_header_icon.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                                @if(Auth::user()->icon)
+                                                    <img src="{{ Storage::url(Auth::user()->icon) }}" alt="" class="img-thumbnail rounded-circle shadow">
+                                                @else
+                                                    <img src="{{ asset('images/no_image.png') }}" alt="" class="img-thumbnail rounded-circle shadow">
+                                                @endif
                                             </div>
                                         </a>
 

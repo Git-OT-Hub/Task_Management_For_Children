@@ -136,8 +136,12 @@
                 <div class="card-body">
                     <div class="row border-bottom border-3">
                         <div class="col-3">
-                            <div class="ratio ratio-1x1 custom-user-icon" style="width: 40px; height: 40px;">
-                                <img src="{{ asset('images/test_header_icon.png') }}" alt="" class="img-thumbnail rounded-circle">
+                            <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
+                                @if($receiveRewardsUser["user_icon"])
+                                    <img src="{{ Storage::url($receiveRewardsUser['user_icon']) }}" alt="" class="img-thumbnail rounded-circle">
+                                @else
+                                    <img src="{{ asset('images/no_image.png') }}" alt="" class="img-thumbnail rounded-circle">
+                                @endif
                             </div>
                         </div>
                         <div class="col-9 align-self-center">

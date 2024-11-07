@@ -42,4 +42,5 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get("/profiles", [ProfileController::class, "index"])->name("profiles.index");
     Route::get("/profiles/edit", [ProfileController::class, "edit"])->name("profiles.edit");
     Route::patch("/profiles/update", [ProfileController::class, "update"])->name("profiles.update");
+    Route::delete("/profiles/icon", [ProfileController::class, "deleteIcon"])->name("profiles.icon.destroy");
 });
