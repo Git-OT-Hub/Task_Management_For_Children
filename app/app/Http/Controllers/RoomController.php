@@ -9,6 +9,8 @@ use App\Models\Room;
 use App\Models\EarnedPoint;
 use App\Http\Requests\RoomRequest;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\InformationNotification;
+use Illuminate\Support\Facades\Log;
 
 class RoomController extends Controller
 {
@@ -73,12 +75,24 @@ class RoomController extends Controller
                 $earnedPoint->room_id = $room->id;
                 $earnedPoint->user_id = $participant->id;
                 $earnedPoint->save();
+
+                // 通知
+                $information = [
+                    "sender" => Auth::user()->name,
+                    "content" => "『 {$room->name} 』に招待されています。",
+                    "url" => route('rooms.index')
+                ];
+                $participant->notify(new InformationNotification((object) $information));
             });
+
             session()->flash("successMessage", "ルームを作成しました。");
 
             return redirect()->route("rooms.index");
         } catch (\Throwable $e) {
+            Log::error('Room creation error: ' . $e->getMessage());
+            session()->flash("failureMessage", "ルームの作成に失敗しました。");
 
+            return redirect()->route("rooms.index");
         }
     }
 

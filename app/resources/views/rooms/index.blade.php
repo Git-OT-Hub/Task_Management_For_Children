@@ -27,6 +27,9 @@
                     @if ($result["join_status"] == 0)
                         <div class="col-12 col-lg-6 mt-3">
                             <div class="p-3 rounded shadow h-100">
+                                <h2>
+                                    {{ $result["room_name"] }}
+                                </h2>
                                 <div class="card">
                                     <div class="card-header text-center custom-main-color">{{ __('rooms.master') }}</div>
 
@@ -49,9 +52,6 @@
                                 </div>
                                 <div class="mt-3">
                                     <p class="mb-0 fs-4 text-danger">{{ __('rooms.invited') }}</p>
-                                    <p class="mb-0 mt-2 fs-4">
-                                        {{ __('rooms.name') }}：{{ $result["room_name"] }}
-                                    </p>
                                 </div>
                                 <div class="mt-3 text-center">
                                     <form method="post" action="{{ route('rooms.join', ['room' => $result['room_id']]) }}" id="room-join-form">

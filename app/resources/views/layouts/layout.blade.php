@@ -85,20 +85,46 @@
                                         </ul>
                                     </li>
                                     <li class="nav-item dropdown ms-0 ms-md-1">
-                                        <a id="navbarDropdownNotice" class="nav-link dropdown-toggle " href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                             <i class="fa-solid fa-bell fa-2x"></i>
+                                        <a id="navbarDropdownNotice" class="nav-link dropdown-toggle " href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-bs-auto-close="false" v-pre>     
+                                            <i class="fa-solid fa-bell fa-2x position-relative">
+                                                @if(Auth::user()->unreadNotifications->count() !== 0)
+                                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger custom-notice-numbers">    
+                                                        {{ Auth::user()->unreadNotifications->count() }}
+                                                    </span>
+                                                @endif
+                                            </i>
                                         </a>
 
-                                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="navbarDropdownNotice">
-                                            <li>通知1</li>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow p-2 overflow-y-scroll" aria-labelledby="navbarDropdownNotice" style="height: 300px;">
+                                            @forelse(Auth::user()->unreadNotifications as $notification)
+                                                <li>
+                                                    <span>{{ $notification->data['sender'] }}<i class="fa-solid fa-arrow-right mx-2"></i><span>
+                                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ $notification->data['url'] }}">{{ $notification->data['content'] }}</a>
+                                                </li>
+                                                <li><hr class="dropdown-divider"></li>
+                                            @empty
+                                                <li><p class="my-2">{{ __('notifications.no') }}</p></li>
+                                            @endforelse
+                                            <li>test</li>
                                             <li><hr class="dropdown-divider"></li>
-                                            <li>通知2</li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li>通知3</li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li>通知4</li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li>通知5</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
+                                            <li>test</li>
                                         </ul>
                                     </li>
                                 @endguest

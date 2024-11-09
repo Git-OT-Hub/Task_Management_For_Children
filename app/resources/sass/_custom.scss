@@ -40,12 +40,20 @@ main {
     vertical-align: middle;
 }
 
-// お知らせアイコン
+// お知らせ
 #navbarDropdownNotice {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     height: 100%;
+}
+
+.dropdown-divider {
+    border-top: 3px solid var(--bs-dropdown-divider-bg);
+}
+
+.custom-notice-numbers {
+    font-size: 12px;
 }
 
 // 課題一覧　user情報
