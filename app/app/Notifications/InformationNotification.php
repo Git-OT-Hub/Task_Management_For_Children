@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\BroadcastMessage;
+use App\Models\User;
 
 class InformationNotification extends Notification
 {
@@ -54,15 +55,20 @@ class InformationNotification extends Notification
             "sender" => $this->information->sender,
             "content" => $this->information->content,
             "url" => $this->information->url,
+            "participant_id" => $this->information->participant_id
         ];
     }
 
     public function toBroadcast(object $notifiable): BroadcastMessage
     {
+        $user = User::find($this->information->participant_id);
+        $noticeCount = $user->unreadNotifications->count();
+
         return new BroadcastMessage([
             "sender" => $this->information->sender,
             "content" => $this->information->content,
             "url" => $this->information->url,
+            "count" => $noticeCount
         ]);
     }
 }

@@ -86,9 +86,9 @@
                                     </li>
                                     <li class="nav-item dropdown ms-0 ms-md-1">
                                         <a id="navbarDropdownNotice" class="nav-link dropdown-toggle " href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-bs-auto-close="false" v-pre>     
-                                            <i class="fa-solid fa-bell fa-2x position-relative">
+                                            <i class="fa-solid fa-bell fa-2x position-relative" id="notice-count">
                                                 @if(Auth::user()->unreadNotifications->count() !== 0)
-                                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger custom-notice-numbers">    
+                                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger custom-notice-numbers">
                                                         {{ Auth::user()->unreadNotifications->count() }}
                                                     </span>
                                                 @endif
@@ -105,28 +105,11 @@
                                             @empty
                                                 <li><p class="my-2">{{ __('notifications.no') }}</p></li>
                                             @endforelse
-                                            <li>test</li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
-                                            <li>test</li>
                                         </ul>
                                     </li>
+                                    <script>
+                                        window.userId = {{ Auth::user()->id }};
+                                    </script>
                                 @endguest
                             </ul>
                         </div>

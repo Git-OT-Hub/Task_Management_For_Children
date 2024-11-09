@@ -80,7 +80,8 @@ class RoomController extends Controller
                 $information = [
                     "sender" => Auth::user()->name,
                     "content" => "『 {$room->name} 』に招待されています。",
-                    "url" => route('rooms.index')
+                    "url" => route('rooms.index'),
+                    "participant_id" => $participant->id
                 ];
                 $participant->notify(new InformationNotification((object) $information));
             });

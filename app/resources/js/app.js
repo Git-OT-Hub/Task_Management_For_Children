@@ -6,3 +6,4 @@ import './bootstrap';
 import './room';
 import './task';
 import './profile';
+import './information';
