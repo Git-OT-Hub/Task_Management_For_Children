@@ -16,7 +16,8 @@ class RoomController extends Controller
 {
     public function index()
     {
-        $rooms = Auth::user()->participatedRooms()->latest()->get();
+        // $rooms = Auth::user()->participatedRooms()->latest()->get();
+        $rooms = Auth::user()->participatedRooms()->latest()->paginate(4);
         $room_informations = [];
         foreach ($rooms as $room) {
             $array = [];
@@ -50,7 +51,7 @@ class RoomController extends Controller
             $room_informations[] = $array;
         }
 
-        return view("rooms.index")->with(["results" => $room_informations]);
+        return view("rooms.index")->with(["results" => $room_informations, "rooms" => $rooms]);
     }
 
     public function create()
@@ -102,7 +103,8 @@ class RoomController extends Controller
         $this->authorize('view', $room);
 
         $task_informations = [];
-        $tasks = $room->tasks()->latest()->get();
+        // $tasks = $room->tasks()->latest()->get();
+        $tasks = $room->tasks()->latest()->paginate(4);
         foreach ($tasks as $task) {
             $array = [];
             $sender = User::find($task->task_sender);
@@ -133,7 +135,7 @@ class RoomController extends Controller
             }
         }
 
-        return view("rooms.show")->with(["room" => $room, "results" => $task_informations, "recipient" => $recipient, "room_member" => $room_member]);
+        return view("rooms.show")->with(["room" => $room, "results" => $task_informations, "recipient" => $recipient, "room_member" => $room_member, "tasks" => $tasks]);
     }
 
     public function join(Room $room)

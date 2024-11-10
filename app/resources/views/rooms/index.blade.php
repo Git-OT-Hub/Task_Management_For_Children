@@ -133,4 +133,7 @@
         </div>
     </div>
 </div>
+<div class="container mt-5">
+    {{ $rooms->links() }}
+</div>
 @endsection

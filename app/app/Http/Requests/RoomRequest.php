@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Rules\NotCurrentUserName;
 
 class RoomRequest extends FormRequest
 {
@@ -24,8 +25,8 @@ class RoomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "room_name" => "required|max:50",
-            "user_name" => "required|exists:users,name",
+            "room_name" => ["required", "max:50"],
+            "user_name" => ["required", "exists:users,name", new NotCurrentUserName],
         ];
     }
 
