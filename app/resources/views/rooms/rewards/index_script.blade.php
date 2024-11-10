@@ -39,54 +39,39 @@
                             <td class="point align-middle">${resRewardPoint} P</td>
                             <td class="reward align-middle">${resRewardReward}</td>
                             <td class="text-end">
-                                @if(Auth::user()->id === $room->user_id)
-                                    <div class="dropdown">
-                                        <button type="button" class="btn btn-secondary shadow dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                                            {{ __('rewards.edit') }}
-                                        </button>
-                                        <form class="dropdown-menu p-3 dropdown-menu-end shadow reward-update" id="reward-update-${resRewardId}">
-                                            @csrf
-                                            <div class="row mb-3">
-                                                <div class="col-12">
-                                                    <label for="point" class="form-label mb-0">{{ __('rewards.point') }}</label>
-                                                    <input id="point" type="number" class="form-control @error('point') is-invalid @enderror" name="point" value="${resRewardPoint}" required>
-                                                </div>
-                                                <div class="col-12 mt-2">
-                                                    <label for="reward" class="form-label mb-0">{{ __('rewards.reward') }}</label>
-                                                    <input id="reward" type="text" class="form-control @error('reward') is-invalid @enderror" name="reward" value="${resRewardReward}" required>
-                                                </div>
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-secondary shadow dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                        編集
+                                    </button>
+                                    <form class="dropdown-menu p-3 dropdown-menu-end shadow reward-update" id="reward-update-${resRewardId}">
+                                        <div class="row mb-3">
+                                            <div class="col-12">
+                                                <label for="point" class="form-label mb-0">ポイント</label>
+                                                <input id="point" type="number" class="form-control" name="point" value="${resRewardPoint}" required>
                                             </div>
-                                            <ul class="fw-bold text-danger reward-update-error-message">
-                                            </ul>
-                                            <input type="hidden" name="room-id" value="${resRoomId}">
-                                            <div class="row mb-0">
-                                                <div class="col-12 text-end">
-                                                    <button type="button" class="btn btn-primary shadow reward-update" value="${resRewardId}">{{ __('rewards.update') }}</button> 
-                                                </div>
+                                            <div class="col-12 mt-2">
+                                                <label for="reward" class="form-label mb-0">報酬</label>
+                                                <input id="reward" type="text" class="form-control" name="reward" value="${resRewardReward}" required>
                                             </div>
-                                        </form>
-                                    </div>
-                                @endif
+                                        </div>
+                                        <ul class="fw-bold text-danger reward-update-error-message">
+                                        </ul>
+                                        <input type="hidden" name="room-id" value="${resRoomId}">
+                                        <div class="row mb-0">
+                                            <div class="col-12 text-end">
+                                                <button type="button" class="btn btn-primary shadow reward-update" value="${resRewardId}">更新</button> 
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </td>
                             <td class="text-end">
-                                @if(Auth::user()->id === $room->user_id)
-                                    <form class="reward-delete" id="reward-delete-${resRewardId}">
-                                        @csrf
-                                        <input type="hidden" name="room-id" value="${resRoomId}">
-                                        <button type="button" class="btn btn-danger shadow reward-delete" value="${resRewardId}">{{ __('rewards.delete') }}</button> 
-                                    </form>
-                                @endif
+                                <form class="reward-delete" id="reward-delete-${resRewardId}">
+                                    <input type="hidden" name="room-id" value="${resRoomId}">
+                                    <button type="button" class="btn btn-danger shadow reward-delete" value="${resRewardId}">削除</button> 
+                                </form>   
                             </td>
                             <td class="text-end">
-                                @if(Auth::user()->id === $receiveRewardsUser["user_id"])
-                                    <form class="earn-reward" id="earn-reward-${resRewardId}">
-                                        @csrf
-                                        <input type="hidden" name="room-id" value="${resRoomId}">
-                                        <input type="hidden" name="point" value="${resRewardPoint}">
-                                        <input type="hidden" name="reward" value="${resRewardReward}">
-                                        <button type="button" class="btn btn-success shadow earn-reward" value="${resRewardId}">{{ __('rewards.earn') }}</button>
-                                    </form>
-                                @endif
                             </td>
                         </tr>
                     `;

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\Models\Room;
 use App\Models\Task;
 use App\Http\Requests\TaskRequest;
@@ -12,6 +14,7 @@ use OpenAI\Laravel\Facades\OpenAI;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\InformationNotification;
 
 class TaskController extends Controller
 {
@@ -43,6 +46,16 @@ class TaskController extends Controller
         $task->approval_flg = false;
         $task->save();
         session()->flash("successMessage", "課題を作成しました。");
+
+        // 通知
+        $recipient = User::find($task->task_recipient);
+        $information = [
+            "sender" => Auth::user()->name,
+            "content" => "課題『 {$task->title} 』を作成しました。",
+            "url" => route('rooms.tasks.show', ["room" => $room, "task" => $task]),
+            "recipient_id" => $recipient->id
+        ];
+        $recipient->notify(new InformationNotification((object) $information));
 
         return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
     }
@@ -159,6 +172,16 @@ class TaskController extends Controller
         if ($task->complete_flg == 0 && $task->approval_flg == 0) {
             $task->complete_flg = true;
             $task->save();
+
+            // 通知
+            $recipient = User::find($task->task_sender);
+            $information = [
+                "sender" => Auth::user()->name,
+                "content" => "課題『 {$task->title} 』を完了しました。",
+                "url" => route('rooms.tasks.show', ["room" => $room, "task" => $task]),
+                "recipient_id" => $recipient->id
+            ];
+            $recipient->notify(new InformationNotification((object) $information));
         }
         session()->flash("successMessage", "完了報告しました。");
 
@@ -172,6 +195,16 @@ class TaskController extends Controller
         if ($task->approval_flg == 0 && $task->complete_flg == 1) {
             $task->complete_flg = false;
             $task->save();
+
+            // 通知
+            $recipient = User::find($task->task_recipient);
+            $information = [
+                "sender" => Auth::user()->name,
+                "content" => "課題『 {$task->title} 』のやり直しをお願いします。",
+                "url" => route('rooms.tasks.show', ["room" => $room, "task" => $task]),
+                "recipient_id" => $recipient->id
+            ];
+            $recipient->notify(new InformationNotification((object) $information));
         }
         session()->flash("successMessage", "やり直しを依頼しました。");
 
@@ -191,6 +224,16 @@ class TaskController extends Controller
                 $earnedPoint->point = $earnedPoint->point + $task->point;
                 $earnedPoint->save();
             });
+
+            // 通知
+            $recipient = User::find($task->task_recipient);
+            $information = [
+                "sender" => Auth::user()->name,
+                "content" => "課題『 {$task->title} 』の完了を承認しました。",
+                "url" => route('rooms.tasks.show', ["room" => $room, "task" => $task]),
+                "recipient_id" => $recipient->id
+            ];
+            $recipient->notify(new InformationNotification((object) $information));
         }
         session()->flash("successMessage", "承認しました。");
 

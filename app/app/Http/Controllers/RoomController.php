@@ -81,7 +81,7 @@ class RoomController extends Controller
                     "sender" => Auth::user()->name,
                     "content" => "『 {$room->name} 』に招待されています。",
                     "url" => route('rooms.index'),
-                    "participant_id" => $participant->id
+                    "recipient_id" => $participant->id
                 ];
                 $participant->notify(new InformationNotification((object) $information));
             });
@@ -126,6 +126,7 @@ class RoomController extends Controller
                 $recipient = $user->name;
                 $room_member["participant_icon"] = $user->icon;
                 $room_member["participant_name"] = $user->name;
+                $room_member["participant_join_flg"] = $user['pivot']['join_flg'];
             } elseif ($user->id == $room->user_id) {
                 $room_member["room_master_icon"] = $user->icon;
                 $room_member["room_master_name"] = $user->name;
@@ -142,11 +143,20 @@ class RoomController extends Controller
         foreach ($room->participants as $participant) {
             if (Auth::user()->id === $participant->id && $participant->pivot->join_flg == 0) {
                 $room->participants()->updateExistingPivot($participant->id, ["join_flg" => 1]);
-                session()->flash("successMessage", "ルームに参加しました。");
-
-                return redirect()->route("rooms.show", $room);
+            } elseif (Auth::user()->id !== $participant->id) {
+                // 通知
+                $information = [
+                    "sender" => Auth::user()->name,
+                    "content" => "『 {$room->name} 』に参加しました。",
+                    "url" => route('rooms.show', $room),
+                    "recipient_id" => $participant->id
+                ];
+                $participant->notify(new InformationNotification((object) $information));
             }
         }
+        session()->flash("successMessage", "ルームに参加しました。");
+
+        return redirect()->route("rooms.show", $room);
     }
 
     public function update(RoomRequest $request, Room $room)

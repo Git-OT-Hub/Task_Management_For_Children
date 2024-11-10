@@ -15,6 +15,7 @@
                                     <div class="row">
                                         <div class="col-12 mb-1">
                                             {{ __('rooms.master') }}
+                                            <span class="badge text-bg-success align-middle ms-3">{{ __('rooms.participating') }}</span>
                                         </div>
                                         <div class="col-3">
                                             <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
@@ -34,6 +35,11 @@
                                     <div class="row">
                                         <div class="col-12 mb-1">
                                             {{ __('rooms.executor') }}
+                                            @if($room_member["participant_join_flg"] == 0)
+                                                <span class="badge text-bg-warning align-middle ms-3">{{ __('rooms.invitation') }}</span>
+                                            @else
+                                                <span class="badge text-bg-success align-middle ms-3">{{ __('rooms.participating') }}</span>
+                                            @endif
                                         </div>
                                         <div class="col-3">
                                             <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
@@ -80,49 +86,7 @@
                                                 <input type="hidden" id="room-edit-recipient" name="user_name" value="{{ $recipient }}">
                                                 <button type="button" class="btn btn-primary shadow" id="room-edit">{{ __('rooms.update') }}</button>
                                             </form>
-                                            <script type="module">
-                                                $(document).ready(function() {
-                                                    let roomEditId = $("#room-edit-id").val();
-                                                    if (roomEditId) {
-                                                        $("#room-edit").click(function() {
-                                                            $.ajaxSetup({
-                                                                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
-                                                            });
-
-                                                            $.ajax({
-                                                                type: "POST",
-                                                                url: `/rooms/${roomEditId}`,
-                                                                dataType: "json",
-                                                                data: {
-                                                                    "_method": "PATCH",
-                                                                    room_name: $("input[name='room_name']").val(),
-                                                                    user_name: $("input[name='user_name']").val(),
-                                                                },
-                                                            })
-                                                            .done(function(res) {
-                                                                console.log(res);
-                                                                $("#room-name").text(res.name);
-                                                                $('#room-error-message').empty();
-                                                                $('#ajax-flash-message').empty();
-                                                                var dom = '<div class="p-3"><div class="alert alert-info mb-0" role="alert">ルームを編集しました。</div></div>'
-                                                                $('#ajax-flash-message').append(dom);
-                                                            })
-                                                            .fail(function(jqXHR, textStatus, errorThrown) {
-                                                                console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
-                                                                alert("ルーム名の変更に失敗しました。");
-
-                                                                $('#room-error-message').empty();
-                                                                var text = $.parseJSON(jqXHR.responseText);
-                                                                var errors = text.errors;
-                                                                for (var key in errors) {
-                                                                    var errorMessage = errors[key][0];
-                                                                    $('#room-error-message').append(`<li>${errorMessage}</li>`);
-                                                                }
-                                                            });
-                                                        });
-                                                    }
-                                                });
-                                            </script>
+                                            @include("rooms.edit_script")
                                         </div>
                                         <div class="custom-room-button ms-3">
                                             <form method="POST" action="{{ route('rooms.destroy', $room) }}" id="room-delete-form">

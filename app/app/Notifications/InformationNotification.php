@@ -55,13 +55,13 @@ class InformationNotification extends Notification
             "sender" => $this->information->sender,
             "content" => $this->information->content,
             "url" => $this->information->url,
-            "participant_id" => $this->information->participant_id
+            "recipient_id" => $this->information->recipient_id
         ];
     }
 
     public function toBroadcast(object $notifiable): BroadcastMessage
     {
-        $user = User::find($this->information->participant_id);
+        $user = User::find($this->information->recipient_id);
         $noticeCount = $user->unreadNotifications->count();
 
         return new BroadcastMessage([

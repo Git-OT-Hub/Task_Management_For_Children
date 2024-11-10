@@ -17,4 +17,6 @@ return [
     "delete" => "削除",
     "update" => "更新",
     "show" => "ルーム詳細",
+    "participating" => "参加中",
+    "invitation" => "招待中",
 ];
