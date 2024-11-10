@@ -95,21 +95,27 @@
                                             </i>
                                         </a>
 
-                                        <ul class="dropdown-menu dropdown-menu-end shadow p-2 overflow-y-scroll" aria-labelledby="navbarDropdownNotice" style="height: 300px;">
+                                        <ul class="dropdown-menu dropdown-menu-end shadow p-2 overflow-y-scroll" aria-labelledby="navbarDropdownNotice" style="height: 300px;" id="notice-content">
                                             @forelse(Auth::user()->unreadNotifications as $notification)
-                                                <li>
-                                                    <span>{{ $notification->data['sender'] }}<i class="fa-solid fa-arrow-right mx-2"></i><span>
+                                                <li id="notice-{{ $notification->id }}">
+                                                    <span>{{ $notification->data['sender'] }}<i class="fa-solid fa-arrow-right mx-2"></i></span>
                                                     <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ $notification->data['url'] }}">{{ $notification->data['content'] }}</a>
+                                                    <form class="d-inline ms-3">
+                                                        <button type="button" class="btn btn-outline-primary btn-sm lh-1" value="{{ $notification->id }}">
+                                                            <i class="fa-solid fa-check"></i>
+                                                        </button>
+                                                    </form>
                                                 </li>
-                                                <li><hr class="dropdown-divider"></li>
+                                                <li id="notice-divider-{{ $notification->id }}"><hr class="dropdown-divider"></li>
                                             @empty
-                                                <li><p class="my-2">{{ __('notifications.no') }}</p></li>
+                                                <li id="no-notice"><p class="my-2">{{ __('notifications.no') }}</p></li>
                                             @endforelse
                                         </ul>
                                     </li>
                                     <script>
                                         window.userId = {{ Auth::user()->id }};
                                     </script>
+                                    @include("layouts.notification_script")
                                 @endguest
                             </ul>
                         </div>

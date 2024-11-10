@@ -6,6 +6,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\RewardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,4 +44,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get("/profiles/edit", [ProfileController::class, "edit"])->name("profiles.edit");
     Route::patch("/profiles/update", [ProfileController::class, "update"])->name("profiles.update");
     Route::delete("/profiles/icon", [ProfileController::class, "deleteIcon"])->name("profiles.icon.destroy");
+    // notification
+    Route::post('/notifications/{notification}/read', [NotificationController::class, "read"])->name('notifications.read');
 });
