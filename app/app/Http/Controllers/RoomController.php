@@ -180,4 +180,25 @@ class RoomController extends Controller
         
         return redirect()->route("rooms.index");
     }
+
+    public function search(Request $request)
+    {
+        $room_name = $request->room_name;
+        $user_name = $request->user_name;
+        $participation_status = $request->participation_status;
+
+        $search = Auth::user()->participatedRooms()->latest();
+        if ($room_name) {
+            $search->where("name", "like", "%{$room_name}%");
+        }
+        if ($user_name) {
+
+        }
+        if ($participation_status) {
+
+        }
+        $rooms = $search->get();
+
+        return response()->json(["room_name" => $room_name, "user_name" => $user_name, "participation_status" => $participation_status, "rooms" => $rooms]);
+    }
 }
