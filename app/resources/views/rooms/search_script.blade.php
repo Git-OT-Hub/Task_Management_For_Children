@@ -27,8 +27,23 @@
                     },
                 })
                 .done(function(res) {
-                    alert(`${res.room_name}/${res.user_name}/${res.participation_status}`);
-                    console.log(res.rooms);
+                    let result = "";
+                    $.each(res, function(index, val) {
+                        let roomId = val.room_id;
+                        let roomName = val.room_name;
+                        let master = val.room_master;
+                        let masterIcon = val.room_master_icon;
+                        let participant = val.participant;
+                        let participantIcon = val.participant_icon;
+                        let joinStatus = val.join_status;
+                        let createdAt = val.created_at;
+
+                        result = `
+                        
+                        `;
+
+                        //console.log(`${roomId}/${roomName}/${master}/${masterIcon}/${participant}/${participantIcon}/${joinStatus}/${createdAt}`);
+                    });
                     return;
                     // $('#reward-create-form ul.reward-create-error-message').empty();
                     // $('#ajax-flash-message').empty();

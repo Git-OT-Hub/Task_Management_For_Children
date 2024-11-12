@@ -23,7 +23,7 @@
                                     <div class="col-6">
                                         <select class="form-select" id="" name="participation_status">
                                             <option value="">{{ __('rooms.select_participation_status') }}</option>
-                                            <option value="0">{{ __('rooms.not_participating') }}</option>
+                                            <option value="false">{{ __('rooms.not_participating') }}</option>
                                             <option value="1">{{ __('rooms.participating') }}</option>
                                         </select>
                                     </div>

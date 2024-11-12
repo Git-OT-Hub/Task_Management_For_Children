@@ -192,13 +192,50 @@ class RoomController extends Controller
             $search->where("name", "like", "%{$room_name}%");
         }
         if ($user_name) {
-
+            $search->whereHas("participants", function ($q) use ($user_name) {
+                $q->where("name", "like", "%{$user_name}%");
+            });
         }
         if ($participation_status) {
-
+            $search->whereHas("participants", function ($q) use ($participation_status) {
+                $q->where("user_id", Auth::user()->id)->where("join_flg", $participation_status);
+            });
         }
         $rooms = $search->get();
 
-        return response()->json(["room_name" => $room_name, "user_name" => $user_name, "participation_status" => $participation_status, "rooms" => $rooms]);
+        $room_informations = [];
+        foreach ($rooms as $room) {
+            $array = [];
+            $array["room_id"] = $room->id;
+            $array["room_name"] = $room->name;
+            if ($room->pivot->master_flg == 1) {
+                $array["room_master"] = Auth::user()->name;
+                $array["room_master_icon"] = Auth::user()->icon;
+                foreach ($room->participants as $user) {
+                    if ($user->id !== Auth::user()->id) {
+                        $array["participant"] = $user->name;
+                        $array["participant_icon"] = $user->icon;
+                    }
+                }
+            } elseif ($room->pivot->master_flg == 0) {
+                $array["participant"] = Auth::user()->name;
+                $array["participant_icon"] = Auth::user()->icon;
+                foreach ($room->participants as $user) {
+                    if ($user->id !== Auth::user()->id) {
+                        $array["room_master"] = $user->name;
+                        $array["room_master_icon"] = $user->icon;
+                    }
+                }
+            }
+            if ($room->pivot->join_flg == 0) {
+                $array["join_status"] = 0;
+            } elseif ($room->pivot->join_flg == 1) {
+                $array["join_status"] = 1;
+            }
+            $array["created_at"] = $room->created_at;
+            $room_informations[] = $array;
+        }
+
+        return response()->json($room_informations);
     }
 }
