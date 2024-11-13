@@ -44,7 +44,7 @@
                     </a>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" id="rooms-list">
                 @forelse ($results as $result)
                     @if ($result["join_status"] == 0)
                         <div class="col-12 col-lg-6 mt-3">
@@ -76,8 +76,9 @@
                                     <p class="mb-0 fs-4 text-danger">{{ __('rooms.invited') }}</p>
                                 </div>
                                 <div class="mt-3 text-center">
-                                    <form method="post" action="{{ route('rooms.join', ['room' => $result['room_id']]) }}" id="room-join-form">
+                                    <form method="post" action="{{ route('rooms.join', ['room' => $result['room_id']]) }}" id="room-join-form-{{ $result['room_id'] }}">
                                         @csrf
+                                        <input type="hidden" name="room_name" value="{{ $result['room_name'] }}">
                                         <button type="submit" class="btn btn-primary shadow">
                                             {{ __('rooms.join') }}
                                         </button>
@@ -155,7 +156,7 @@
         </div>
     </div>
 </div>
-<div class="container mt-5">
+<div class="container mt-5" id="rooms-pagination">
     {{ $rooms->links() }}
 </div>
 @endsection

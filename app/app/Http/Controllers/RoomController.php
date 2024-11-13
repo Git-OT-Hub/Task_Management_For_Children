@@ -232,7 +232,7 @@ class RoomController extends Controller
             } elseif ($room->pivot->join_flg == 1) {
                 $array["join_status"] = 1;
             }
-            $array["created_at"] = $room->created_at;
+            $array["created_at"] = $room->created_at->format('Y/m/d');
             $room_informations[] = $array;
         }
 

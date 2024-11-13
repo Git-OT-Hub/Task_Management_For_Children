@@ -27,7 +27,21 @@
                     },
                 })
                 .done(function(res) {
+                    $('#rooms-list').empty();
+                    $('#rooms-pagination').remove();
+
+                    if (res.length == 0) {
+                        let noContent = `
+                            <div class="col-12 mt-3">
+                                <p class="mb-0 fs-4">該当する部屋が見つかりませんでした。</p>
+                            </div>
+                        `;
+                        $('#rooms-list').append(noContent);
+                        return;
+                    }
+
                     let result = "";
+                    let csrfToken = $('meta[name="csrf-token"]').attr('content');
                     $.each(res, function(index, val) {
                         let roomId = val.room_id;
                         let roomName = val.room_name;
@@ -38,11 +52,60 @@
                         let joinStatus = val.join_status;
                         let createdAt = val.created_at;
 
-                        result = `
-                        
-                        `;
+                        if (joinStatus == 0) {
+                            let masterIconHtml = masterIcon ? `<img src="/storage/${masterIcon}" alt="" class="img-thumbnail rounded-circle">` : `<img src="http://localhost/images/no_image.png" alt="" class="img-thumbnail rounded-circle">`;
+                            result = `
+                                <div class="col-12 col-lg-6 mt-3">
+                                    <div class="p-3 rounded shadow h-100">
+                                        <h2>
+                                            ${roomName}
+                                        </h2>
+                                        <div class="card">
+                                            <div class="card-header text-center custom-main-color">ルームマスター</div>
 
-                        //console.log(`${roomId}/${roomName}/${master}/${masterIcon}/${participant}/${participantIcon}/${joinStatus}/${createdAt}`);
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
+                                                            ${masterIconHtml}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-9 align-self-center">
+                                                        <p class="mb-0 fs-4">${master}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <p class="mb-0 fs-4 text-danger">招待されています。</p>
+                                        </div>
+                                        <div class="mt-3 text-center">
+                                            <form method="post" action="http://localhost/rooms/${roomId}/join" id="room-join-form-${roomId}">
+                                                <input type="hidden" name="_token" value="${csrfToken}" autocomplete="off">
+                                                <input type="hidden" name="room_name" value="${roomName}">
+                                                <button type="submit" class="btn btn-primary shadow">
+                                                    参加する
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <p class="mb-0 mt-3">
+                                            作成日：
+                                            <time>
+                                                ${createdAt}
+                                            </time>
+                                        </p>
+                                    </div>
+                                </div>
+                            `;
+                        } else if (joinStatus == 1) {
+                            result = `
+                        
+                            `;
+                        }
+
+                        $('#rooms-list').append(result);
+
+                        // console.log(`${roomId}/${roomName}/${master}/${masterIcon}/${participant}/${participantIcon}/${joinStatus}/${createdAt}`);
                     });
                     return;
                     // $('#reward-create-form ul.reward-create-error-message').empty();

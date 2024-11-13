@@ -3,14 +3,18 @@
 {
     // ルーム参加前の確認画面
     document.addEventListener("DOMContentLoaded", () => {
-        const roomJoinForm = document.querySelector("#room-join-form");
-        if (roomJoinForm) {
-            roomJoinForm.addEventListener("submit", (e) => {
-                e.preventDefault();
-                if (!confirm("このルームに参加しますか?")) {
-                    return;
+        const roomsList = document.querySelector("#rooms-list");
+        if (roomsList) {
+            roomsList.addEventListener("submit", (e) => {
+                const targetForm = e.target;
+                if (targetForm) {
+                    e.preventDefault();
+                    const roomName = targetForm.querySelector("input[name='room_name']").value;
+                    if (!confirm(`ルーム「 ${roomName} 」に参加しますか?`)) {
+                        return;
+                    }
+                    targetForm.submit();
                 }
-                roomJoinForm.submit();
             });
         }
     });
