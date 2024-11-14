@@ -27,8 +27,11 @@
                                             <option value="1">{{ __('rooms.participating') }}</option>
                                         </select>
                                     </div>
-                                    <div class="col-6 text-end">
+                                    <div class="col-3">
                                         <button type="button" class="btn btn-primary shadow" id="rooms-search-btn"><i class="fa-solid fa-magnifying-glass fa-xl"></i></button>
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        <a href="{{ route('rooms.index') }}" class="btn btn-secondary shadow">{{ __('rooms.reset') }}</a>
                                     </div>
                                 </div>
                             </form>

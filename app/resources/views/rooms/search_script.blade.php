@@ -54,6 +54,7 @@
 
                         if (joinStatus == 0) {
                             let masterIconHtml = masterIcon ? `<img src="/storage/${masterIcon}" alt="" class="img-thumbnail rounded-circle">` : `<img src="http://localhost/images/no_image.png" alt="" class="img-thumbnail rounded-circle">`;
+
                             result = `
                                 <div class="col-12 col-lg-6 mt-3">
                                     <div class="p-3 rounded shadow h-100">
@@ -98,57 +99,69 @@
                                 </div>
                             `;
                         } else if (joinStatus == 1) {
+                            let masterIconHtml = masterIcon ? `<img src="/storage/${masterIcon}" alt="" class="img-thumbnail rounded-circle">` : `<img src="http://localhost/images/no_image.png" alt="" class="img-thumbnail rounded-circle">`;
+                            let participantIconHtml = participantIcon ? `<img src="/storage/${participantIcon}" alt="" class="img-thumbnail rounded-circle">` : `<img src="http://localhost/images/no_image.png" alt="" class="img-thumbnail rounded-circle">`;
+                            
                             result = `
-                        
+                                <div class="col-12 col-lg-6 mt-3">
+                                    <div class="p-3 rounded shadow h-100">
+                                        <h2>
+                                            <a href="http://localhost/rooms/${roomId}" class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">${roomName}</a>
+                                        </h2>
+                                        <div class="card">
+                                            <div class="card-header text-center custom-main-color">ルームマスター</div>
+
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
+                                                            ${masterIconHtml}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-9 align-self-center">
+                                                        <p class="mb-0 fs-4">${master}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card mt-3">
+                                            <div class="card-header text-center custom-main-color">課題実施ユーザー</div>
+
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
+                                                            ${participantIconHtml}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-9 align-self-center">
+                                                        <p class="mb-0 fs-4">${participant}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="mb-0 mt-3">
+                                            作成日：
+                                            <time>
+                                                ${createdAt}
+                                            </time>
+                                        </p>
+                                    </div>
+                                </div>
                             `;
                         }
 
                         $('#rooms-list').append(result);
-
-                        // console.log(`${roomId}/${roomName}/${master}/${masterIcon}/${participant}/${participantIcon}/${joinStatus}/${createdAt}`);
                     });
-                    return;
-                    // $('#reward-create-form ul.reward-create-error-message').empty();
-                    // $('#ajax-flash-message').empty();
-                    // $(`#reward-create-form input[name='point']`).val('');
-                    // $(`#reward-create-form input[name='reward']`).val('');
-                    // var noReward = $('#creation-rewards-list tr.no_rewards');
-                    // if (noReward) {
-                    //     noReward.remove();
-                    // }
-                    
-                    // var resRewardId = res.reward.id;
-                    // var resRewardPoint = res.reward.point;
-                    // var resRewardReward = res.reward.reward;
-                    // var resRoomId = res.room.id;
-                    // var newReward = `
-                        
-                    // `;
-                    // $('#creation-rewards-list').prepend(newReward);
-
-                    // var dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">報酬を作成しました。</div></div>'
-                    // $('#ajax-flash-message').append(dom);
-                    
-                    // setTimeout(function() {
-                    //     $('#ajax-flash-message').empty();
-                    // }, 3000);
                 })
                 .fail(function(jqXHR, textStatus, errorThrown) {
-                    // if (jqXHR.responseJSON["message"]) {
-                    //     alert(jqXHR.responseJSON["message"]);
-                    //     return;
-                    // }
+                    if (jqXHR.responseJSON["message"]) {
+                        alert(jqXHR.responseJSON["message"]);
+                        return;
+                    }
 
-                    // console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
-                    // alert("報酬の作成に失敗しました。");
-
-                    // $('#reward-create-form ul.reward-create-error-message').empty();
-                    // var text = $.parseJSON(jqXHR.responseText);
-                    // var errors = text.errors;
-                    // for (var key in errors) {
-                    //     var errorMessage = errors[key][0];
-                    //     $('#reward-create-form ul.reward-create-error-message').append(`<li>${errorMessage}</li>`);
-                    // }
+                    console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
+                    alert("検索に失敗しました。");
                 });
             });
         }

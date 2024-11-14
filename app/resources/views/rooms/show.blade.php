@@ -61,9 +61,9 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-4 align-self-center text-center">
-                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ route('rooms.index') }}">
-                                        <i class="fa-solid fa-reply"></i>
-                                        {{ __('rooms.list') }}
+                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="#" onClick="history.back()">
+                                        <i class="fa-solid fa-reply fa-2xl"></i>
+                                        <span class="fs-5">{{ __('rooms.back') }}</span>
                                     </a>
                                 </div>
                                 <div class="col-4 ms-auto text-center">
