@@ -14,9 +14,8 @@ use Illuminate\Support\Facades\Log;
 
 class RoomController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // $rooms = Auth::user()->participatedRooms()->latest()->get();
         $rooms = Auth::user()->participatedRooms()->latest()->paginate(4);
         $room_informations = [];
         foreach ($rooms as $room) {
@@ -49,6 +48,11 @@ class RoomController extends Controller
             }
             $array["created_at"] = $room->created_at;
             $room_informations[] = $array;
+        }
+
+        if ($request->ajax()) {
+            $results = $room_informations;
+            return view("rooms.room_list", compact("results", "rooms"))->render();
         }
 
         return view("rooms.index")->with(["results" => $room_informations, "rooms" => $rooms]);
@@ -201,7 +205,7 @@ class RoomController extends Controller
                 $q->where("user_id", Auth::user()->id)->where("join_flg", $participation_status);
             });
         }
-        $rooms = $search->get();
+        $rooms = $search->paginate(4)->withQueryString();
 
         $room_informations = [];
         foreach ($rooms as $room) {
@@ -232,10 +236,11 @@ class RoomController extends Controller
             } elseif ($room->pivot->join_flg == 1) {
                 $array["join_status"] = 1;
             }
-            $array["created_at"] = $room->created_at->format('Y/m/d');
+            $array["created_at"] = $room->created_at;
             $room_informations[] = $array;
         }
 
-        return response()->json($room_informations);
+        $results = $room_informations;
+        return view("rooms.room_list", compact("results", "rooms"))->render();
     }
 }

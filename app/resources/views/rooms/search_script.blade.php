@@ -1,4 +1,5 @@
 <script type="module">
+    // search
     $(document).ready(function() {
         let searchBtn = $("#rooms-search-btn");
         if (searchBtn) {    
@@ -19,7 +20,7 @@
                 $.ajax({
                     type: "GET",
                     url: "/rooms/search/" + roomName + userName + participationStatus,
-                    dataType: "json",
+                    dataType: "html",
                     data: {
                         room_name: roomName,
                         user_name: userName,
@@ -28,141 +29,43 @@
                 })
                 .done(function(res) {
                     $('#rooms-list').empty();
-                    $('#rooms-pagination').remove();
-
-                    if (res.length == 0) {
-                        let noContent = `
-                            <div class="col-12 mt-3">
-                                <p class="mb-0 fs-4">該当する部屋が見つかりませんでした。</p>
-                            </div>
-                        `;
-                        $('#rooms-list').append(noContent);
-                        return;
-                    }
-
-                    let result = "";
-                    let csrfToken = $('meta[name="csrf-token"]').attr('content');
-                    $.each(res, function(index, val) {
-                        let roomId = val.room_id;
-                        let roomName = val.room_name;
-                        let master = val.room_master;
-                        let masterIcon = val.room_master_icon;
-                        let participant = val.participant;
-                        let participantIcon = val.participant_icon;
-                        let joinStatus = val.join_status;
-                        let createdAt = val.created_at;
-
-                        if (joinStatus == 0) {
-                            let masterIconHtml = masterIcon ? `<img src="/storage/${masterIcon}" alt="" class="img-thumbnail rounded-circle">` : `<img src="http://localhost/images/no_image.png" alt="" class="img-thumbnail rounded-circle">`;
-
-                            result = `
-                                <div class="col-12 col-lg-6 mt-3">
-                                    <div class="p-3 rounded shadow h-100">
-                                        <h2>
-                                            ${roomName}
-                                        </h2>
-                                        <div class="card">
-                                            <div class="card-header text-center custom-main-color">ルームマスター</div>
-
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-3">
-                                                        <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
-                                                            ${masterIconHtml}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-9 align-self-center">
-                                                        <p class="mb-0 fs-4">${master}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-3">
-                                            <p class="mb-0 fs-4 text-danger">招待されています。</p>
-                                        </div>
-                                        <div class="mt-3 text-center">
-                                            <form method="post" action="http://localhost/rooms/${roomId}/join" id="room-join-form-${roomId}">
-                                                <input type="hidden" name="_token" value="${csrfToken}" autocomplete="off">
-                                                <input type="hidden" name="room_name" value="${roomName}">
-                                                <button type="submit" class="btn btn-primary shadow">
-                                                    参加する
-                                                </button>
-                                            </form>
-                                        </div>
-                                        <p class="mb-0 mt-3">
-                                            作成日：
-                                            <time>
-                                                ${createdAt}
-                                            </time>
-                                        </p>
-                                    </div>
-                                </div>
-                            `;
-                        } else if (joinStatus == 1) {
-                            let masterIconHtml = masterIcon ? `<img src="/storage/${masterIcon}" alt="" class="img-thumbnail rounded-circle">` : `<img src="http://localhost/images/no_image.png" alt="" class="img-thumbnail rounded-circle">`;
-                            let participantIconHtml = participantIcon ? `<img src="/storage/${participantIcon}" alt="" class="img-thumbnail rounded-circle">` : `<img src="http://localhost/images/no_image.png" alt="" class="img-thumbnail rounded-circle">`;
-                            
-                            result = `
-                                <div class="col-12 col-lg-6 mt-3">
-                                    <div class="p-3 rounded shadow h-100">
-                                        <h2>
-                                            <a href="http://localhost/rooms/${roomId}" class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">${roomName}</a>
-                                        </h2>
-                                        <div class="card">
-                                            <div class="card-header text-center custom-main-color">ルームマスター</div>
-
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-3">
-                                                        <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
-                                                            ${masterIconHtml}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-9 align-self-center">
-                                                        <p class="mb-0 fs-4">${master}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card mt-3">
-                                            <div class="card-header text-center custom-main-color">課題実施ユーザー</div>
-
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-3">
-                                                        <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
-                                                            ${participantIconHtml}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-9 align-self-center">
-                                                        <p class="mb-0 fs-4">${participant}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p class="mb-0 mt-3">
-                                            作成日：
-                                            <time>
-                                                ${createdAt}
-                                            </time>
-                                        </p>
-                                    </div>
-                                </div>
-                            `;
-                        }
-
-                        $('#rooms-list').append(result);
-                    });
+                    $('#rooms-list').html(res);
                 })
                 .fail(function(jqXHR, textStatus, errorThrown) {
-                    if (jqXHR.responseJSON["message"]) {
-                        alert(jqXHR.responseJSON["message"]);
-                        return;
-                    }
-
                     console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
                     alert("検索に失敗しました。");
                 });
+            });
+        }
+    });
+
+    // pagination
+    $(document).ready(function() {
+        $(document).on("click", ".pagination a", function(e) {
+            e.preventDefault();
+            
+            let url = $(this).attr("href");
+            roomsPaginate(url);
+        });
+
+        function roomsPaginate(url)
+        {
+            $.ajaxSetup({
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
+            });
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "html",
+            })
+            .done(function(res) {
+                $('#rooms-list').empty();
+                $('#rooms-list').html(res);
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
+                alert("画面切り替えに失敗しました。");
             });
         }
     });
