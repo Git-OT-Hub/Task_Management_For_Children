@@ -28,4 +28,7 @@ return [
     "is_approved" => "承認されました!",
     "completion_report_in_progress" => "完了報告中です!",
     "there_was_completion_report" => "完了報告がありました!",
+    "select_status" => "-- 課題状態を選択 --",
+    "not_completion_reported" => "完了報告・達成なし",
+    "reset" => "リセット",
 ];

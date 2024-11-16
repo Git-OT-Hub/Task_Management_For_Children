@@ -116,3 +116,13 @@ main {
 .custom-icon-button {
     display: inline-block;
 }
+
+// pagination
+.active > .page-link {
+    background-color: #4885e1;
+    border-color: #4885e1;
+}
+
+.page-link {
+    color: #4885e1;
+}

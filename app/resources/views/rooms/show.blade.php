@@ -58,15 +58,15 @@
                             </ul>
                         </div>
 
-                        <div class="card-body">
+                        <div class="card-body border-bottom border-3">
                             <div class="row">
                                 <div class="col-4 align-self-center text-center">
-                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="#" onClick="history.back()">
-                                        <i class="fa-solid fa-reply fa-2xl"></i>
-                                        <span class="fs-5">{{ __('rooms.back') }}</span>
+                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ route('rooms.index') }}">
+                                        <i class="fa-solid fa-reply fa-xl"></i>
+                                        <span class="fs-5">{{ __('rooms.list') }}</span>
                                     </a>
                                 </div>
-                                <div class="col-4 ms-auto text-center">
+                                <div class="col-6 ms-auto text-center">
                                     @if(Auth::user()->id === $room->user_id)
                                         <div class="dropdown custom-room-button">
                                             <button type="button" class="btn btn-secondary shadow dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
@@ -100,7 +100,68 @@
                                     @endif
                                 </div>
                             </div>
-                            検索機能
+                        </div>
+
+                        <div class="card-body">
+                            <form class="tasks-search-form">
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <input type="search" class="form-control" placeholder="{{ __('tasks.title') }}" id="" name="title" value="">
+                                    </div>
+                                    <div class="col-6">
+                                        <select class="form-select" id="" name="status">
+                                            <option value="">{{ __('tasks.select_status') }}</option>
+                                            <option value="none">{{ __('tasks.not_completion_reported') }}</option>
+                                            <option value="reported">{{ __('tasks.completion_reported') }}</option>
+                                            <option value="completed">{{ __('tasks.completed') }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-12">
+                                        <label class="form-label mb-0">{{ __('tasks.deadline') }}</label>
+                                    </div>
+                                    <div class="col-5 pe-0">
+                                        <input type="datetime-local" class="form-control" name="deadline_from" value="">
+                                    </div>
+                                    <div class="col-2 text-center px-0">
+                                        <span class="">~</span>
+                                    </div>
+                                    <div class="col-5 ps-0">
+                                        <input type="datetime-local" class="form-control" name="deadline_until" value="">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="row align-items-center">
+                                            <div class="col-12">
+                                                <label class="form-label mb-0">{{ __('tasks.point') }}</label>
+                                            </div>
+                                            <div class="col-5 pe-0">
+                                                <input type="number" class="form-control" name="point_from" value="">
+                                            </div>
+                                            <div class="col-2 text-center px-0">
+                                                <span class="">~</span>
+                                            </div>
+                                            <div class="col-5 ps-0">
+                                                <input type="number" class="form-control" name="point_until" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="room_id" value="{{ $room->id }}">
+                                    <div class="col-6 align-self-end">
+                                        <div class="row">
+                                            <div class="col-6 text-end">
+                                                <button type="button" class="btn btn-primary shadow" id="tasks-search-btn"><i class="fa-solid fa-magnifying-glass fa-xl"></i></button>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                <a href="{{ route('rooms.show', $room) }}" class="btn btn-secondary shadow">{{ __('tasks.reset') }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            @include("rooms.tasks.search_script")
                         </div>
                     </div>
                 </div>
@@ -119,81 +180,10 @@
                     </a>
                 </div>
             </div>
-            <div class="row">
-                @forelse ($results as $result)
-                    <div class="col-12 col-lg-6 mt-3">
-                        <div class="card h-100 shadow">
-                            <div class="row g-0">
-                                <div class="col-4 align-self-center p-3">
-                                    @if($result["task_image"])
-                                        <img src="{{ Storage::url($result['task_image']) }}" class="img-fluid rounded" alt="">
-                                    @else
-                                        <img src="{{ asset('images/no_image.png') }}" class="img-fluid rounded" alt="">
-                                    @endif
-                                </div>
-                                <div class="col-8">
-                                    <div class="card-body">
-                                        <div class="row align-items-center justify-content-between">
-                                            <div class="col-4">
-                                                <small class="text-body-secondary">
-                                                    {{ __('tasks.creator') }}
-                                                </small>
-                                            </div>
-                                            <div class="col-8 text-end">
-                                                @if($result["task_complete_flg"] == 1 && $result["task_approval_flg"] == 0)
-                                                    <span class="btn btn-warning rounded-pill">
-                                                        {{ __('tasks.completion_reported') }}
-                                                    </span>
-                                                @elseif($result["task_complete_flg"] == 1 && $result["task_approval_flg"] == 1)
-                                                    <span class="btn btn-danger rounded-pill">
-                                                        {{ __('tasks.completed') }}
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="border-bottom border-5 py-3">
-                                            <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
-                                                @if($result["sender_icon"])
-                                                    <img src="{{ Storage::url($result['sender_icon']) }}" alt="" class="img-thumbnail rounded-circle">
-                                                @else
-                                                    <img src="{{ asset('images/no_image.png') }}" alt="" class="img-thumbnail rounded-circle">
-                                                @endif
-                                            </div>
-                                            <span class="mb-0 fs-4 ms-3">
-                                                {{ $result["sender_name"] }}
-                                            </span>
-                                        </div>
-
-                                        <h4 class="card-title my-3">
-                                            <a href="{{ route('rooms.tasks.show', ['room' => $room, 'task' => $result['task_id']]) }}" class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ $result["task_title"] }}</a>
-                                        </h4>
-                                        <p class="card-text">
-                                            {{ __('tasks.point') }}：{{ $result["task_point"] }}
-                                        </p>
-                                        <p class="card-text">
-                                            {{ __('tasks.deadline') }}：{{ $result["task_deadline"] }}
-                                        </p>
-                                        <p class="card-text">
-                                            <small class="text-body-secondary">
-                                                {{ __('tasks.created_at') }}：{{ $result["task_created_at"]->format('Y/m/d') }}
-                                            </small>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                    <div class="col-12 mt-3">
-                        <p class="mb-0 fs-4">{{ __('tasks.no') }}</p>
-                    </div>
-                @endforelse
+            <div class="row mt-4" id="tasks-list">
+                @include("rooms.tasks.task_list")
             </div>
         </div>
     </div>
-</div>
-<div class="container mt-5">
-    {{ $tasks->links() }}
 </div>
 @endsection

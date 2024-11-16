@@ -28,7 +28,7 @@
 
         <div class="d-none flex-sm-fill d-sm-flex align-items-sm-center justify-content-sm-between">
             <div>
-                <p class="small text-muted">
+                <!-- <p class="small text-muted">
                     {!! __('Showing') !!}
                     <span class="fw-semibold">{{ $paginator->firstItem() }}</span>
                     {!! __('to') !!}
@@ -36,11 +36,11 @@
                     {!! __('of') !!}
                     <span class="fw-semibold">{{ $paginator->total() }}</span>
                     {!! __('results') !!}
-                </p>
+                </p> -->
             </div>
 
             <div>
-                <ul class="pagination">
+                <ul class="pagination grid gap-0 column-gap-2">
                     {{-- Previous Page Link --}}
                     @if ($paginator->onFirstPage())
                         <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
@@ -63,7 +63,7 @@
                         @if (is_array($element))
                             @foreach ($element as $page => $url)
                                 @if ($page == $paginator->currentPage())
-                                    <li class="page-item active" aria-current="page"><span class="page-link">{{ $page }}</span></li>
+                                    <li class="page-item active" aria-current="page"><span class="page-link rounded-3">{{ $page }}</span></li>
                                 @else
                                     <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
                                 @endif

@@ -20,7 +20,7 @@ return [
     "participating" => "参加中",
     "invitation" => "招待中",
     "user_name" => "ユーザー名",
-    "select_participation_status" => "参加状態を選択",
+    "select_participation_status" => "-- 参加状態を選択 --",
     "not_participating" => "未参加",
     "participating" => "参加中",
     "reset" => "リセット",

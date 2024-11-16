@@ -47,7 +47,7 @@
                     </a>
                 </div>
             </div>
-            <div class="row" id="rooms-list">
+            <div class="row mt-4" id="rooms-list">
                 @include("rooms.room_list")
             </div>
         </div>

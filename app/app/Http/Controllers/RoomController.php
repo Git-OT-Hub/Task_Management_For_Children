@@ -102,12 +102,11 @@ class RoomController extends Controller
         }
     }
 
-    public function show(Room $room)
+    public function show(Room $room, Request $request)
     {
         $this->authorize('view', $room);
 
         $task_informations = [];
-        // $tasks = $room->tasks()->latest()->get();
         $tasks = $room->tasks()->latest()->paginate(4);
         foreach ($tasks as $task) {
             $array = [];
@@ -137,6 +136,11 @@ class RoomController extends Controller
                 $room_member["room_master_icon"] = $user->icon;
                 $room_member["room_master_name"] = $user->name;
             }
+        }
+
+        if ($request->ajax()) {
+            $results = $task_informations;
+            return view("rooms.tasks.task_list", compact("results", "tasks", "room"))->render();
         }
 
         return view("rooms.show")->with(["room" => $room, "results" => $task_informations, "recipient" => $recipient, "room_member" => $room_member, "tasks" => $tasks]);
@@ -185,7 +189,7 @@ class RoomController extends Controller
         return redirect()->route("rooms.index");
     }
 
-    public function search(Request $request)
+    public function roomSearch(Request $request)
     {
         $room_name = $request->room_name;
         $user_name = $request->user_name;
@@ -239,8 +243,69 @@ class RoomController extends Controller
             $array["created_at"] = $room->created_at;
             $room_informations[] = $array;
         }
-
         $results = $room_informations;
+        
         return view("rooms.room_list", compact("results", "rooms"))->render();
+    }
+
+    public function taskSearch(Request $request)
+    {
+        $title = $request->title;
+        $status = $request->status;
+        $deadline_from = $request->deadline_from;
+        $deadline_until = $request->deadline_until;
+        $point_from = $request->point_from;
+        $point_until = $request->point_until;
+        $room_id = $request->room_id;
+
+        $room = Room::find($room_id);
+        $search = $room->tasks()->latest();
+        if ($title) {
+            $search->where("title", "like", "%{$title}%");
+        }
+        if ($status) {
+            if ($status == "none") {
+                $search->where("complete_flg", 0)->where("approval_flg", 0);
+            } elseif ($status == "reported") {
+                $search->where("complete_flg", 1)->where("approval_flg", 0);
+            } elseif ($status == "completed") {
+                $search->where("complete_flg", 1)->where("approval_flg", 1);
+            }
+        }
+        if ($deadline_from && $deadline_until) {
+            $search->whereBetween("deadline", [$deadline_from, $deadline_until]);
+        } elseif ($deadline_from && !$deadline_until) {
+            $search->where("deadline", ">=", $deadline_from);
+        } elseif (!$deadline_from && $deadline_until) {
+            $search->where("deadline", "<=", $deadline_until);
+        }
+        if ($point_from && $point_until) {
+            $search->whereBetween("point", [$point_from, $point_until]);
+        } elseif ($point_from && !$point_until) {
+            $search->where("point", ">=", $point_from);
+        } elseif (!$point_from && $point_until) {
+            $search->where("point", "<=", $point_until);
+        }
+        $tasks = $search->paginate(4)->withQueryString();
+
+        $task_informations = [];
+        foreach ($tasks as $task) {
+            $array = [];
+            $sender = User::find($task->task_sender);
+            $array["sender_icon"] = $sender->icon;
+            $array["sender_name"] = $sender->name;
+            $array["task_id"] = $task->id;
+            $array["task_title"] = $task->title;
+            $array["task_point"] = $task->point;
+            $array["task_deadline"] = $task->deadline;
+            $array["task_image"] = $task->image;
+            $array["task_complete_flg"] = $task->complete_flg;
+            $array["task_approval_flg"] = $task->approval_flg;
+            $array["task_created_at"] = $task->created_at;
+            $task_informations[] = $array;
+        }
+        $results = $task_informations;
+        
+        return view("rooms.tasks.task_list", compact("results", "tasks", "room"))->render();
     }
 }
