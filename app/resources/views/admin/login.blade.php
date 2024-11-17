@@ -67,7 +67,7 @@
                                 </div> 
                                 
                                 <div class="mt-2">
-                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ url('admin/password/request') }}">
+                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ url('admin/password/reset') }}">
                                         <i class="fa-solid fa-key"></i>
                                         {{ __('admin.forgot_password') }}
                                     </a>

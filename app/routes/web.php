@@ -50,7 +50,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('/notifications/{notification}/read', [NotificationController::class, "read"])->name('notifications.read');
 });
 
-// 管理者
+// 管理者　認証
 Route::view('/admin/login', 'admin/login');
 Route::post('/admin/login', [App\Http\Controllers\Admin\LoginController::class, 'login']);
 Route::post('/admin/logout', [App\Http\Controllers\Admin\LoginController::class, 'logout']);
@@ -59,3 +59,8 @@ Route::post('/admin/register', [App\Http\Controllers\Admin\RegisterController::c
 Route::group(['middleware' => 'auth:admin'], function() {
     Route::view('/admin/home', 'admin/home');
 });
+// 管理者　パスワードリセット
+Route::view('/admin/password/reset', 'admin/passwords/email');
+Route::post('/admin/password/email', [App\Http\Controllers\Admin\ForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::get('/admin/password/reset/{token}', [App\Http\Controllers\Admin\ResetPasswordController::class, 'showResetForm']);
+Route::post('/admin/password/reset', [App\Http\Controllers\Admin\ResetPasswordController::class, 'reset']);
