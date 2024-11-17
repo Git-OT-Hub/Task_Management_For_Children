@@ -49,3 +49,13 @@ Route::group(['middleware' => 'auth'], function() {
     // notification
     Route::post('/notifications/{notification}/read', [NotificationController::class, "read"])->name('notifications.read');
 });
+
+// 管理者
+Route::view('/admin/login', 'admin/login');
+Route::post('/admin/login', [App\Http\Controllers\Admin\LoginController::class, 'login']);
+Route::post('/admin/logout', [App\Http\Controllers\Admin\LoginController::class, 'logout']);
+Route::view('/admin/register', 'admin/register');
+Route::post('/admin/register', [App\Http\Controllers\Admin\RegisterController::class, 'register']);
+Route::group(['middleware' => 'auth:admin'], function() {
+    Route::view('/admin/home', 'admin/home');
+});

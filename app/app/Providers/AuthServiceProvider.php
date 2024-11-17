@@ -5,7 +5,11 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use App\Models\Room;
+use App\Models\Task;
+use App\Models\Reward;
 use App\Policies\RoomPolicy;
+use App\Policies\TaskPolicy;
+use App\Policies\RewardPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -16,6 +20,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Room::class => RoomPolicy::class,
+        Task::class => TaskPolicy::class,
+        Reward::class => RewardPolicy::class,
     ];
 
     /**

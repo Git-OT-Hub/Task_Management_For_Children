@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             EarnedPointsTableSeeder::class,
             RewardsTableSeeder::class,
             EarnedRewardsTableSeeder::class,
+            AdminTableSeeder::class,
         ]);
     }
 }
