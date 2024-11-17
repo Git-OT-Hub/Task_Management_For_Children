@@ -19,10 +19,10 @@ class RewardController extends Controller
         $rewards = $room->rewards()->where("acquired_flg", "=", 0)->orderBy("point", "asc")->get();
         $earnedRewards = $room->rewards()->where("acquired_flg", "=", 1)->orderBy("point", "asc")->get();
         $earnedPoint = $room->earnedPoint;
-        $user = User::find($earnedPoint->user_id);
-        $receiveRewardsUser = ["user_id" => $user->id, "user_icon" => $user->icon, "user_name" => $user->name, "earned_point" => $earnedPoint->point];
+        $recipientUser = User::find($earnedPoint->user_id);
+        $receiveRewardsUser = ["user_icon" => $recipientUser->icon, "user_name" => $recipientUser->name, "earned_point" => $earnedPoint->point];
         
-        return view("rooms.rewards.index")->with(["room" => $room, "rewards" => $rewards, "receiveRewardsUser" => $receiveRewardsUser, "earnedRewards" => $earnedRewards]);
+        return view("rooms.rewards.index")->with(["room" => $room, "rewards" => $rewards, "receiveRewardsUser" => $receiveRewardsUser, "earnedRewards" => $earnedRewards, "recipientUser" => $recipientUser]);
     }
 
     public function store(RewardRequest $request, Room $room)
@@ -39,7 +39,11 @@ class RewardController extends Controller
         }
         $reward->save();
 
-        return response()->json(["reward" => $reward, "room" => $room]);
+        $earnedPoint = $room->earnedPoint;
+        $recipientUser = User::find($earnedPoint->user_id);
+
+        //return response()->json(["reward" => $reward, "room" => $room]);
+        return view("rooms.rewards.reward", compact("reward", "room", "recipientUser"))->render();
     }
 
     public function update(RewardRequest $request, Room $room, Reward $reward)

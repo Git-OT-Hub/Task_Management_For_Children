@@ -13,7 +13,7 @@
                 $.ajax({
                     type: "POST",
                     url: `/rooms/${roomId}/rewards`,
-                    dataType: "json",
+                    dataType: "html",
                     data: {
                         "_method": "POST",
                         point: $(`#reward-create-form input[name='point']`).val(),
@@ -25,59 +25,15 @@
                     $('#ajax-flash-message').empty();
                     $(`#reward-create-form input[name='point']`).val('');
                     $(`#reward-create-form input[name='reward']`).val('');
-                    var noReward = $('#creation-rewards-list tr.no_rewards');
+
+                    let noReward = $('#creation-rewards-list tr.no_rewards');
                     if (noReward) {
                         noReward.remove();
                     }
-                    
-                    var resRewardId = res.reward.id;
-                    var resRewardPoint = res.reward.point;
-                    var resRewardReward = res.reward.reward;
-                    var resRoomId = res.room.id;
-                    var newReward = `
-                        <tr id="reward-${resRewardId}">
-                            <td class="point align-middle">${resRewardPoint} P</td>
-                            <td class="reward align-middle">${resRewardReward}</td>
-                            <td class="text-end">
-                                <div class="dropdown">
-                                    <button type="button" class="btn btn-secondary shadow dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                                        編集
-                                    </button>
-                                    <form class="dropdown-menu p-3 dropdown-menu-end shadow reward-update" id="reward-update-${resRewardId}">
-                                        <div class="row mb-3">
-                                            <div class="col-12">
-                                                <label for="point" class="form-label mb-0">ポイント</label>
-                                                <input id="point" type="number" class="form-control" name="point" value="${resRewardPoint}" required>
-                                            </div>
-                                            <div class="col-12 mt-2">
-                                                <label for="reward" class="form-label mb-0">報酬</label>
-                                                <input id="reward" type="text" class="form-control" name="reward" value="${resRewardReward}" required>
-                                            </div>
-                                        </div>
-                                        <ul class="fw-bold text-danger reward-update-error-message">
-                                        </ul>
-                                        <input type="hidden" name="room-id" value="${resRoomId}">
-                                        <div class="row mb-0">
-                                            <div class="col-12 text-end">
-                                                <button type="button" class="btn btn-primary shadow reward-update" value="${resRewardId}">更新</button> 
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </td>
-                            <td class="text-end">
-                                <form class="reward-delete" id="reward-delete-${resRewardId}">
-                                    <input type="hidden" name="room-id" value="${resRoomId}">
-                                    <button type="button" class="btn btn-danger shadow reward-delete" value="${resRewardId}">削除</button> 
-                                </form>   
-                            </td>
-                            <td class="text-end">
-                            </td>
-                        </tr>
-                    `;
-                    $('#creation-rewards-list').prepend(newReward);
 
-                    var dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">報酬を作成しました。</div></div>'
+                    $('#creation-rewards-list').prepend(res);
+
+                    let dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">報酬を作成しました。</div></div>'
                     $('#ajax-flash-message').append(dom);
                     
                     setTimeout(function() {
@@ -85,19 +41,14 @@
                     }, 3000);
                 })
                 .fail(function(jqXHR, textStatus, errorThrown) {
-                    if (jqXHR.responseJSON["message"]) {
-                        alert(jqXHR.responseJSON["message"]);
-                        return;
-                    }
-
                     console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
                     alert("報酬の作成に失敗しました。");
 
                     $('#reward-create-form ul.reward-create-error-message').empty();
-                    var text = $.parseJSON(jqXHR.responseText);
-                    var errors = text.errors;
-                    for (var key in errors) {
-                        var errorMessage = errors[key][0];
+                    let text = $.parseJSON(jqXHR.responseText);
+                    let errors = text.errors;
+                    for (let key in errors) {
+                        let errorMessage = errors[key][0];
                         $('#reward-create-form ul.reward-create-error-message').append(`<li>${errorMessage}</li>`);
                     }
                 });
@@ -125,11 +76,12 @@
                 },
             })
             .done(function(res) {
-                $(`#reward-update-${rewardId} ul.reward-update-error-message`).empty();
+                $(`#reward-update-${res.id} ul.reward-update-error-message`).empty();
                 $('#ajax-flash-message').empty();
-                $(`#reward-${rewardId} td.point`).text(`${res.point} P`);
-                $(`#reward-${rewardId} td.reward`).text(res.reward);
-                var dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">報酬を更新しました。</div></div>'
+                $(`#reward-${res.id} td.point`).text(`${res.point} P`);
+                $(`#reward-${res.id} td.reward`).text(res.reward);
+
+                let dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">報酬を更新しました。</div></div>'
                 $('#ajax-flash-message').append(dom);
                 
                 setTimeout(function() {
@@ -146,10 +98,10 @@
                 alert("報酬の更新に失敗しました。");
 
                 $(`#reward-update-${rewardId} ul.reward-update-error-message`).empty();
-                var text = $.parseJSON(jqXHR.responseText);
-                var errors = text.errors;
-                for (var key in errors) {
-                    var errorMessage = errors[key][0];
+                let text = $.parseJSON(jqXHR.responseText);
+                let errors = text.errors;
+                for (let key in errors) {
+                    let errorMessage = errors[key][0];
                     $(`#reward-update-${rewardId} ul.reward-update-error-message`).append(`<li>${errorMessage}</li>`);
                 }
             });
@@ -183,7 +135,7 @@
                 $('#ajax-flash-message').empty();
                 $(`#reward-${res.id}`).remove();
                 
-                var dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">報酬を削除しました。</div></div>'
+                let dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">報酬を削除しました。</div></div>'
                 $('#ajax-flash-message').append(dom);
                 
                 setTimeout(function() {
@@ -229,17 +181,18 @@
             })
             .done(function(res) {
                 $('#ajax-flash-message').empty();
-                var noEarned = $('#earned-rewards tr.no_earned');
+
+                let noEarned = $('#earned-rewards tr.no_earned');
                 if (noEarned) {
                     noEarned.remove();
                 }
 
                 $(`#reward-${res.reward.id}`).remove();
-                var earnedReward = `<tr><td>${res.reward.point} P</td><td>${res.reward.reward}</td></tr>`;
+                let earnedReward = `<tr><td>${res.reward.point} P</td><td>${res.reward.reward}</td></tr>`;
                 $('#earned-rewards').prepend(earnedReward);
                 $('#current-points-held').text(res.earnedPoint.point);
                 
-                var dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">報酬を獲得しました。</div></div>'
+                let dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">報酬を獲得しました。</div></div>'
                 $('#ajax-flash-message').append(dom);
                 
                 setTimeout(function() {
