@@ -63,7 +63,7 @@
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <a class="dropdown-item" href="#">
+                                                <a class="dropdown-item" href="{{ route('admin.profiles.index') }}">
                                                     {{ __('admin.profile') }}
                                                 </a>
                                             </li>

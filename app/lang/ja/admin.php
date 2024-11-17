@@ -16,4 +16,9 @@ return [
     "contact" => "お問い合わせ",
     "copyrigth" => "c 2024 My_App_Name All Rights Reserved",
     "for_admin" => "（管理者用）",
+    "home" => "管理者ホーム",
+    "users_management" => "ユーザー管理",
+    "rooms_management" => "ルーム管理",
+    "tasks_management" => "課題管理",
+    "rewards_management" => "報酬管理",
 ];

@@ -58,6 +58,11 @@ Route::view('/admin/register', 'admin/register');
 Route::post('/admin/register', [App\Http\Controllers\Admin\RegisterController::class, 'register']);
 Route::group(['middleware' => 'auth:admin'], function() {
     Route::view('/admin/home', 'admin/home');
+    // profile
+    Route::get("/admin/profiles", [App\Http\Controllers\Admin\ProfileController::class, "index"])->name("admin.profiles.index");
+    Route::get("admin/profiles/edit", [App\Http\Controllers\Admin\ProfileController::class, "edit"])->name("admin.profiles.edit");
+    Route::patch("admin/profiles/update", [App\Http\Controllers\Admin\ProfileController::class, "update"])->name("admin.profiles.update");
+    Route::delete("admin/profiles/icon", [App\Http\Controllers\Admin\ProfileController::class, "deleteIcon"])->name("admin.profiles.icon.destroy");
 });
 // 管理者　パスワードリセット
 Route::view('/admin/password/reset', 'admin/passwords/email');
