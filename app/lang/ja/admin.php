@@ -21,4 +21,7 @@ return [
     "rooms_management" => "ルーム管理",
     "tasks_management" => "課題管理",
     "rewards_management" => "報酬管理",
+    "no_users" => "ユーザーのデータがありません。",
+    "id" => "ID",
+    "reset" => "リセット",
 ];

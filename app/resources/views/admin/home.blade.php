@@ -8,7 +8,7 @@
                 <div class="card-header text-center fs-5 custom-main-color">{{ __('admin.home') }}</div>
 
                 <div class="card-body border-bottom border-3">
-                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="#">
+                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ route('admin.users.index') }}">
                         <i class="fa-solid fa-user-group fa-2xl"></i>
                         <span class="fs-4">{{ __('admin.users_management') }}</span>
                     </a>

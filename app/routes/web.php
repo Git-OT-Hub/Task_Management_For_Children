@@ -63,6 +63,9 @@ Route::group(['middleware' => 'auth:admin'], function() {
     Route::get("admin/profiles/edit", [App\Http\Controllers\Admin\ProfileController::class, "edit"])->name("admin.profiles.edit");
     Route::patch("admin/profiles/update", [App\Http\Controllers\Admin\ProfileController::class, "update"])->name("admin.profiles.update");
     Route::delete("admin/profiles/icon", [App\Http\Controllers\Admin\ProfileController::class, "deleteIcon"])->name("admin.profiles.icon.destroy");
+    // user_management
+    Route::get("/admin/users", [App\Http\Controllers\Admin\UserController::class, "index"])->name("admin.users.index");
+    Route::get("/admin/users/search/{content}", [App\Http\Controllers\Admin\UserController::class, "userSearch"]);
 });
 // 管理者　パスワードリセット
 Route::view('/admin/password/reset', 'admin/passwords/email');
