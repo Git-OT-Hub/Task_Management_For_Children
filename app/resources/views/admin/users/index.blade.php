@@ -8,6 +8,12 @@
                 <div class="card-header text-center fs-5 custom-main-color">{{ __('admin.users_management') }}</div>
 
                 <div class="card-body border-bottom border-3">
+                    <div class="mb-4">
+                        <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ url('admin/home') }}">
+                            <i class="fa-solid fa-reply fa-xl"></i>
+                            <span class="fs-5">{{ __('admin.home') }}</span>
+                        </a>
+                    </div>
                     <form class="admin-users-search-form">
                         <div class="row mb-3">
                             <div class="col-6">

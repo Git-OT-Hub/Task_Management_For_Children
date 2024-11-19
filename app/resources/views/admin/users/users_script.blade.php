@@ -79,15 +79,13 @@
                 return;
             }
 
-            return;
-
             $.ajaxSetup({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
             });
             
             $.ajax({
                 type: "POST",
-                url: `/rooms/${roomId}/rewards/${rewardId}`,
+                url: `/admin/users/${userId}`,
                 dataType: "json",
                 data: {
                     "_method": "DELETE",
@@ -95,9 +93,9 @@
             })
             .done(function(res) {
                 $('#ajax-flash-message').empty();
-                $(`#reward-${res.id}`).remove();
+                $(`#user-${res.id}`).remove();
                 
-                let dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">報酬を削除しました。</div></div>'
+                let dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">ユーザーを削除しました。</div></div>'
                 $('#ajax-flash-message').append(dom);
                 
                 setTimeout(function() {
@@ -111,7 +109,7 @@
                 }
                 
                 console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
-                alert("報酬の削除に失敗しました。");
+                alert("ユーザーの削除に失敗しました。");
             });
         });
     });

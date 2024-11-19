@@ -34,4 +34,11 @@ class UserController extends Controller
 
         return view("admin.users.users_list", compact("users"))->render();
     }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return response()->json($user);
+    }
 }

@@ -2,7 +2,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th scope="col">{{ __('admin.id') }}</th>
+            <th scope="col">{{ __('admin.user_id') }}</th>
             <th scope="col">{{ __('admin.name') }}</th>
             <th scope="col">{{ __('admin.email') }}</th>
             <th scope="col"></th>

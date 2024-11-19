@@ -66,6 +66,10 @@ Route::group(['middleware' => 'auth:admin'], function() {
     // user_management
     Route::get("/admin/users", [App\Http\Controllers\Admin\UserController::class, "index"])->name("admin.users.index");
     Route::get("/admin/users/search/{content}", [App\Http\Controllers\Admin\UserController::class, "userSearch"]);
+    Route::delete("admin/users/{user}", [App\Http\Controllers\Admin\UserController::class, "destroy"])->name("admin.users.destroy");
+    // room_management
+    Route::get("/admin/rooms", [App\Http\Controllers\Admin\RoomController::class, "index"])->name("admin.rooms.index");
+    Route::get("/admin/rooms/search/{content}", [App\Http\Controllers\Admin\RoomController::class, "roomSearch"]);
 });
 // 管理者　パスワードリセット
 Route::view('/admin/password/reset', 'admin/passwords/email');

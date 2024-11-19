@@ -12,8 +12,6 @@
                 let pointUntil = $("form.tasks-search-form input[name='point_until']").val();
                 let roomId = $("form.tasks-search-form input[name='room_id']").val();
 
-                console.log(`${title}/${status}/from:${deadlineFrom}/until:${deadlineUntil}/from:${pointFrom}/until:${pointUntil}`);
-
                 if (!(title || status || deadlineFrom || deadlineUntil || pointFrom || pointUntil)) {
                     alert("検索ワードが全て未入力です。");
                     return;

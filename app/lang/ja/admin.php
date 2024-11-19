@@ -22,6 +22,12 @@ return [
     "tasks_management" => "課題管理",
     "rewards_management" => "報酬管理",
     "no_users" => "ユーザーのデータがありません。",
-    "id" => "ID",
+    "user_id" => "ユーザーID",
     "reset" => "リセット",
+    "room_id" => "ルームID",
+    "room_name" => "ルーム名",
+    "master" => "ルームマスター",
+    "implementer" => "課題実施ユーザー",
+    "point" => "ポイント",
+    "no_rooms" => "ルームのデータがありません。",
 ];
