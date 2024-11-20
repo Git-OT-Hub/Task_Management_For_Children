@@ -70,6 +70,7 @@ Route::group(['middleware' => 'auth:admin'], function() {
     // room_management
     Route::get("/admin/rooms", [App\Http\Controllers\Admin\RoomController::class, "index"])->name("admin.rooms.index");
     Route::get("/admin/rooms/search/{content}", [App\Http\Controllers\Admin\RoomController::class, "roomSearch"]);
+    Route::delete("admin/rooms/{room}", [App\Http\Controllers\Admin\RoomController::class, "destroy"])->name("admin.rooms.destroy");
 });
 // 管理者　パスワードリセット
 Route::view('/admin/password/reset', 'admin/passwords/email');

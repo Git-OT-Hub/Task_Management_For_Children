@@ -45,10 +45,10 @@
             e.preventDefault();
             
             let url = $(this).attr("href");
-            adminUsersPaginate(url);
+            adminRoomsPaginate(url);
         });
 
-        function adminUsersPaginate(url)
+        function adminRoomsPaginate(url)
         {
             $.ajaxSetup({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
@@ -60,8 +60,8 @@
                 dataType: "html",
             })
             .done(function(res) {
-                $('#admin-users-list').empty();
-                $('#admin-users-list').html(res);
+                $('#admin-rooms-list').empty();
+                $('#admin-rooms-list').html(res);
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
                 console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
@@ -72,12 +72,11 @@
 
     // delete
     $(document).ready(function() {
-        $("#admin-users-list").on("click", "form.user-delete-form button", function() {
-            let userId = $(this).val();
-            let name = $(`#admin-users-list #user-${userId} td.user-name`).text();
-            let email = $(`#admin-users-list #user-${userId} td.user-email`).text();
+        $("#admin-rooms-list").on("click", "form.room-delete-form button", function() {
+            let roomId = $(this).val();
+            let roomName = $(`#admin-rooms-list #room-${roomId} td.room-name`).text();
 
-            if (!confirm(`ユーザー「 ${name} / ${email} 」を削除しますか?`)) {
+            if (!confirm(`ルーム「 ID：${roomId} / ${roomName} 」を削除しますか?`)) {
                 return;
             }
 
@@ -87,7 +86,7 @@
             
             $.ajax({
                 type: "POST",
-                url: `/admin/users/${userId}`,
+                url: `/admin/rooms/${roomId}`,
                 dataType: "json",
                 data: {
                     "_method": "DELETE",
@@ -95,9 +94,9 @@
             })
             .done(function(res) {
                 $('#ajax-flash-message').empty();
-                $(`#user-${res.id}`).remove();
+                $(`#admin-rooms-list #room-${res.id}`).remove();
                 
-                let dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">ユーザーを削除しました。</div></div>'
+                let dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">ルームを削除しました。</div></div>'
                 $('#ajax-flash-message').append(dom);
                 
                 setTimeout(function() {
@@ -111,7 +110,7 @@
                 }
                 
                 console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
-                alert("ユーザーの削除に失敗しました。");
+                alert("ルームの削除に失敗しました。");
             });
         });
     });
