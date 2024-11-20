@@ -20,7 +20,7 @@
                     </a>
                 </div>
                 <div class="card-body border-bottom border-3">
-                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="#">
+                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ route('admin.tasks.index') }}">
                         <i class="fa-solid fa-cubes-stacked fa-2xl"></i>
                         <span class="fs-4">{{ __('admin.tasks_management') }}</span>
                     </a>

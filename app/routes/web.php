@@ -71,6 +71,8 @@ Route::group(['middleware' => 'auth:admin'], function() {
     Route::get("/admin/rooms", [App\Http\Controllers\Admin\RoomController::class, "index"])->name("admin.rooms.index");
     Route::get("/admin/rooms/search/{content}", [App\Http\Controllers\Admin\RoomController::class, "roomSearch"]);
     Route::delete("admin/rooms/{room}", [App\Http\Controllers\Admin\RoomController::class, "destroy"])->name("admin.rooms.destroy");
+    // task_management
+    Route::get("/admin/tasks", [App\Http\Controllers\Admin\TaskController::class, "index"])->name("admin.tasks.index");
 });
 // 管理者　パスワードリセット
 Route::view('/admin/password/reset', 'admin/passwords/email');
