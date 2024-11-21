@@ -36,12 +36,12 @@
                     return;
                 }
 
-                if (roomId < 1) {
-                    alert("「ルームID」は 1 以上で入力してください。");
-                    return;
+                if (roomId) {
+                    if (roomId < 1) {
+                        alert("「ルームID」は 1 以上で入力してください。");
+                        return;
+                    }
                 }
-
-                return;//ここからスタート
 
                 $.ajaxSetup({
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
@@ -49,16 +49,21 @@
                 
                 $.ajax({
                     type: "GET",
-                    url: "/admin/users/search/" + name + email,
+                    url: "/admin/tasks/search/" + title + pointFrom + pointUntil + deadlineFrom + deadlineUntil + status + roomId,
                     dataType: "html",
                     data: {
-                        name: name,
-                        email: email,
+                        title: title,
+                        point_from: pointFrom,
+                        point_until: pointUntil,
+                        deadline_from: deadlineFrom,
+                        deadline_until: deadlineUntil,
+                        status: status,
+                        room_id: roomId,
                     },
                 })
                 .done(function(res) {
-                    $('#admin-users-list').empty();
-                    $('#admin-users-list').html(res);
+                    $('#admin-tasks-list').empty();
+                    $('#admin-tasks-list').html(res);
                 })
                 .fail(function(jqXHR, textStatus, errorThrown) {
                     console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
@@ -74,10 +79,10 @@
             e.preventDefault();
             
             let url = $(this).attr("href");
-            adminUsersPaginate(url);
+            adminTasksPaginate(url);
         });
 
-        function adminUsersPaginate(url)
+        function adminTasksPaginate(url)
         {
             $.ajaxSetup({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
@@ -89,8 +94,8 @@
                 dataType: "html",
             })
             .done(function(res) {
-                $('#admin-users-list').empty();
-                $('#admin-users-list').html(res);
+                $('#admin-tasks-list').empty();
+                $('#admin-tasks-list').html(res);
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
                 console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
@@ -101,12 +106,12 @@
 
     // delete
     $(document).ready(function() {
-        $("#admin-users-list").on("click", "form.user-delete-form button", function() {
-            let userId = $(this).val();
-            let name = $(`#admin-users-list #user-${userId} td.user-name`).text();
-            let email = $(`#admin-users-list #user-${userId} td.user-email`).text();
+        $("#admin-tasks-list").on("click", "form.task-delete-form button", function() {
+            let taskId = $(this).val();
+            let roomId = $(`#admin-tasks-list #task-${taskId} td.task-room-id`).text();
+            let title = $(`#admin-tasks-list #task-${taskId} td.task-title`).text();
 
-            if (!confirm(`ユーザー「 ${name} / ${email} 」を削除しますか?`)) {
+            if (!confirm(`課題「 ルームID：${roomId} / 課題ID：${taskId} / ${title} 」を削除しますか?`)) {
                 return;
             }
 
@@ -116,7 +121,7 @@
             
             $.ajax({
                 type: "POST",
-                url: `/admin/users/${userId}`,
+                url: `/admin/tasks/${taskId}`,
                 dataType: "json",
                 data: {
                     "_method": "DELETE",
@@ -124,9 +129,9 @@
             })
             .done(function(res) {
                 $('#ajax-flash-message').empty();
-                $(`#user-${res.id}`).remove();
+                $(`#task-${res.id}`).remove();
                 
-                let dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">ユーザーを削除しました。</div></div>'
+                let dom = '<div class="p-1"><div class="alert alert-info mb-0" role="alert">課題を削除しました。</div></div>'
                 $('#ajax-flash-message').append(dom);
                 
                 setTimeout(function() {
@@ -140,7 +145,7 @@
                 }
                 
                 console.error('Ajax通信に失敗しました。：' + textStatus + ':\n' + errorThrown);
-                alert("ユーザーの削除に失敗しました。");
+                alert("課題の削除に失敗しました。");
             });
         });
     });

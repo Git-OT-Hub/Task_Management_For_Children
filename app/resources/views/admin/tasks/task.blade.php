@@ -13,7 +13,7 @@
         @endif
     </td>
     <td class="task-room-id align-middle">{{ $task->room_id }}</td>
-    <td class="text-end">
+    <td class="text-end align-middle">
         <form class="task-delete-form">
             @csrf
             <button type="button" class="btn btn-danger shadow" value="{{ $task->id }}"><i class="fa-solid fa-trash-can fa-lg"></i></button>
