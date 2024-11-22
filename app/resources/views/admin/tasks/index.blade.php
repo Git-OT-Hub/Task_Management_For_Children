@@ -47,7 +47,7 @@
                         <div class="row mb-3">
                             <div class="col-6">
                                 <select class="form-select" name="status">
-                                    <option value="">{{ __('admin.select_status') }}</option>
+                                    <option value="">{{ __('admin.task_select_status') }}</option>
                                     <option value="none">{{ __('admin.no_completion_no_accomplished') }}</option>
                                     <option value="reported">{{ __('admin.completion_report_in_progress') }}</option>
                                     <option value="completed">{{ __('admin.accomplished') }}</option>

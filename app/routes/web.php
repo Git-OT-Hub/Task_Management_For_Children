@@ -75,6 +75,10 @@ Route::group(['middleware' => 'auth:admin'], function() {
     Route::get("/admin/tasks", [App\Http\Controllers\Admin\TaskController::class, "index"])->name("admin.tasks.index");
     Route::get("/admin/tasks/search/{content}", [App\Http\Controllers\Admin\TaskController::class, "taskSearch"]);
     Route::delete("admin/tasks/{task}", [App\Http\Controllers\Admin\TaskController::class, "destroy"])->name("admin.tasks.destroy");
+    // reward_management
+    Route::get("/admin/rewards", [App\Http\Controllers\Admin\RewardController::class, "index"])->name("admin.rewards.index");
+    Route::get("/admin/rewards/search/{content}", [App\Http\Controllers\Admin\RewardController::class, "rewardSearch"]);
+    Route::delete("admin/rewards/{reward}", [App\Http\Controllers\Admin\RewardController::class, "destroy"])->name("admin.rewards.destroy");
 });
 // 管理者　パスワードリセット
 Route::view('/admin/password/reset', 'admin/passwords/email');

@@ -26,7 +26,7 @@
                     </a>
                 </div>
                 <div class="card-body">
-                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="#">
+                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ route('admin.rewards.index') }}">
                         <i class="fa-solid fa-money-check-dollar fa-2xl"></i>
                         <span class="fs-4">{{ __('admin.rewards_management') }}</span>
                     </a>
