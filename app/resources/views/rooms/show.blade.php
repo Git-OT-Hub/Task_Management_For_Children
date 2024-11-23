@@ -1,5 +1,6 @@
 @extends('layouts.layout')
 
+@section('title', 'ルーム詳細')
 @section('content')
 <div class="container">
     <div class="row">

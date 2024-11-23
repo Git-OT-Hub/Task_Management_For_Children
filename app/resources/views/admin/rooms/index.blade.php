@@ -1,5 +1,6 @@
 @extends('layouts.admin')
 
+@section('title', 'ルーム管理')
 @section('content')
 <div class="container">
     <div class="row">

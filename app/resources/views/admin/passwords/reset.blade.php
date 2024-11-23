@@ -1,5 +1,6 @@
 @extends('layouts.admin')
 
+@section('title', 'パスワード再設定(管理者用)')
 @section('content')
 <div class="container">
     <div class="row justify-content-center">

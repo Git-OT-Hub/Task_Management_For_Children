@@ -1,5 +1,6 @@
 @extends('layouts.admin')
 
+@section('title', 'プロフィール編集(管理者用)')
 @section('content')
 <div class="container">
     <div class="row justify-content-center">

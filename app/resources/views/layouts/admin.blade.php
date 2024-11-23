@@ -7,7 +7,11 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    @hasSection('title')
+        <title>@yield('title') | {{ config('app.name') }}</title>
+    @else
+        <title>{{ config('app.name') }}</title>
+    @endif
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -112,7 +116,7 @@
         </main>
         <footer class="custom-main-color p-3">
             <div class="mt-2">
-                <a href="#" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ __('admin.contact') }}</a>
+                <a href="https://forms.gle/XeLdXj9UpxrXCkTP6" target="_blank" rel="nofollow sponsored noopener noreferrer" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ __('admin.contact') }}</a>
             </div>
             <div class="mt-2">
                 <small>{{ __('admin.copyrigth') }}</small>

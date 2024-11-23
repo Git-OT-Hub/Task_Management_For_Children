@@ -1,5 +1,6 @@
 @extends('layouts.layout')
 
+@section('title', 'パスワード再設定の申請')
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
