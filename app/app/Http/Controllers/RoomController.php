@@ -16,7 +16,7 @@ class RoomController extends Controller
 {
     public function index(Request $request)
     {
-        $rooms = Auth::user()->participatedRooms()->latest()->paginate(4);
+        $rooms = Auth::user()->participatedRooms()->with('participants')->latest()->paginate(4);
         $room_informations = [];
         foreach ($rooms as $room) {
             $array = [];
@@ -66,8 +66,9 @@ class RoomController extends Controller
     public function store(RoomRequest $request)
     {
         try {
-            DB::transaction(function () use($request) {
-                $room = new Room();
+            $room = new Room();
+
+            DB::transaction(function () use($request, $room) {
                 $room->user_id = Auth::user()->id;
                 $room->name = $request->room_name;
                 $room->save();
@@ -93,9 +94,8 @@ class RoomController extends Controller
 
             session()->flash("successMessage", "ルームを作成しました。");
 
-            return redirect()->route("rooms.index");
+            return redirect()->route("rooms.show", $room);
         } catch (\Throwable $e) {
-            Log::error('Room creation error: ' . $e->getMessage());
             session()->flash("failureMessage", "ルームの作成に失敗しました。");
 
             return redirect()->route("rooms.index");
@@ -108,9 +108,9 @@ class RoomController extends Controller
 
         $task_informations = [];
         $tasks = $room->tasks()->latest()->paginate(4);
+        $sender = User::find($room->user_id);
         foreach ($tasks as $task) {
             $array = [];
-            $sender = User::find($task->task_sender);
             $array["sender_icon"] = $sender->icon;
             $array["sender_name"] = $sender->name;
             $array["task_id"] = $task->id;
@@ -150,23 +150,29 @@ class RoomController extends Controller
     {
         $this->authorize('join', $room);
 
-        foreach ($room->participants as $participant) {
-            if (Auth::user()->id === $participant->id && $participant->pivot->join_flg == 0) {
-                $room->participants()->updateExistingPivot($participant->id, ["join_flg" => 1]);
-            } elseif (Auth::user()->id !== $participant->id) {
-                // 通知
-                $information = [
-                    "sender" => Auth::user()->name,
-                    "content" => "『 {$room->name} 』に参加しました。",
-                    "url" => route('rooms.show', $room),
-                    "recipient_id" => $participant->id
-                ];
-                $participant->notify(new InformationNotification((object) $information));
+        try {
+            foreach ($room->participants as $participant) {
+                if (Auth::user()->id === $participant->id && $participant->pivot->join_flg == 0) {
+                    $room->participants()->updateExistingPivot($participant->id, ["join_flg" => 1]);
+                } elseif (Auth::user()->id !== $participant->id) {
+                    // 通知
+                    $information = [
+                        "sender" => Auth::user()->name,
+                        "content" => "『 {$room->name} 』に参加しました。",
+                        "url" => route('rooms.show', $room),
+                        "recipient_id" => $participant->id
+                    ];
+                    $participant->notify(new InformationNotification((object) $information));
+                }
             }
-        }
-        session()->flash("successMessage", "ルームに参加しました。");
+            session()->flash("successMessage", "ルームに参加しました。");
 
-        return redirect()->route("rooms.show", $room);
+            return redirect()->route("rooms.show", $room);
+        } catch (\Throwable $e) {
+            session()->flash("failureMessage", "ルームの参加に失敗しました。");
+
+            return redirect()->route("rooms.index");
+        }
     }
 
     public function update(RoomRequest $request, Room $room)
@@ -183,10 +189,16 @@ class RoomController extends Controller
     {
         $this->authorize('delete', $room);
 
-        $room->delete();
-        session()->flash("successMessage", "ルームを削除しました。");
-        
-        return redirect()->route("rooms.index");
+        try {
+            $room->delete();
+            session()->flash("successMessage", "ルームを削除しました。");
+            
+            return redirect()->route("rooms.index");
+        } catch (\Throwable $e) {
+            session()->flash("failureMessage", "ルームの削除に失敗しました。");
+
+            return redirect()->route("rooms.index");
+        }
     }
 
     public function roomSearch(Request $request)
@@ -195,7 +207,7 @@ class RoomController extends Controller
         $user_name = $request->user_name;
         $participation_status = $request->participation_status;
 
-        $search = Auth::user()->participatedRooms()->latest();
+        $search = Auth::user()->participatedRooms()->with('participants')->latest();
         if ($room_name) {
             $search->where("name", "like", "%{$room_name}%");
         }
@@ -289,9 +301,9 @@ class RoomController extends Controller
         $tasks = $search->paginate(4)->withQueryString();
 
         $task_informations = [];
+        $sender = User::find($room->user_id);
         foreach ($tasks as $task) {
             $array = [];
-            $sender = User::find($task->task_sender);
             $array["sender_icon"] = $sender->icon;
             $array["sender_name"] = $sender->name;
             $array["task_id"] = $task->id;

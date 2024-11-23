@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 use App\Notifications\InformationNotification;
+use Intervention\Image\Laravel\Facades\Image;
 
 class TaskController extends Controller
 {
@@ -29,35 +30,45 @@ class TaskController extends Controller
     {
         $this->authorize('create', [Task::class, $room]);
 
-        $task = new Task();
-        $task->room_id = $room->id;
-        foreach ($room->participants as $user) {
-            if ($user->id == $room->user_id) {
-                $task->task_sender = $user->id;
-            } elseif ($user->id !== $room->user_id) {
-                $task->task_recipient = $user->id;
+        try {
+            $task = new Task();
+            $task->room_id = $room->id;
+            foreach ($room->participants as $user) {
+                if ($user->id == $room->user_id) {
+                    $task->task_sender = $user->id;
+                } elseif ($user->id !== $room->user_id) {
+                    $task->task_recipient = $user->id;
+                }
             }
-        }
-        $columns = ["title", "deadline", "point", "body"];
-        foreach ($columns as $column) {
-            $task->$column = $request->$column;
-        }
-        $task->complete_flg = false;
-        $task->approval_flg = false;
-        $task->save();
-        session()->flash("successMessage", "課題を作成しました。");
+            $columns = ["title", "deadline", "point", "body"];
+            foreach ($columns as $column) {
+                $task->$column = $request->$column;
+            }
+            $task->complete_flg = false;
+            $task->approval_flg = false;
+            $task->save();
+            session()->flash("successMessage", "課題を作成しました。");
 
-        // 通知
-        $recipient = User::find($task->task_recipient);
-        $information = [
-            "sender" => Auth::user()->name,
-            "content" => "課題『 {$task->title} 』を作成しました。",
-            "url" => route('rooms.tasks.show', ["room" => $room, "task" => $task]),
-            "recipient_id" => $recipient->id
-        ];
-        $recipient->notify(new InformationNotification((object) $information));
+            // 通知
+            $recipient = User::find($task->task_recipient);
+            foreach ($room->participants as $user) {
+                if ($user->id == $recipient->id && $user->pivot->join_flg == 1) {
+                    $information = [
+                        "sender" => Auth::user()->name,
+                        "content" => "課題『 {$task->title} 』を作成しました。",
+                        "url" => route('rooms.tasks.show', ["room" => $room, "task" => $task]),
+                        "recipient_id" => $recipient->id
+                    ];
+                    $recipient->notify(new InformationNotification((object) $information));
+                }
+            }
 
-        return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+        } catch (\Throwable $e) {
+            session()->flash("failureMessage", "課題の作成に失敗しました。");
+
+            return redirect()->route("rooms.show", $room);
+        }
     }
 
     public function generateImage(Room $room, Task $task, TaskImageRequest $request)
@@ -94,7 +105,9 @@ class TaskController extends Controller
                 }
 
                 $imageContents = file_get_contents($url);
-                Storage::put($path, $imageContents);
+                $imageFile = Image::read($imageContents);
+                $imageFile->scaleDown(width: 500);
+                Storage::put($path, $imageFile->encode());
 
                 $task->image = $path;
                 $task->save();
@@ -122,16 +135,22 @@ class TaskController extends Controller
     {
         $this->authorize('delete', [Task::class, $room]);
 
-        DB::transaction(function () use($task) {
-            if ($currentImage = $task->image) {
-                Storage::delete($currentImage);
-            }
-            $task->image = null;
-            $task->save();
-        });
-        session()->flash("successMessage", "画像を削除しました。");
+        try {
+            DB::transaction(function () use($task) {
+                if ($currentImage = $task->image) {
+                    Storage::delete($currentImage);
+                }
+                $task->image = null;
+                $task->save();
+            });
+            session()->flash("successMessage", "画像を削除しました。");
 
-        return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+        } catch (\Throwable $e) {
+            session()->flash("failureMessage", "画像の削除に失敗しました。");
+
+            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+        }
     }
 
     public function edit(Room $room, Task $task)
@@ -145,98 +164,129 @@ class TaskController extends Controller
     {
         $this->authorize('update', [Task::class, $room]);
         
-        $columns = ["title", "deadline", "point", "body"];
-        foreach ($columns as $column) {
-            $task->$column = $request->$column;
-        }
-        $task->save();
-        session()->flash("successMessage", "課題を編集しました。");
+        try {
+            $columns = ["title", "deadline", "point", "body"];
+            foreach ($columns as $column) {
+                $task->$column = $request->$column;
+            }
+            $task->save();
+            session()->flash("successMessage", "課題を編集しました。");
 
-        return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+        } catch (\Throwable $e) {
+            session()->flash("failureMessage", "課題の編集に失敗しました。");
+
+            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+        }
     }
 
     public function destroy(Room $room, Task $task)
     {
         $this->authorize('delete', [Task::class, $room]);
 
-        $task->delete();
-        session()->flash("successMessage", "課題を削除しました。");
+        try {
+            $task->delete();
+            session()->flash("successMessage", "課題を削除しました。");
 
-        return redirect()->route("rooms.show", $room);
+            return redirect()->route("rooms.show", $room);
+        } catch (\Throwable $e) {
+            session()->flash("failureMessage", "課題の削除に失敗しました。");
+
+            return redirect()->route("rooms.show", $room);
+        }
     }
 
     public function completion(Room $room, Task $task)
     {
         $this->authorize('completion', $task);
 
-        if ($task->complete_flg == 0 && $task->approval_flg == 0) {
-            $task->complete_flg = true;
-            $task->save();
+        try {
+            if ($task->complete_flg == 0 && $task->approval_flg == 0) {
+                $task->complete_flg = true;
+                $task->save();
 
-            // 通知
-            $recipient = User::find($task->task_sender);
-            $information = [
-                "sender" => Auth::user()->name,
-                "content" => "課題『 {$task->title} 』を完了しました。",
-                "url" => route('rooms.tasks.show', ["room" => $room, "task" => $task]),
-                "recipient_id" => $recipient->id
-            ];
-            $recipient->notify(new InformationNotification((object) $information));
+                // 通知
+                $recipient = User::find($task->task_sender);
+                $information = [
+                    "sender" => Auth::user()->name,
+                    "content" => "課題『 {$task->title} 』を完了しました。",
+                    "url" => route('rooms.tasks.show', ["room" => $room, "task" => $task]),
+                    "recipient_id" => $recipient->id
+                ];
+                $recipient->notify(new InformationNotification((object) $information));
+            }
+            session()->flash("successMessage", "完了報告しました。");
+
+            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+        } catch (\Throwable $e) {
+            session()->flash("failureMessage", "完了報告に失敗しました。");
+
+            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
         }
-        session()->flash("successMessage", "完了報告しました。");
-
-        return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
     }
 
     public function redo(Room $room, Task $task)
     {
         $this->authorize('redo', [Task::class, $room]);
 
-        if ($task->approval_flg == 0 && $task->complete_flg == 1) {
-            $task->complete_flg = false;
-            $task->save();
+        try {
+            if ($task->approval_flg == 0 && $task->complete_flg == 1) {
+                $task->complete_flg = false;
+                $task->save();
 
-            // 通知
-            $recipient = User::find($task->task_recipient);
-            $information = [
-                "sender" => Auth::user()->name,
-                "content" => "課題『 {$task->title} 』のやり直しをお願いします。",
-                "url" => route('rooms.tasks.show', ["room" => $room, "task" => $task]),
-                "recipient_id" => $recipient->id
-            ];
-            $recipient->notify(new InformationNotification((object) $information));
+                // 通知
+                $recipient = User::find($task->task_recipient);
+                $information = [
+                    "sender" => Auth::user()->name,
+                    "content" => "課題『 {$task->title} 』のやり直しをお願いします。",
+                    "url" => route('rooms.tasks.show', ["room" => $room, "task" => $task]),
+                    "recipient_id" => $recipient->id
+                ];
+                $recipient->notify(new InformationNotification((object) $information));
+            }
+            session()->flash("successMessage", "やり直しを依頼しました。");
+
+            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+        } catch (\Throwable $e) {
+            session()->flash("failureMessage", "やり直し依頼に失敗しました。");
+
+            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
         }
-        session()->flash("successMessage", "やり直しを依頼しました。");
 
-        return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
     }
 
     public function approval(Room $room, Task $task)
     {
         $this->authorize('approval', [Task::class, $room]);
 
-        if ($task->approval_flg == 0 && $task->complete_flg == 1) {
-            DB::transaction(function () use($task, $room) {
-                $task->approval_flg = true;
-                $task->save();
+        try {
+            if ($task->approval_flg == 0 && $task->complete_flg == 1) {
+                DB::transaction(function () use($task, $room) {
+                    $task->approval_flg = true;
+                    $task->save();
 
-                $earnedPoint = $room->earnedPoint;
-                $earnedPoint->point = $earnedPoint->point + $task->point;
-                $earnedPoint->save();
-            });
+                    $earnedPoint = $room->earnedPoint;
+                    $earnedPoint->point = $earnedPoint->point + $task->point;
+                    $earnedPoint->save();
+                });
 
-            // 通知
-            $recipient = User::find($task->task_recipient);
-            $information = [
-                "sender" => Auth::user()->name,
-                "content" => "課題『 {$task->title} 』の完了を承認しました。",
-                "url" => route('rooms.tasks.show', ["room" => $room, "task" => $task]),
-                "recipient_id" => $recipient->id
-            ];
-            $recipient->notify(new InformationNotification((object) $information));
+                // 通知
+                $recipient = User::find($task->task_recipient);
+                $information = [
+                    "sender" => Auth::user()->name,
+                    "content" => "課題『 {$task->title} 』の完了を承認しました。",
+                    "url" => route('rooms.tasks.show', ["room" => $room, "task" => $task]),
+                    "recipient_id" => $recipient->id
+                ];
+                $recipient->notify(new InformationNotification((object) $information));
+            }
+            session()->flash("successMessage", "承認しました。");
+
+            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
+        } catch (\Throwable $e) {
+            session()->flash("failureMessage", "承認に失敗しました。");
+
+            return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
         }
-        session()->flash("successMessage", "承認しました。");
-
-        return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
     }
 }

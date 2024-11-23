@@ -25,48 +25,60 @@ class ProfileController extends Controller
 
     public function update(ProfileRequest $request)
     {
-        $user = User::find(Auth::user()->id);
+        try {
+            $user = User::find(Auth::user()->id);
 
-        DB::transaction(function () use($request, $user) {
-            if ($request->hasFile("icon")) {
-                if ($currentIcon = $user->icon) {
-                    Storage::disk("public")->delete($currentIcon);
+            DB::transaction(function () use($request, $user) {
+                if ($request->hasFile("icon")) {
+                    if ($currentIcon = $user->icon) {
+                        Storage::disk("public")->delete($currentIcon);
+                    }
+                    $file = $request->file("icon");
+                    $imageFile = Image::read($file);
+                    $imageFile->coverDown(200, 200);
+                    $filename = 'icons/' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+                    Storage::disk("public")->put($filename, $imageFile->encode());
+                    $user->icon = $filename;
                 }
-                $file = $request->file("icon");
-                $imageFile = Image::read($file);
-                $imageFile->coverDown(200, 200);
-                $filename = 'icons/' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-                Storage::disk("public")->put($filename, $imageFile->encode());
-                $user->icon = $filename;
-            }
 
-            $columns = ["name", "email", "goal"];
-            foreach ($columns as $column) {
-                $user->$column = $request->$column;
-            }
+                $columns = ["name", "email", "goal"];
+                foreach ($columns as $column) {
+                    $user->$column = $request->$column;
+                }
 
-            $user->save();
-        });
+                $user->save();
+            });
 
-        session()->flash("successMessage", "プロフィールを更新しました。");
+            session()->flash("successMessage", "プロフィールを更新しました。");
 
-        return redirect()->route("profiles.index");
+            return redirect()->route("profiles.index");
+        } catch (\Throwable $e) {
+            session()->flash("failureMessage", "プロフィールの更新に失敗しました。");
+
+            return redirect()->route("profiles.index");
+        }
     }
 
     public function deleteIcon()
     {
-        $user = User::find(Auth::user()->id);
+        try {
+            $user = User::find(Auth::user()->id);
 
-        DB::transaction(function () use($user) {
-            if ($currentIcon = $user->icon) {
-                Storage::disk("public")->delete($currentIcon);
-            }
-            $user->icon = null;
-            $user->save();
-        });
+            DB::transaction(function () use($user) {
+                if ($currentIcon = $user->icon) {
+                    Storage::disk("public")->delete($currentIcon);
+                }
+                $user->icon = null;
+                $user->save();
+            });
 
-        session()->flash("successMessage", "アイコンを削除しました。");
+            session()->flash("successMessage", "アイコンを削除しました。");
 
-        return redirect()->route("profiles.index");
+            return redirect()->route("profiles.index");
+        } catch (\Throwable $e) {
+            session()->flash("failureMessage", "アイコンの削除に失敗しました。");
+
+            return redirect()->route("profiles.index");
+        }
     }
 }

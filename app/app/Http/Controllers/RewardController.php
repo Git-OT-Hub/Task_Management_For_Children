@@ -42,7 +42,6 @@ class RewardController extends Controller
         $earnedPoint = $room->earnedPoint;
         $recipientUser = User::find($earnedPoint->user_id);
 
-        //return response()->json(["reward" => $reward, "room" => $room]);
         return view("rooms.rewards.reward", compact("reward", "room", "recipientUser"))->render();
     }
 
