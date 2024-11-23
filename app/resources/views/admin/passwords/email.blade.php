@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow">
-                <div class="card-header text-center custom-main-color">{{ __('Request a Password Reset') }}{{ __('admin.for_admin') }}</div>
+                <div class="card-header text-center custom-main-color text-white fs-5">{{ __('Request a Password Reset') }}{{ __('admin.for_admin') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -34,15 +34,15 @@
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <div>
+                                <div class="text-end">
                                     <button type="submit" class="btn btn-primary">
-                                        {{ __('Send Password Reset Link') }}
+                                        <i class="fa-solid fa-envelope fa-2xl"></i>
                                     </button>
                                 </div>
                                 
                                 <div class="mt-3">
-                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ url('admin/login') }}">
-                                        <i class="fa-solid fa-right-to-bracket"></i>
+                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" href="{{ url('admin/login') }}">
+                                        <i class="fa-solid fa-right-to-bracket fa-xl"></i>
                                         {{ __('admin.login_here') }}
                                     </a>
                                 </div>

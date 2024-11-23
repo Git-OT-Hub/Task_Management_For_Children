@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col">
                     <div class="card shadow">
-                        <div class="card-header text-center custom-main-color">{{ __('rooms.list') }}</div>
+                        <div class="card-header text-center custom-main-color fs-5 text-white">{{ __('rooms.list') }}</div>
 
                         <div class="card-body">
                             <form class="rooms-search-form">
@@ -28,7 +28,7 @@
                                             <option value="1">{{ __('rooms.participating') }}</option>
                                         </select>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-3 text-end">
                                         <button type="button" class="btn btn-primary shadow" id="rooms-search-btn"><i class="fa-solid fa-magnifying-glass fa-xl"></i></button>
                                     </div>
                                     <div class="col-3 text-end">

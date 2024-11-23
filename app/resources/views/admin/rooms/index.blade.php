@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-lg-10 offset-lg-1">
             <div class="card shadow">
-                <div class="card-header text-center fs-5 custom-main-color">{{ __('admin.rooms_management') }}</div>
+                <div class="card-header text-center fs-5 custom-main-color text-white">{{ __('admin.rooms_management') }}</div>
 
                 <div class="card-body border-bottom border-3">
                     <div class="mb-4">
@@ -28,7 +28,7 @@
                             <div class="col-6">
                                 <input type="search" class="form-control" placeholder="{{ __('admin.implementer') }}" name="implementer" value="">
                             </div>
-                            <div class="col-2 text-end">
+                            <div class="col-3 text-end">
                                 <button type="button" class="btn btn-primary shadow" id="rooms-search-btn"><i class="fa-solid fa-magnifying-glass fa-xl"></i></button>
                             </div>
                             <div class="col-3 text-end">

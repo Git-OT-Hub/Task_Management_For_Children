@@ -7,6 +7,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <link rel="shortcut icon" href="{{ asset('/tab.ico') }}">
+
     @hasSection('title')
         <title>@yield('title') | {{ config('app.name') }}</title>
     @else
@@ -26,9 +28,11 @@
             <header class="custom-main-color shadow">
                 <nav class="navbar navbar-expand-md">
                     <div class="container-fluid">
-                        <img src="{{ asset('images/test_header_icon.png') }}" alt="" width="80" height="60">
-                        <a class="navbar-brand px-3" href="{{ url('/') }}">
-                            {{ config('app.name', 'Laravel') }}
+                        <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
+                            <img class="img-thumbnail rounded-circle" src="{{ asset('images/header_image.png') }}" alt="">
+                        </div>
+                        <a class="navbar-brand px-3 link-light fs-3" href="{{ url('/') }}">
+                            {{ config('app.name') }}
                         </a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -41,21 +45,21 @@
                                 @guest
                                     @if (Route::has('login'))
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('login') }}"><i class="fa-solid fa-right-to-bracket fa-2x"></i></a>
+                                            <a class="nav-link link-light" href="{{ route('login') }}"><i class="fa-solid fa-right-to-bracket fa-2x"></i></a>
                                         </li>
                                     @endif
 
                                     @if (Route::has('register'))
                                         <li class="nav-item ms-0 ms-md-3">
-                                            <a class="nav-link" href="{{ route('register') }}"><i class="fa-solid fa-user-plus fa-2x"></i></a>
+                                            <a class="nav-link link-light" href="{{ route('register') }}"><i class="fa-solid fa-user-plus fa-2x"></i></a>
                                         </li>
                                     @endif
                                 @else
                                     <li class="nav-item d-flex align-items-center">     
-                                        <a class="nav-link" href="{{ route('rooms.index') }}"><i class="fa-solid fa-house fa-2x"></i></a>
+                                        <a class="nav-link link-light" href="{{ route('rooms.index') }}"><i class="fa-solid fa-house fa-2x"></i></a>
                                     </li>
                                     <li class="nav-item dropdown ms-0 ms-md-3">
-                                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        <a id="navbarDropdown" class="nav-link dropdown-toggle link-light" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                             <div class="ratio ratio-1x1 custom-user-icon" style="width: 60px; height: 60px;">
                                                 @if(Auth::user()->icon)
                                                     <img src="{{ Storage::url(Auth::user()->icon) }}" alt="" class="img-thumbnail rounded-circle shadow">
@@ -67,17 +71,17 @@
 
                                         <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="navbarDropdown">
                                             <li>
-                                                <span class="dropdown-item">{{ Auth::user()->name }}</span>
+                                                <span class="dropdown-item fs-5">{{ Auth::user()->name }}</span>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('profiles.index') }}">
+                                                <a class="dropdown-item link-secondary fs-5" href="{{ route('profiles.index') }}">
                                                     {{ __('profiles.profile') }}
                                                 </a>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                                <a class="dropdown-item link-secondary" href="{{ route('logout') }}"
                                                 onclick="event.preventDefault();
                                                                 document.getElementById('logout-form').submit();">
                                                     <i class="fa-solid fa-right-from-bracket fa-2x"></i>
@@ -89,7 +93,7 @@
                                         </ul>
                                     </li>
                                     <li class="nav-item dropdown ms-0 ms-md-1">
-                                        <a id="navbarDropdownNotice" class="nav-link dropdown-toggle " href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-bs-auto-close="false" v-pre>     
+                                        <a id="navbarDropdownNotice" class="nav-link dropdown-toggle link-light" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-bs-auto-close="false" v-pre>     
                                             <i class="fa-solid fa-bell fa-2x position-relative" id="notice-count">
                                                 @if(Auth::user()->unreadNotifications->count() !== 0)
                                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger custom-notice-numbers">
@@ -147,12 +151,12 @@
                 </div>
             </div>
         </div>
-        <main class="py-4">
+        <main class="py-4 custom-main-bg">
             @yield('content')
         </main>
         <footer class="custom-main-color p-3">
             <div>
-                <a href="{{ url('/') }}" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ config('app.name', 'Laravel') }} {{ __('About') }}</a>
+                <a href="{{ url('/') }}" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ config('app.name') }} {{ __('About') }}</a>
             </div>
             <div class="mt-2">
                 <a href="https://forms.gle/XeLdXj9UpxrXCkTP6" target="_blank" rel="nofollow sponsored noopener noreferrer" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ __('Contact') }}</a>

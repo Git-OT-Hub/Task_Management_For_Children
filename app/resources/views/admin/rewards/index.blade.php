@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-lg-10 offset-lg-1">
             <div class="card shadow">
-                <div class="card-header text-center fs-5 custom-main-color">{{ __('admin.rewards_management') }}</div>
+                <div class="card-header text-center fs-5 custom-main-color text-white">{{ __('admin.rewards_management') }}</div>
 
                 <div class="card-body border-bottom border-3">
                     <div class="mb-4">

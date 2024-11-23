@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card shadow">
-                <div class="card-header text-center fs-5 custom-main-color">{{ $task->title }}</div>
+                <div class="card-header text-center fs-5 custom-main-color text-white">{{ $task->title }}</div>
 
                 <div class="card-body">
                     <div class="row">
@@ -44,7 +44,7 @@
                                         @csrf
 
                                         <button type="submit" class="btn btn-danger shadow">
-                                            {{ __('tasks.image_delete') }}
+                                            <i class="fa-solid fa-trash-can fa-xl"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -56,12 +56,6 @@
                             </div>
                         @endif
                     </div>
-
-                    @if(session("imageGenerationFailure"))
-                        <div class="alert alert-danger mt-4" role="alert">
-                            {{ session("imageGenerationFailure") }}
-                        </div>
-                    @endif
                     
                     @if(Auth::user()->id === $room->user_id)
                         <div class="accordion mt-4" id="accordionGenerateImage">
@@ -94,7 +88,7 @@
                                                 <div class="col-12">
                                                     <div class="text-end">
                                                         <button type="submit" class="btn btn-primary shadow">
-                                                            {{ __('tasks.image_generation') }}
+                                                            <i class="fa-solid fa-plus fa-xl"></i>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -117,15 +111,15 @@
 
                 <div class="card-body">
                     <p class="card-text">
-                        {{ __('tasks.point') }}：{{ $task->point }}
+                        {{ __('tasks.point') }}：<span class="text-primary fs-5">{{ $task->point }} P</span>
                     </p>
                     <p class="card-text">
-                        {{ __('tasks.deadline') }}：{{ $task->deadline }}
+                        {{ __('tasks.deadline') }}：<span class="text-danger fs-5">{{ $task->deadline }}</span>
                     </p>
                     <p class="card-text mb-1">
                         {{ __('tasks.body') }}：
                     </p>
-                    <p class="card-text border border-2 p-2">
+                    <p class="card-text border border-2 rounded-2 p-2">
                         {!! nl2br(e($task->body)) !!}
                     </p>
                     <p class="card-text">
@@ -140,7 +134,7 @@
                         <div class="row align-items-center justify-content-end mb-4">
                             <div class="col-3 text-end">
                                 <a class="btn btn-secondary shadow" href="{{ route('rooms.tasks.edit', ['room' => $room, 'task' => $task]) }}">
-                                    {{ __('tasks.edit') }}
+                                    <i class="fa-solid fa-pen-to-square fa-xl"></i>
                                 </a>
                             </div>
                             <div class="col-3 text-end">
@@ -149,7 +143,7 @@
                                     @csrf
 
                                     <button type="submit" class="btn btn-danger shadow">
-                                        {{ __('tasks.delete') }}
+                                        <i class="fa-solid fa-trash-can fa-xl"></i>
                                     </button>
                                 </form>
                             </div>

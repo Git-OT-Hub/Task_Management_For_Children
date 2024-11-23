@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col">
                     <div class="card shadow">
-                        <div class="card-header text-center fs-5 custom-main-color" id="room-name">{{ $room->name }}</div>
+                        <div class="card-header text-center fs-5 custom-main-color text-white" id="room-name">{{ $room->name }}</div>
 
                         <div class="card-body border-bottom border-3">
                             <ul class="list-group list-group-flush">
@@ -71,7 +71,7 @@
                                     @if(Auth::user()->id === $room->user_id)
                                         <div class="dropdown custom-room-button">
                                             <button type="button" class="btn btn-secondary shadow dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                                                {{ __('rooms.edit') }}
+                                                <i class="fa-solid fa-pen-to-square fa-xl"></i>
                                             </button>
                                             <form class="dropdown-menu p-4 dropdown-menu-end shadow">
                                                 @csrf
@@ -85,7 +85,11 @@
                                                 </div>
                                                 <input type="hidden" id="room-edit-id" value="{{ $room->id }}">
                                                 <input type="hidden" id="room-edit-recipient" name="user_name" value="{{ $recipient }}">
-                                                <button type="button" class="btn btn-primary shadow" id="room-edit">{{ __('rooms.update') }}</button>
+                                                <div class="text-end">
+                                                    <button type="button" class="btn btn-primary shadow" id="room-edit">
+                                                        <i class="fa-solid fa-pen-to-square fa-xl"></i>
+                                                    </button>
+                                                </div>
                                             </form>
                                             @include("rooms.edit_script")
                                         </div>
@@ -94,7 +98,7 @@
                                                 @method('DELETE')
                                                 @csrf
                                                 <button class="btn btn-danger shadow">
-                                                    {{ __('rooms.delete') }}
+                                                    <i class="fa-solid fa-trash-can fa-xl"></i>
                                                 </button>
                                             </form>
                                         </div>

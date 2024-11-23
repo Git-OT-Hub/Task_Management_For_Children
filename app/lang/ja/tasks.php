@@ -15,7 +15,7 @@ return [
     "body" => "メッセージ",
     "point_explanation" => "※課題達成時の報酬ポイントを入力してください。",
     "image_generation" => "画像生成",
-    "image_generation_explanation" => "※生成したい画像の説明文を入力してください（例：「夏休みの宿題をする子ども」、「母親と一緒に洗濯を干す子どもの絵」）。",
+    "image_generation_explanation" => "※生成したい画像の説明文を入力してください（例：「夏休みの宿題をする子ども」、「母親と一緒に洗濯物を干す子どもの絵」）。",
     "image_generation_progress" => "画像生成中です。しばらくお待ちください...",
     "image_delete" => "画像削除",
     "edit" => "課題編集",

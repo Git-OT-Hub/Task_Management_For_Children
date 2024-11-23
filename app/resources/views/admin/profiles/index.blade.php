@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card shadow">
-                <div class="card-header text-center fs-5 custom-main-color">{{ __('profiles.profile') }}</div>
+                <div class="card-header text-center fs-5 custom-main-color text-white">{{ __('profiles.profile') }}</div>
 
                 <div class="card-body">
                     <div class="row">
@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-4 ms-auto text-center">
                             <a class="btn btn-secondary shadow" href="{{ route('admin.profiles.edit') }}">
-                                {{ __('profiles.edit') }}
+                                <i class="fa-solid fa-pen-to-square fa-xl"></i>
                             </a>
                         </div>
                     </div>
@@ -35,7 +35,9 @@
                                 <form method="POST" action="{{ route('admin.profiles.icon.destroy') }}" id="icon-delete" class="custom-icon-button align-bottom ms-2">
                                     @method("DELETE")
                                     @csrf
-                                    <button type="submit" class="btn btn-danger shadow">{{ __('profiles.delete') }}</button>
+                                    <button type="submit" class="btn btn-danger shadow">
+                                        <i class="fa-solid fa-trash-can fa-xl"></i>
+                                    </button>
                                 </form>
                             @endif
                         </div>

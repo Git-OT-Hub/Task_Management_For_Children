@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow">
-                <div class="card-header text-center fs-5 custom-main-color">{{ __('tasks.edit') }}</div>
+                <div class="card-header text-center fs-5 custom-main-color text-white">{{ __('tasks.edit') }}</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('rooms.tasks.update', ['room' => $room, 'task' => $task]) }}">
@@ -76,13 +76,13 @@
                             <div class="col-12">
                                 <div class="text-end">
                                     <button type="submit" class="btn btn-primary shadow">
-                                        {{ __('tasks.edit') }}
+                                        <i class="fa-solid fa-pen-to-square fa-xl"></i>
                                     </button>
                                 </div>
 
                                 <div class="mt-3 text-center">
-                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ route('rooms.tasks.show', ['room' => $room, 'task' => $task]) }}">
-                                        <i class="fa-solid fa-reply"></i>
+                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" href="{{ route('rooms.tasks.show', ['room' => $room, 'task' => $task]) }}">
+                                        <i class="fa-solid fa-reply fa-xl"></i>
                                         {{ __('tasks.show') }}
                                     </a>
                                 </div>

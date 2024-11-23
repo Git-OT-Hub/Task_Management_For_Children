@@ -1,12 +1,12 @@
 @forelse ($results as $result)
     @if ($result["join_status"] == 0)
         <div class="col-12 col-lg-6 mt-3">
-            <div class="p-3 rounded shadow h-100">
+            <div class="card p-3 rounded shadow h-100">
                 <h2>
                     {{ $result["room_name"] }}
                 </h2>
                 <div class="card">
-                    <div class="card-header text-center custom-main-color">{{ __('rooms.master') }}</div>
+                    <div class="card-header text-center custom-main-color text-white">{{ __('rooms.master') }}</div>
 
                     <div class="card-body">
                         <div class="row">
@@ -38,21 +38,23 @@
                     </form>
                 </div>
                 <p class="mb-0 mt-3">
-                    {{ __('rooms.date') }}：
-                    <time datetime="{{ $result['created_at'] }}">
-                        {{ $result['created_at']->format('Y/m/d') }}
-                    </time>
+                    <small class="text-secondary">
+                        {{ __('rooms.date') }}：
+                        <time datetime="{{ $result['created_at'] }}">
+                            {{ $result['created_at']->format('Y/m/d') }}
+                        </time>
+                    </small>
                 </p>
             </div>
         </div>
     @elseif ($result["join_status"] == 1)
         <div class="col-12 col-lg-6 mt-3">
-            <div class="p-3 rounded shadow h-100">
+            <div class="card p-3 rounded shadow h-100">
                 <h2>
                     <a href="{{ route('rooms.show', ['room' => $result['room_id']]) }}" class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ $result["room_name"] }}</a>
                 </h2>
                 <div class="card">
-                    <div class="card-header text-center custom-main-color">{{ __('rooms.master') }}</div>
+                    <div class="card-header text-center custom-main-color text-white">{{ __('rooms.master') }}</div>
 
                     <div class="card-body">
                         <div class="row">
@@ -72,7 +74,7 @@
                     </div>
                 </div>
                 <div class="card mt-3">
-                    <div class="card-header text-center custom-main-color">{{ __('rooms.executor') }}</div>
+                    <div class="card-header text-center custom-main-color text-white">{{ __('rooms.executor') }}</div>
 
                     <div class="card-body">
                         <div class="row">
@@ -92,10 +94,12 @@
                     </div>
                 </div>
                 <p class="mb-0 mt-3">
-                    {{ __('rooms.date') }}：
-                    <time datetime="{{ $result['created_at'] }}">
-                        {{ $result['created_at']->format('Y/m/d') }}
-                    </time>
+                    <small class="text-secondary">
+                        {{ __('rooms.date') }}：
+                        <time datetime="{{ $result['created_at'] }}">
+                            {{ $result['created_at']->format('Y/m/d') }}
+                        </time>
+                    </small>
                 </p>
             </div>
         </div>

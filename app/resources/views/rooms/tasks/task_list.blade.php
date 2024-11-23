@@ -47,10 +47,10 @@
                             <a href="{{ route('rooms.tasks.show', ['room' => $room, 'task' => $result['task_id']]) }}" class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ $result["task_title"] }}</a>
                         </h4>
                         <p class="card-text">
-                            {{ __('tasks.point') }}：{{ $result["task_point"] }}
+                            {{ __('tasks.point') }}：<span class="text-primary">{{ $result["task_point"] }} P</span>
                         </p>
                         <p class="card-text">
-                            {{ __('tasks.deadline') }}：{{ $result["task_deadline"] }}
+                            {{ __('tasks.deadline') }}：<span class="text-danger">{{ $result["task_deadline"] }}</span>
                         </p>
                         <p class="card-text">
                             <small class="text-body-secondary">

@@ -105,7 +105,7 @@ class TaskController extends Controller
             return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
 
         } catch (\Throwable $e) {
-            session()->flash("imageGenerationFailure", "画像生成に失敗しました。時間を置いてから試してください。");
+            session()->flash("failureMessage", "画像生成に失敗しました。時間を置いてから試してください。");
 
             return redirect()->route("rooms.tasks.show", ["room" => $room, "task" => $task]);
         }

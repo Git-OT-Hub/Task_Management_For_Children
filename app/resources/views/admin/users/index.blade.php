@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-lg-10 offset-lg-1">
             <div class="card shadow">
-                <div class="card-header text-center fs-5 custom-main-color">{{ __('admin.users_management') }}</div>
+                <div class="card-header text-center fs-5 custom-main-color text-white">{{ __('admin.users_management') }}</div>
 
                 <div class="card-body border-bottom border-3">
                     <div class="mb-4">
@@ -25,9 +25,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-7">
+                            <div class="col-6">
                             </div>
-                            <div class="col-2 text-end">
+                            <div class="col-3 text-end">
                                 <button type="button" class="btn btn-primary shadow" id="users-search-btn"><i class="fa-solid fa-magnifying-glass fa-xl"></i></button>
                             </div>
                             <div class="col-3 text-end">

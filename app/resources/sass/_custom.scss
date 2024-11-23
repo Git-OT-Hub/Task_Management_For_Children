@@ -3,6 +3,14 @@
     background: #8795a1;
 }
 
+.custom-main-text {
+    color: #8795a1;
+}
+
+.custom-main-bg {
+    background: #f2f2f2;
+}
+
 // footer下の余白削除
 html {
     height: 100%;
@@ -33,6 +41,21 @@ main {
     --bs-btn-bg: #4885e1;
     --bs-btn-hover-bg: #1f64cb;
     --bs-btn-active-bg: #1953aa;
+}
+
+// btn-outline-primary カスタム
+.btn-outline-primary {
+    --bs-btn-color: #4885e1;
+    --bs-btn-border-color: #4885e1;
+    --bs-btn-hover-bg: #4885e1;
+    --bs-btn-hover-border-color: #4885e1;
+    --bs-btn-active-bg: #1953aa;
+    --bs-btn-active-border-color: #1953aa;
+}
+
+// text-primary カスタム
+.text-primary {
+    color: #4885e1 !important;
 }
 
 // dropdown-menu カスタム

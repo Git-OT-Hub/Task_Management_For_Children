@@ -6,13 +6,13 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card shadow">
-                <div class="card-header text-center fs-5 custom-main-color">{{ __('profiles.profile') }} {{ __('profiles.edit') }}</div>
+                <div class="card-header text-center fs-5 custom-main-color text-white">{{ __('profiles.profile') }} {{ __('profiles.edit') }}</div>
 
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 align-self-center">
-                            <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ route('profiles.index') }}">
-                                <i class="fa-solid fa-reply"></i>
+                            <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" href="{{ route('profiles.index') }}">
+                                <i class="fa-solid fa-reply fa-xl"></i>
                                 {{ __('profiles.profile') }}
                             </a>
                         </div>
@@ -91,7 +91,7 @@
                                     <div class="col-12">
                                         <div class="text-end">
                                             <button type="submit" class="btn btn-primary shadow">
-                                                {{ __('profiles.update') }}
+                                                <i class="fa-solid fa-pen-to-square fa-xl"></i>
                                             </button>
                                         </div>
                                     </div>

@@ -4,9 +4,9 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <div class="card shadow">
-                <div class="card-header text-center custom-main-color">{{ __('Login') }}</div>
+                <div class="card-header text-center custom-main-color fs-5 text-white">{{ __('Login') }}</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
@@ -54,24 +54,24 @@
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <div>
+                                <div class="text-end">
                                     <button type="submit" class="btn btn-primary">
-                                        {{ __('Login') }}
+                                        <i class="fa-solid fa-right-to-bracket fa-xl"></i>
                                     </button>
                                 </div>
 
                                 @if (Route::has('register'))
                                     <div class="mt-3">
-                                        <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ route('register') }}">
-                                            <i class="fa-solid fa-user-plus"></i>
+                                        <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" href="{{ route('register') }}">
+                                            <i class="fa-solid fa-user-plus fa-xl"></i>
                                             {{ __('User registration here!') }}
                                         </a>
                                     </div>    
                                 @endif
                                 @if (Route::has('password.request'))
                                     <div class="mt-2">
-                                        <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ route('password.request') }}">
-                                            <i class="fa-solid fa-key"></i>
+                                        <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" href="{{ route('password.request') }}">
+                                            <i class="fa-solid fa-key fa-xl"></i>
                                             {{ __('Forgot Your Password?') }}
                                         </a>
                                     </div>

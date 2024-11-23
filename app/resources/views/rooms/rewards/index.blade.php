@@ -6,13 +6,13 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card shadow">
-                <div class="card-header text-center fs-5 custom-main-color">{{ __('rewards.list') }}</div>
+                <div class="card-header text-center fs-5 custom-main-color text-white">{{ __('rewards.list') }}</div>
 
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 align-self-center text-start">
-                            <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ route('rooms.show', $room) }}">
-                                <i class="fa-solid fa-reply"></i>
+                            <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" href="{{ route('rooms.show', $room) }}">
+                                <i class="fa-solid fa-reply fa-xl"></i>
                                 {{ __('rooms.show') }}
                             </a>
                         </div>
@@ -46,7 +46,7 @@
                                                 <div class="col-12">
                                                     <div class="text-end">
                                                         <button type="button" class="btn btn-primary shadow" id="reward-create-btn">
-                                                            {{ __('rewards.create') }}
+                                                            <i class="fa-solid fa-sack-dollar fa-xl"></i>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -79,7 +79,7 @@
             </div>
 
             <div class="card shadow mt-4">
-                <div class="card-header text-center fs-5 custom-main-color">{{ __('rewards.earned') }}</div>
+                <div class="card-header text-center fs-5 custom-main-color text-white">{{ __('rewards.earned') }}</div>
 
                 <div class="card-body">
                     <div class="row border-bottom border-3">
@@ -98,7 +98,7 @@
                         <div class="col-12 border-top border-3 mt-2">
                             <p class="mb-0 fs-5 py-2">
                                 {{ __('rewards.points_held') }}：
-                                <span id="current-points-held" class="badge text-bg-warning fs-4">{{ $receiveRewardsUser["earned_point"] }}</span> P
+                                <span id="current-points-held" class="badge text-bg-warning fs-3">{{ $receiveRewardsUser["earned_point"] }}</span> P
                             </p>
                         </div>
                     </div>
@@ -113,7 +113,7 @@
                         <tbody id="earned-rewards">
                             @forelse ($earnedRewards as $earnedReward)
                                 <tr>
-                                    <td>{{ $earnedReward->point }} P</td>
+                                    <td class="text-primary">{{ $earnedReward->point }} P</td>
                                     <td>{{ $earnedReward->reward }}</td>
                                 </tr>
                             @empty
