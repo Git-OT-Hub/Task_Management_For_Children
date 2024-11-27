@@ -4,6 +4,10 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -39,5 +43,34 @@ class Handler extends ExceptionHandler
         }
         
         return redirect()->guest($exception->redirectTo ?? route('login'));
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        // 403 This action is unauthorized
+        if ($exception instanceof AuthorizationException) {
+            return $this->redirectBasedOnUserType();
+        }
+
+        // 404 Not Found
+        if ($exception instanceof NotFoundHttpException || $exception instanceof ModelNotFoundException) {
+            return $this->redirectBasedOnUserType();
+        }
+
+        // その他のエラー
+        return parent::render($request, $exception);
+    }
+
+    protected function redirectBasedOnUserType()
+    {
+        if (auth('admin')->check()) {
+
+            return redirect('/admin/home');
+        } elseif (auth()->check()) {
+
+            return redirect('/');
+        }
+
+        return redirect('/');
     }
 }

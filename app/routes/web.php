@@ -85,3 +85,15 @@ Route::view('/admin/password/reset', 'admin/passwords/email');
 Route::post('/admin/password/email', [App\Http\Controllers\Admin\ForgotPasswordController::class, 'sendResetLinkEmail']);
 Route::get('/admin/password/reset/{token}', [App\Http\Controllers\Admin\ResetPasswordController::class, 'showResetForm']);
 Route::post('/admin/password/reset', [App\Http\Controllers\Admin\ResetPasswordController::class, 'reset']);
+
+Route::fallback(function () {
+    if (auth('admin')->check()) {
+
+        return redirect('/admin/home');
+    } elseif (auth()->check()) {
+
+        return redirect('/');
+    }
+
+    return redirect('/');
+});

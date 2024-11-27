@@ -188,7 +188,7 @@
                 }
 
                 $(`#reward-${res.reward.id}`).remove();
-                let earnedReward = `<tr><td>${res.reward.point} P</td><td>${res.reward.reward}</td></tr>`;
+                let earnedReward = `<tr><td class="text-primary">${res.reward.point} P</td><td>${res.reward.reward}</td></tr>`;
                 $('#earned-rewards').prepend(earnedReward);
                 $('#current-points-held').text(res.earnedPoint.point);
                 
