@@ -7,6 +7,7 @@ use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use App\Models\User;
 use App\Models\Room;
+use App\Models\Reward;
 
 class RewardTest extends DuskTestCase
 {
@@ -38,28 +39,62 @@ class RewardTest extends DuskTestCase
             $browser->loginAs($master)
                     ->visit("/rooms/{$room->id}/rewards")
                     ->waitFor('#reward-create-btn')
-                    ->assertButtonEnabled('#reward-create-btn')
-                    //->assertSee("報酬一覧")
                     ->with('#reward-create-form', function ($form) {
                         $form->type('point', 100)
                              ->type('reward', 'new reward')
-                             ->value('input#create-point', 100)
-                             ->value('input#create-reward', 'new reward')
                              ->press('button[type="button"]');
-                             //->click('#reward-create-btn');
                     })
-                    // ->pause(1000) // 一時停止（簡易的な解決策だが推奨されない）
-                    // ->assertDatabaseHas('rewards', [
-                    //     'point' => 100,
-                    //     'reward' => 'new reward',
-                    // ]);
-                    //->assertDialogOpened('報酬の作成に失敗しました。');
+                    ->waitForText('100')
                     ->waitForText('new reward')
+                    ->assertSee('100')
                     ->assertSee('new reward');
-                    //->waitForTextIn('td.point', '100')
-                    //->waitForTextIn('td.reward', 'new reward')
-                    //->assertSeeIn('td.point', '100')
-                    //->assertSeeIn('td.reward', 'new reward');
+        });
+    }
+
+    public function test_reward_update(): void
+    {
+        $master = User::factory()->create();
+        $participant = User::factory()->create();
+        $room = $this->set_room(master: $master, participant: $participant);
+        $reward = Reward::factory()->create(['room_id' => $room->id, 'user_id' => $master->id]);
+
+        $this->browse(function (Browser $browser) use ($master, $participant, $room, $reward) {
+            $browser->loginAs($master)
+                    ->visit("/rooms/{$room->id}/rewards")
+                    ->assertSee($reward->reward)
+                    ->with("#reward-{$reward->id}", function (Browser $item) use($reward) {
+                        $item->click('button.dropdown-toggle')
+                             ->assertAttribute('#update-reward', 'value', $reward->reward)
+                             ->type('point', 250)
+                             ->type('reward', 'update reward')
+                             ->click('button.reward-update');
+                    })
+                    ->waitForText('250')
+                    ->waitForText('update reward')
+                    ->assertSee('250')
+                    ->assertSee('update reward');
+        });
+    }
+
+    public function test_reward_delete(): void
+    {
+        $master = User::factory()->create();
+        $participant = User::factory()->create();
+        $room = $this->set_room(master: $master, participant: $participant);
+        $reward = Reward::factory()->create(['room_id' => $room->id, 'user_id' => $master->id]);
+
+        $this->browse(function (Browser $browser) use ($master, $participant, $room, $reward) {
+            $browser->loginAs($master)
+                    ->visit("/rooms/{$room->id}/rewards")
+                    ->assertSee($reward->reward)
+                    ->with("#reward-{$reward->id}", function (Browser $item) use($reward) {
+                        $item->click('button.reward-delete')
+                             ->assertDialogOpened("報酬「 {$reward->point} P / {$reward->reward} 」を削除しますか?")
+                             ->acceptDialog();
+                    })
+                    ->waitUntilMissingText($reward->reward)
+                    ->assertDontSee($reward->point)
+                    ->assertDontSee($reward->reward);
         });
     }
 }
