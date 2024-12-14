@@ -11,12 +11,12 @@
                     @csrf
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="point" class="form-label mb-0">{{ __('rewards.point') }}</label>
-                            <input id="point" type="number" class="form-control @error('point') is-invalid @enderror" name="point" value="{{ old('point', $reward->point) }}" required>
+                            <label for="update-point" class="form-label mb-0">{{ __('rewards.point') }}</label>
+                            <input id="update-point" type="number" class="form-control @error('point') is-invalid @enderror" name="point" value="{{ old('point', $reward->point) }}" required>
                         </div>
                         <div class="col-12 mt-2">
-                            <label for="reward" class="form-label mb-0">{{ __('rewards.reward') }}</label>
-                            <input id="reward" type="text" class="form-control @error('reward') is-invalid @enderror" name="reward" value="{{ old('reward', $reward->reward) }}" required>
+                            <label for="update-reward" class="form-label mb-0">{{ __('rewards.reward') }}</label>
+                            <input id="update-reward" type="text" class="form-control @error('reward') is-invalid @enderror" name="reward" value="{{ old('reward', $reward->reward) }}" required>
                         </div>
                     </div>
                     <ul class="fw-bold text-danger reward-update-error-message">

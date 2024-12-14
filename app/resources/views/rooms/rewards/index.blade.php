@@ -31,12 +31,12 @@
                                             @csrf
                                             <div class="row mb-3">
                                                 <div class="col-3">
-                                                    <label for="point" class="form-label">{{ __('rewards.point') }}</label>
-                                                    <input id="point" type="number" class="form-control @error('point') is-invalid @enderror" name="point" value="{{ old('point') }}" required>
+                                                    <label for="create-point" class="form-label">{{ __('rewards.point') }}</label>
+                                                    <input id="create-point" type="number" class="form-control @error('point') is-invalid @enderror" name="point" value="{{ old('point') }}" required>
                                                 </div>
                                                 <div class="col-9">
-                                                    <label for="reward" class="form-label">{{ __('rewards.reward') }}</label>
-                                                    <input id="reward" type="text" class="form-control @error('reward') is-invalid @enderror" name="reward" value="{{ old('reward') }}" required>
+                                                    <label for="create-reward" class="form-label">{{ __('rewards.reward') }}</label>
+                                                    <input id="create-reward" type="text" class="form-control @error('reward') is-invalid @enderror" name="reward" value="{{ old('reward') }}" required>
                                                 </div>
                                             </div>
                                             <ul class="fw-bold text-danger reward-create-error-message">
