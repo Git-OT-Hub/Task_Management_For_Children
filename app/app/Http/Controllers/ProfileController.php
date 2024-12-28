@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Intervention\Image\Laravel\Facades\Image;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
-use App\Models\User;
 use App\Http\Requests\ProfileRequest;
+use App\Services\ProfileService;
 
 class ProfileController extends Controller
 {
+    public function __construct(ProfileService $profileService)
+    {
+        $this->profileService = $profileService;
+    }
+
     public function index()
     {
         return view("profiles.index");
@@ -26,28 +26,8 @@ class ProfileController extends Controller
     public function update(ProfileRequest $request)
     {
         try {
-            $user = User::find(Auth::user()->id);
-
-            DB::transaction(function () use($request, $user) {
-                if ($request->hasFile("icon")) {
-                    if ($currentIcon = $user->icon) {
-                        Storage::disk("public")->delete($currentIcon);
-                    }
-                    $file = $request->file("icon");
-                    $imageFile = Image::read($file);
-                    $imageFile->coverDown(200, 200);
-                    $filename = 'icons/' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-                    Storage::disk("public")->put($filename, $imageFile->encode());
-                    $user->icon = $filename;
-                }
-
-                $columns = ["name", "email", "goal"];
-                foreach ($columns as $column) {
-                    $user->$column = $request->$column;
-                }
-
-                $user->save();
-            });
+            // サービスで定義したメソッド呼び出し
+            $this->profileService->update($request);
 
             session()->flash("successMessage", "プロフィールを更新しました。");
 
@@ -62,15 +42,8 @@ class ProfileController extends Controller
     public function deleteIcon()
     {
         try {
-            $user = User::find(Auth::user()->id);
-
-            DB::transaction(function () use($user) {
-                if ($currentIcon = $user->icon) {
-                    Storage::disk("public")->delete($currentIcon);
-                }
-                $user->icon = null;
-                $user->save();
-            });
+            // サービスで定義したメソッド呼び出し
+            $this->profileService->deleteIcon();
 
             session()->flash("successMessage", "アイコンを削除しました。");
 
