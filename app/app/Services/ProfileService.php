@@ -7,15 +7,18 @@ use Illuminate\Support\Facades\DB;
 use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Http\Requests\ProfileRequest;
 
 class ProfileService
 {
+    protected $profileInterface;
+
     public function __construct(ProfileInterface $profileInterface)
     {
         $this->profileInterface = $profileInterface;
     }
 
-	public function update($request)
+	public function update(ProfileRequest $request)
     {
         // インターフェースで定義したメソッド呼び出し
         $user = $this->profileInterface->getUser();
@@ -39,12 +42,8 @@ class ProfileService
                 $user->icon = $filename;
             }
 
-            $columns = ["name", "email", "goal"];
-            foreach ($columns as $column) {
-                $user->$column = $request->$column;
-            }
-
-            $user->save();
+            // インターフェースで定義したメソッド呼び出し
+            $this->profileInterface->updateUser(request: $request, user: $user);
         });
     }
 
@@ -58,8 +57,9 @@ class ProfileService
             if ($currentIcon = $user->icon) {
                 Storage::disk("public")->delete($currentIcon);
             }
-            $user->icon = null;
-            $user->save();
+
+            // インターフェースで定義したメソッド呼び出し
+            $this->profileInterface->deleteIcon($user);
         });
     }
 }
