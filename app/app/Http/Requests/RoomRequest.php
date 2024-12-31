@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Rules\NotCurrentUserName;
+use Symfony\Component\HttpFoundation\Response;
 
 class RoomRequest extends FormRequest
 {
@@ -42,12 +43,12 @@ class RoomRequest extends FormRequest
     {
         if ($this->ajax()) {
             $response = [
-                'status' => 400,
+                'status' => Response::HTTP_BAD_REQUEST,
                 'errors' => $validator->errors()->toArray(),
             ];
             
             throw new HttpResponseException(
-                response()->json($response, 422)
+                response()->json($response, Response::HTTP_UNPROCESSABLE_ENTITY)
             );
         }
     

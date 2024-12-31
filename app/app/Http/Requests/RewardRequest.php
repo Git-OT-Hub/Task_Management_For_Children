@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Symfony\Component\HttpFoundation\Response;
 
 class RewardRequest extends FormRequest
 {
@@ -41,12 +42,12 @@ class RewardRequest extends FormRequest
     {
         if ($this->ajax()) {
             $response = [
-                'status' => 400,
+                'status' => Response::HTTP_BAD_REQUEST,
                 'errors' => $validator->errors()->toArray(),
             ];
             
             throw new HttpResponseException(
-                response()->json($response, 422)
+                response()->json($response, Response::HTTP_UNPROCESSABLE_ENTITY)
             );
         }
     
