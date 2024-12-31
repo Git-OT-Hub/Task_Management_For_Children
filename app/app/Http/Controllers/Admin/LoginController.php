@@ -48,6 +48,11 @@ class LoginController extends Controller
         return Auth::guard('admin');
     }
 
+    public function showLoginForm()
+    {
+        return view('admin.login');
+    }
+
     public function logout(Request $request)
     {
         $this->performLogout($request);

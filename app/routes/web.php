@@ -2,11 +2,22 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\TopController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\RewardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Admin\LoginController as AdminLoginController;
+use App\Http\Controllers\Admin\RegisterController as AdminRegisterController;
+use App\Http\Controllers\Admin\ForgotPasswordController as AdminForgotPasswordController;
+use App\Http\Controllers\Admin\ResetPasswordController as AdminResetPasswordController;
+use App\Http\Controllers\Admin\HomeController as AdminHomeController;
+use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\RoomController as AdminRoomController;
+use App\Http\Controllers\Admin\TaskController as AdminTaskController;
+use App\Http\Controllers\Admin\RewardController as AdminRewardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,70 +32,92 @@ use App\Http\Controllers\NotificationController;
 
 Auth::routes();
 
-Route::get('/', function () {
-    return view('top');
-});
+Route::get('/', [TopController::class, "index"]);
 
 Route::group(['middleware' => 'auth'], function() {
     // room
     Route::resource("rooms", RoomController::class);
-    Route::post("/rooms/{room}/join", [RoomController::class, "join"])->name("rooms.join");
-    Route::get("/rooms/search/{content}", [RoomController::class, "roomSearch"]);
-    Route::get("/rooms/tasks/search/{content}", [RoomController::class, "taskSearch"]);
+    Route::prefix('rooms')->name('rooms.')->group(function () {
+        Route::post("/{room}/join", [RoomController::class, "join"])->name("join");
+        Route::get("/search/{content}", [RoomController::class, "roomSearch"]);
+        Route::get("/tasks/search/{content}", [RoomController::class, "taskSearch"]);
+    });
     // task
     Route::resource("rooms.tasks", TaskController::class)->only("create", "store", "show", "edit", "update", "destroy");
-    Route::post("/rooms/{room}/tasks/{task}/image/ai", [TaskController::class, "generateImage"])->name("rooms.tasks.image.ai");
-    Route::delete("/rooms/{room}/tasks/{task}/image", [TaskController::class, "deleteImage"])->name("rooms.tasks.image.destroy");
-    Route::post("/rooms/{room}/tasks/{task}/completion", [TaskController::class, "completion"])->name("rooms.tasks.completion");
-    Route::post("/rooms/{room}/tasks/{task}/redo", [TaskController::class, "redo"])->name("rooms.tasks.redo");
-    Route::post("/rooms/{room}/tasks/{task}/approval", [TaskController::class, "approval"])->name("rooms.tasks.approval");
+    Route::prefix('rooms')->name('rooms.tasks.')->group(function () {
+        Route::post("/{room}/tasks/{task}/image/ai", [TaskController::class, "generateImage"])->name("image.ai");
+        Route::delete("/{room}/tasks/{task}/image", [TaskController::class, "deleteImage"])->name("image.destroy");
+        Route::post("/{room}/tasks/{task}/completion", [TaskController::class, "completion"])->name("completion");
+        Route::post("/{room}/tasks/{task}/redo", [TaskController::class, "redo"])->name("redo");
+        Route::post("/{room}/tasks/{task}/approval", [TaskController::class, "approval"])->name("approval");
+    });
     // reward
     Route::resource("rooms.rewards", RewardController::class)->only("index", "store", "update", "destroy");
-    Route::post("/rooms/{room}/rewards/{reward}/earn", [RewardController::class, "earn"])->name("rooms.rewards.earn");
+    Route::prefix('rooms')->name('rooms.rewards.')->group(function () {
+        Route::post("/{room}/rewards/{reward}/earn", [RewardController::class, "earn"])->name("earn");
+    });
     // profile
-    Route::get("/profiles", [ProfileController::class, "index"])->name("profiles.index");
-    Route::get("/profiles/edit", [ProfileController::class, "edit"])->name("profiles.edit");
-    Route::patch("/profiles/update", [ProfileController::class, "update"])->name("profiles.update");
-    Route::delete("/profiles/icon", [ProfileController::class, "deleteIcon"])->name("profiles.icon.destroy");
+    Route::prefix('profiles')->name('profiles.')->group(function () {
+        Route::get("/", [ProfileController::class, "index"])->name("index");
+        Route::get("/edit", [ProfileController::class, "edit"])->name("edit");
+        Route::patch("/update", [ProfileController::class, "update"])->name("update");
+        Route::delete("/icon", [ProfileController::class, "deleteIcon"])->name("icon.destroy");
+    });
     // notification
-    Route::post('/notifications/{notification}/read', [NotificationController::class, "read"])->name('notifications.read');
+    Route::prefix('notifications')->name('notifications.')->group(function () {
+        Route::post('/{notification}/read', [NotificationController::class, "read"])->name('read');
+    });
 });
 
-// 管理者　認証
-Route::view('/admin/login', 'admin/login');
-Route::post('/admin/login', [App\Http\Controllers\Admin\LoginController::class, 'login']);
-Route::post('/admin/logout', [App\Http\Controllers\Admin\LoginController::class, 'logout']);
-Route::view('/admin/register', 'admin/register');
-Route::post('/admin/register', [App\Http\Controllers\Admin\RegisterController::class, 'register']);
-Route::group(['middleware' => 'auth:admin'], function() {
-    Route::view('/admin/home', 'admin/home');
-    // profile
-    Route::get("/admin/profiles", [App\Http\Controllers\Admin\ProfileController::class, "index"])->name("admin.profiles.index");
-    Route::get("admin/profiles/edit", [App\Http\Controllers\Admin\ProfileController::class, "edit"])->name("admin.profiles.edit");
-    Route::patch("admin/profiles/update", [App\Http\Controllers\Admin\ProfileController::class, "update"])->name("admin.profiles.update");
-    Route::delete("admin/profiles/icon", [App\Http\Controllers\Admin\ProfileController::class, "deleteIcon"])->name("admin.profiles.icon.destroy");
-    // user_management
-    Route::get("/admin/users", [App\Http\Controllers\Admin\UserController::class, "index"])->name("admin.users.index");
-    Route::get("/admin/users/search/{content}", [App\Http\Controllers\Admin\UserController::class, "userSearch"]);
-    Route::delete("admin/users/{user}", [App\Http\Controllers\Admin\UserController::class, "destroy"])->name("admin.users.destroy");
-    // room_management
-    Route::get("/admin/rooms", [App\Http\Controllers\Admin\RoomController::class, "index"])->name("admin.rooms.index");
-    Route::get("/admin/rooms/search/{content}", [App\Http\Controllers\Admin\RoomController::class, "roomSearch"]);
-    Route::delete("admin/rooms/{room}", [App\Http\Controllers\Admin\RoomController::class, "destroy"])->name("admin.rooms.destroy");
-    // task_management
-    Route::get("/admin/tasks", [App\Http\Controllers\Admin\TaskController::class, "index"])->name("admin.tasks.index");
-    Route::get("/admin/tasks/search/{content}", [App\Http\Controllers\Admin\TaskController::class, "taskSearch"]);
-    Route::delete("admin/tasks/{task}", [App\Http\Controllers\Admin\TaskController::class, "destroy"])->name("admin.tasks.destroy");
-    // reward_management
-    Route::get("/admin/rewards", [App\Http\Controllers\Admin\RewardController::class, "index"])->name("admin.rewards.index");
-    Route::get("/admin/rewards/search/{content}", [App\Http\Controllers\Admin\RewardController::class, "rewardSearch"]);
-    Route::delete("admin/rewards/{reward}", [App\Http\Controllers\Admin\RewardController::class, "destroy"])->name("admin.rewards.destroy");
+// 管理者機能
+Route::prefix('admin')->name('admin.')->group(function () {
+    // 管理者　認証
+    Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name("login");
+    Route::post('/login', [AdminLoginController::class, 'login']);
+    Route::post('/logout', [AdminLoginController::class, 'logout'])->name("logout");
+    Route::get('/register', [AdminRegisterController::class, 'showRegistrationForm'])->name("register");
+    Route::post('/register', [AdminRegisterController::class, 'register']);
+    // 管理者　パスワードリセット
+    Route::get('/password/reset', [AdminForgotPasswordController::class, 'showLinkRequestForm'])->name("password.request");
+    Route::post('/password/email', [AdminForgotPasswordController::class, 'sendResetLinkEmail'])->name("password.email");
+    Route::get('/password/reset/{token}', [AdminResetPasswordController::class, 'showResetForm'])->name("password.reset");
+    Route::post('/password/reset', [AdminResetPasswordController::class, 'reset'])->name("password.update");
 });
-// 管理者　パスワードリセット
-Route::view('/admin/password/reset', 'admin/passwords/email');
-Route::post('/admin/password/email', [App\Http\Controllers\Admin\ForgotPasswordController::class, 'sendResetLinkEmail']);
-Route::get('/admin/password/reset/{token}', [App\Http\Controllers\Admin\ResetPasswordController::class, 'showResetForm']);
-Route::post('/admin/password/reset', [App\Http\Controllers\Admin\ResetPasswordController::class, 'reset']);
+
+Route::group(['middleware' => 'auth:admin'], function() {
+    Route::get('/admin/home', [AdminHomeController::class, "index"]);
+    // profile
+    Route::prefix('admin/profiles')->name('admin.profiles.')->group(function () {
+        Route::get("/", [AdminProfileController::class, "index"])->name("index");
+        Route::get("/edit", [AdminProfileController::class, "edit"])->name("edit");
+        Route::patch("/update", [AdminProfileController::class, "update"])->name("update");
+        Route::delete("/icon", [AdminProfileController::class, "deleteIcon"])->name("icon.destroy");
+    });
+    // user_management
+    Route::prefix('admin/users')->name('admin.users.')->group(function () {
+        Route::get("/", [AdminUserController::class, "index"])->name("index");
+        Route::get("/search/{content}", [AdminUserController::class, "userSearch"]);
+        Route::delete("/{user}", [AdminUserController::class, "destroy"])->name("destroy");
+    });
+    // room_management
+    Route::prefix('admin/rooms')->name('admin.rooms.')->group(function () {
+        Route::get("/", [AdminRoomController::class, "index"])->name("index");
+        Route::get("/search/{content}", [AdminRoomController::class, "roomSearch"]);
+        Route::delete("/{room}", [AdminRoomController::class, "destroy"])->name("destroy");
+    });
+    // task_management
+    Route::prefix('admin/tasks')->name('admin.tasks.')->group(function () {
+        Route::get("/", [AdminTaskController::class, "index"])->name("index");
+        Route::get("/search/{content}", [AdminTaskController::class, "taskSearch"]);
+        Route::delete("/{task}", [AdminTaskController::class, "destroy"])->name("destroy");
+    });
+    // reward_management
+    Route::prefix('admin/rewards')->name('admin.rewards.')->group(function () {
+        Route::get("/", [AdminRewardController::class, "index"])->name("index");
+        Route::get("/search/{content}", [AdminRewardController::class, "rewardSearch"]);
+        Route::delete("/{reward}", [AdminRewardController::class, "destroy"])->name("destroy");
+    });
+});
 
 Route::fallback(function () {
     if (auth('admin')->check()) {
